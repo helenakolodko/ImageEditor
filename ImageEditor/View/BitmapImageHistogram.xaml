@@ -1,0 +1,47 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="ImageEditor.View.BitmapImageHistogram"
+    xmlns:local="clr-namespace:ImageEditor.View"
+	x:Name="BiHistogram">
+	<UserControl.Resources>
+		<Style x:Key="Panels">
+			<Setter Property="Control.Background" Value="#FFF3F3F3"/>
+		</Style>
+		<Style x:Key="Adjustments">
+			<Setter Property="Control.Background" Value="#FFE5E5E5"/>
+		</Style>
+        <BooleanToVisibilityConverter x:Key="b2v" />
+    </UserControl.Resources>
+
+	<Grid x:Name="LayoutRoot">
+		<StackPanel Style="{StaticResource Adjustments}">            
+			    <Canvas Style="{StaticResource Panels}" Height="150" Margin="6" ClipToBounds="True">
+                    <Border Height="150">
+						<Polygon Fill="#4CFF0000" Stroke="Red" 
+                             Visibility="{Binding IsChecked,ElementName=RedVisible, Converter={StaticResource b2v}}"
+                             Points="{Binding RedCurve, ElementName=BiHistogram}" Stretch="Fill"/>
+					</Border>
+                    <Border Height="150">
+                    <Polygon Fill="#4C00FF00" Stroke="Green" 
+                             Visibility="{Binding IsChecked,ElementName=GreenVisible, Converter={StaticResource b2v}}"
+                             Points="{Binding GreenCurve, ElementName=BiHistogram}" Stretch="Fill"/>
+                    </Border>
+                    <Border Height="150">
+                    <Polygon Fill="#4C0000FF" Stroke="Blue" 
+                             Visibility="{Binding IsChecked,ElementName=BlueVisible, Converter={StaticResource b2v}}"
+                             Points="{Binding BlueCurve, ElementName=BiHistogram}" Stretch="Fill"/>
+                    </Border>
+                </Canvas>	
+            
+			<DockPanel HorizontalAlignment="Center" Margin="0,6">
+				<CheckBox x:Name="RedVisible" Content="Red" Margin="6,0" Foreground="Red" IsChecked="True"/>
+                <CheckBox x:Name="GreenVisible" Content="Green" Margin="6,0" Foreground="Green" IsChecked="True"/>
+                <CheckBox x:Name="BlueVisible" Content="Blue" Margin="6,0" Foreground="Blue" IsChecked="True"/>
+			</DockPanel>
+		</StackPanel>
+	</Grid>
+</UserControl>

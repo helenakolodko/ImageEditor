@@ -1,0 +1,11 @@
+GraphicalEditor/
+part2/
+part3/
+Debug/
+Release/
+ipch/
+*.sdf
+*.opensdf
+*.ini
+*.suo
+*.txt
