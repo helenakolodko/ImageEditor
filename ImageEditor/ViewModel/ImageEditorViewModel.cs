@@ -17,73 +17,96 @@ namespace ImageEditor.ViewModel
 {
     public class ImageEditorViewModel : INotifyPropertyChanged
     {
-//        private int _brightness;
-//        public int Brightness
-//        {
-//            get { return _brightness; }
-//            set
-//            {
-//                _brightness = value;
-//                OnPropertyChanged();
-//            }
-//        }
-//
-//        private int _contrast;
-//        public int Contrast
-//        {
-//            get { return _contrast; }
-//            set
-//            {
-//                _contrast = value;
-//                OnPropertyChanged();
-//            }
-//        }
-//
-//        private int _saturation;
-//        public int Saturation
-//        {
-//            get { return _saturation; }
-//            set
-//            {
-//                _saturation = value;
-//                OnPropertyChanged();
-//            }
-//        }
-//
-//
-//        private int _red;
-//        public int Red
-//        {
-//            get { return _red; }
-//            set
-//            {
-//                _red = value;
-//                OnPropertyChanged();
-//            }
-//        }
-//
-//        private int _green;
-//        public int Green
-//        {
-//            get { return _green; }
-//            set
-//            {
-//                _green = value;
-//                OnPropertyChanged();
-//            }
-//        }
-//
-//        private int _blue;
-//        public int Blue
-//        {
-//            get { return _blue; }
-//            set
-//            {
-//                _blue = value;
-//                OnPropertyChanged();
-//            }
-//        }
-//
+        private int _brightness;
+        public int Brightness
+        {
+            get { return _brightness; }
+            set
+            {
+                _brightness = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _contrast;
+        public int Contrast
+        {
+            get { return _contrast; }
+            set
+            {
+                _contrast = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _saturation;
+        public int Saturation
+        {
+            get { return _saturation; }
+            set
+            {
+                _saturation = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private int _red;
+        public int Red
+        {
+            get { return _red; }
+            set
+            {
+                _red = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _green;
+        public int Green
+        {
+            get { return _green; }
+            set
+            {
+                _green = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _blue;
+        public int Blue
+        {
+            get { return _blue; }
+            set
+            {
+                _blue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Image _image;
+        private Image _tempImage;
+
+        public Image Image
+        {
+            get { return _image; }
+            set { _image = value; }
+        }
+
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public float NoiseCoverage { get; set; }
+
+        public int ReductionRadius { get; set; }
+        public int SpatialFactor { get; set; }
+        public int ColourFactor { get; set; }
+
+        public float Zoom { get; set; }
+
+
+
+        //
 //        public MainWindow()
 //        {
 //            InitializeComponent();

@@ -1,4 +1,6 @@
-﻿using ImageEditor.ViewModel;
+﻿using System;
+using System.Windows.Input;
+using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
@@ -11,10 +13,17 @@ namespace ImageEditor.Command
             _viewModel = viewModel;
         }
 
-        public void Execute(object param)
+        public bool CanExecute(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Execute(object parameter)
         {
             throw new System.NotImplementedException();
         }
+
+        public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {

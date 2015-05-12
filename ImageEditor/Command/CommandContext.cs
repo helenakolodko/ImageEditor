@@ -1,4 +1,6 @@
-﻿namespace ImageEditor.Command
+﻿using System.Windows.Input;
+
+namespace ImageEditor.Command
 {
     public class CommandContext
     {

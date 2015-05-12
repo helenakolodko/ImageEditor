@@ -126,8 +126,7 @@
 							<TextBlock Text=" Filters"/>
 						</StackPanel>
 					</TabItem.Header>
-					<StackPanel Style="{StaticResource Adjustments}">
-						<Label Content="Brightness"/>
+					<StackPanel Style="{StaticResource Adjustments}"><Label Content="Brightness"/>
 						<DockPanel>							
 							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"   
 								Minimum="{Binding Minimum, ElementName=Brightness}" 
@@ -151,7 +150,31 @@
 								Value="{Binding Value, ElementName=Saturation, UpdateSourceTrigger=PropertyChanged}"/>
 							<Slider x:Name="Saturation"/>	
 						</DockPanel>
-						<Button x:Name="ApplyBrightness" Content="Apply"  Margin="0,10" HorizontalAlignment="Center"
+						<Label Content="Red" Margin="0,15,0,0"/>
+						<DockPanel>							
+							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"   
+								Minimum="{Binding Minimum, ElementName=Red}" 
+								Maximum="{Binding Maximum, ElementName=Red}" 
+								Value="{Binding Value, ElementName=Red, UpdateSourceTrigger=PropertyChanged}"/>
+							<Slider x:Name="Red"	Value="{Binding BrightnessValue, ElementName=Window}"/>	
+						</DockPanel>
+						<Label Content="Green" HorizontalAlignment="Left" />
+						<DockPanel>
+							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"
+								Minimum="{Binding Minimum, ElementName=Green}"  
+								Maximum="{Binding Maximum, ElementName=Green}"
+								Value="{Binding Value, ElementName=Green, UpdateSourceTrigger=PropertyChanged}"/>
+							<Slider x:Name="Green" Value="{Binding ContrastValue, ElementName=Window}"/>	
+						</DockPanel>
+						<Label Content="Blue" HorizontalAlignment="Left"/>
+						<DockPanel>
+							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"  
+								Minimum="{Binding Minimum, ElementName=Blue}"  
+								Maximum="{Binding Maximum, ElementName=Blue}" 
+								Value="{Binding Value, ElementName=Blue, UpdateSourceTrigger=PropertyChanged}"/>
+							<Slider x:Name="Blue"/>	
+						</DockPanel>
+						<Button x:Name="ApplyBrightness" Content="Apply Filters"  Margin="0,10" HorizontalAlignment="Center"
 							Click="ApplyBrightness_Click"/>						
 					</StackPanel>
 				</TabItem>
@@ -162,80 +185,62 @@
 							<TextBlock Text=" Image"/>
 						</StackPanel>
 					</TabItem.Header>
-					<Grid Style="{StaticResource Adjustments}">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="90"/>
-							<ColumnDefinition Width="7*"/>
-							<ColumnDefinition Width="6*"/>
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="25"/>
-							<RowDefinition Height="25"/>
-							<RowDefinition Height="25"/>
-							<RowDefinition Height="45"/>
-							<RowDefinition Height="15"/>
-							<RowDefinition Height="25"/>
-							<RowDefinition Height="25"/>
-							<RowDefinition Height="15"/>							
-							<RowDefinition Height="25"/>
-							<RowDefinition Height="25"/>
-							<RowDefinition/>
-						</Grid.RowDefinitions>
-						<Label Content="Height" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Width="45.627"/>
-						<xctk:IntegerUpDown x:Name="ImageHeight" Grid.Column="1" Grid.Row="1" Minimum="1" ParsingNumberStyle="Integer" Maximum="7000">
-							<xctk:IntegerUpDown.InputScope>
-								<InputScope>
-									<InputScope.Names>
-										<InputScopeName NameValue="PersonalMiddleName"/>
-									</InputScope.Names>
-								</InputScope>
-							</xctk:IntegerUpDown.InputScope>
-						</xctk:IntegerUpDown>
-						<Label x:Name="HeightPercents" Content="%" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Width="19.82" />
-						<Label Content="Width" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" Width="42.04" />
-						<xctk:IntegerUpDown x:Name="ImageWidth" Grid.Column="1" Grid.Row="2" Minimum="1" ParsingNumberStyle="Integer" Maximum="7000" HorizontalAlignment="Left" Width="70">
-							<xctk:IntegerUpDown.InputScope>
-								<InputScope>
-									<InputScope.Names>
-										<InputScopeName NameValue="PersonalMiddleName"/>
-									</InputScope.Names>
-								</InputScope>
-							</xctk:IntegerUpDown.InputScope>
-						</xctk:IntegerUpDown>
-						<DockPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Margin="72.5,10,12.5,10" Width="75">
-							<Button x:Name="Resize" Width="75">
+					<StackPanel Style="{StaticResource Adjustments}">
+						<DockPanel HorizontalAlignment="Center" Margin="0,30,0,0">
+							<Label Content="Height" HorizontalAlignment="Right"/>
+							<xctk:IntegerUpDown x:Name="ImageHeight" Minimum="1" ParsingNumberStyle="Integer" Width="65" Maximum="9000">
+								<xctk:IntegerUpDown.InputScope>
+									<InputScope>
+										<InputScope.Names>
+											<InputScopeName NameValue="PersonalMiddleName"/>
+										</InputScope.Names>
+									</InputScope>
+								</xctk:IntegerUpDown.InputScope>
+							</xctk:IntegerUpDown>
+						</DockPanel>
+						<DockPanel HorizontalAlignment="Center" Margin="0,0,0,15">
+							<Label Content="Width"/>
+							<xctk:IntegerUpDown x:Name="ImageWidth" Minimum="1" ParsingNumberStyle="Integer" Maximum="7000" Width="65">
+								<xctk:IntegerUpDown.InputScope>
+									<InputScope>
+										<InputScope.Names>
+											<InputScopeName NameValue="PersonalMiddleName"/>
+										</InputScope.Names>
+									</InputScope>
+								</xctk:IntegerUpDown.InputScope>
+							</xctk:IntegerUpDown>
+						</DockPanel>
+						<Button x:Name="Resize" Width="85" Height="25">
 								<DockPanel>
 									<Image Source="Resources/resize-26.png" />
 									<TextBlock Text=" Resize"/>
 								</DockPanel>
-							</Button>							
-						</DockPanel>
-						<Label x:Name="WidthPercents" Content="%" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" Width="19.82" />
-						<Button x:Name="RotateLeft" Width="110" Grid.Row="5" Grid.ColumnSpan="3">
+							</Button>
+						<Button x:Name="RotateLeft" Height="25" Width="110" Margin="0,30,0,0">
 							<DockPanel>
 								<Image Source="Resources/rotate-26.png" />
 								<TextBlock Text=" Rotate Left"/>
 							</DockPanel>							
 						</Button>
-						<Button x:Name="RotateRight" Width="110" Grid.Row="6" Grid.ColumnSpan="3">
+						<Button x:Name="RotateRight" Height="25" Margin="0,0,0,30"  Width="110" >
 							<DockPanel>
 								<Image Source="Resources/rotate_right-26.png" />
 								<TextBlock Text=" Rotate Right"/>
 							</DockPanel>
 						</Button>
-						<Button x:Name="FlipHorizontal" Width="110" Grid.Row="8" Grid.ColumnSpan="3">
+						<Button x:Name="FlipHorizontal" Height="25" Width="110">
 							<DockPanel>
 								<Image Source="Resources/flip_horizontal-26.png" />
 								<TextBlock Text=" Flip Horizontal"/>
 							</DockPanel>								
 						</Button>
-						<Button x:Name="FlipVertical" Width="110" Grid.Row="9" Grid.ColumnSpan="3">
+						<Button x:Name="FlipVertical" Width="110" Height="25">
 							<DockPanel>
 								<Image Source="Resources/flip_vertical-26.png" />
 								<TextBlock Text=" Flip Vertical"/>
 							</DockPanel>															
 						</Button>					
-					</Grid>
+					</StackPanel>
 				</TabItem>
 				<TabItem Style="{StaticResource Panels}">
 					<TabItem.Header>
@@ -248,7 +253,8 @@
                         <imageEditorView:BitmapImageHistogram x:Name="histogram"/>
 						<Slider Minimum="0" Maximum="255" Margin="6" Value="255"/>
 						<Slider Minimum="0" Maximum="255" Margin="6" Value="0"/>
-						<Button x:Name="Equalize"  Content="Equalize" HorizontalAlignment="Center" Margin="0,6" Click="Equalize_OnClick"/>
+						<Button x:Name="Equalize"  Content="Equalize" HorizontalAlignment="Center" Margin="0,6" 
+                                Click="Equalize_OnClick"/>
 					</StackPanel>
 				</TabItem>
 				<TabItem Style="{StaticResource Panels}">
@@ -259,7 +265,7 @@
 						</StackPanel>
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
-						<Label Content="Add Noise" HorizontalAlignment="Center"/>
+						<Label Content="Add Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 <!--						<Label Content="Radius"/>-->
 <!--						<StackPanel Orientation="Horizontal">-->
 <!--							<Slider x:Name="RadiusAdd" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	-->
@@ -276,6 +282,10 @@
 <!--								Minimum="{Binding Minimum, ElementName=SaturationAdd}"-->
 <!--								Value="{Binding Value, ElementName=SaturationAdd, UpdateSourceTrigger=PropertyChanged}"/>-->
 <!--						</StackPanel>-->
+						<DockPanel HorizontalAlignment="Center">
+							<RadioButton Content="Salt-n-Papper" GroupName="NoiseType" Margin="6,0"/>
+							<RadioButton Content="Additive" GroupName="NoiseType" Margin="6,0"/>
+						</DockPanel>
 						<Label Content="Coverage"/>
 						<StackPanel Orientation="Horizontal">
 							<Slider x:Name="Coverage" Maximum="100" TickPlacement="TopLeft"
@@ -285,8 +295,12 @@
 								Minimum="{Binding Minimum, ElementName=Coverage}"
 								Value="{Binding Value, ElementName=Coverage, UpdateSourceTrigger=PropertyChanged}"/>
 						</StackPanel>
-						<Button x:Name="AddNoise" Content="Apply" Width="45" Margin="0,10"/>
-						<Label Content="Reduce Noise" HorizontalAlignment="Center"/>
+						<Button x:Name="AddNoise" Content="Apply" Width="45" Margin="0,10,0,30"/>
+						<Label Content="Reduce Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
+						<DockPanel HorizontalAlignment="Center">
+							<RadioButton Content="Median" GroupName="ReductionType" Margin="6,0"/>
+							<RadioButton Content="Bilateral" GroupName="ReductionType" Margin="6,0"/>
+						</DockPanel>
 						<Label Content="Radius"/>
 						<StackPanel Orientation="Horizontal">
 							<Slider x:Name="RadiusReduce" Maximum="25" TickPlacement="TopLeft" TickFrequency="5" Minimum="0" Width="165"/>	
@@ -295,13 +309,21 @@
 								Minimum="{Binding Minimum, ElementName=RadiusReduce}"
 								Value="{Binding Value, ElementName=RadiusReduce, UpdateSourceTrigger=PropertyChanged}"/>
 						</StackPanel>
-						<Label Content="Percentile"/>
+						<Label Content="SpacialFactor"/>
 						<StackPanel Orientation="Horizontal">
-							<Slider x:Name="Percentile" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="-100" Width="165"/>	
+							<Slider x:Name="SpacialFactor" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	
 							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
-								Maximum="{Binding Maximum, ElementName=Percentile}"
-								Minimum="{Binding Minimum, ElementName=Percentile}"
-								Value="{Binding Value, ElementName=Percentile, UpdateSourceTrigger=PropertyChanged}"/>
+								Maximum="{Binding Maximum, ElementName=SpacialFactor}"
+								Minimum="{Binding Minimum, ElementName=SpacialFactor}"
+								Value="{Binding Value, ElementName=SpacialFactor, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+						<Label Content="ColourFactor"/>
+						<StackPanel Orientation="Horizontal">
+							<Slider x:Name="ColourFactor" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	
+							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
+								Maximum="{Binding Maximum, ElementName=ColourFactor}"
+								Minimum="{Binding Minimum, ElementName=ColourFactor}"
+								Value="{Binding Value, ElementName=ColourFactor, UpdateSourceTrigger=PropertyChanged}"/>
 						</StackPanel>	
 						<Button x:Name="ReduceNoise" Content="Apply" Width="45" Margin="0,10"/>					
 					</StackPanel>

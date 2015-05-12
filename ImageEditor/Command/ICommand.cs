@@ -1,6 +1,6 @@
 ﻿namespace ImageEditor.Command
 {
-    public interface ICommand
+    public interface IReversableCommand
     {
         void Execute(object param);
         void Undo(CommandContext context);
