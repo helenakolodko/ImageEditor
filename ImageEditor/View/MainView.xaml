@@ -8,38 +8,8 @@
         mc:Ignorable="d" 
         x:Class="ImageEditor.View.MainView"
         x:Name="Window"
-        Title="Image Editor" Height="530" Width="800" Icon="Resources/brush-pencil.png">
-	<Window.Resources>
-		<Style TargetType="{x:Type Button}">
-			<Setter Property="Background" Value="#FFE6E6E6" />
-			<Setter Property="BorderBrush" Value="#FFA4A3A3"/>
-		</Style>
-		<Style TargetType="{x:Type xctk:IntegerUpDown}">
-			<Setter Property="Background" Value="#FFF3F3F3"/>
-		</Style>
-		<Style TargetType="{x:Type Thumb}"/>
-		<Style TargetType="{x:Type ComboBox}">
-			<Setter Property="Background" Value="#FFE6E6E6" />
-			<Setter Property="BorderBrush" Value="#FFA4A3A3"/>
-		</Style>
-		<Style x:Key="Panels">
-			<Setter Property="Control.Background" Value="#FFF3F3F3"/>
-		</Style>
-		<Style x:Key="Adjustments">
-			<Setter Property="Control.Background" Value="#FFE5E5E5"/>
-		</Style>
-		<Style x:Key="Back" TargetType="{x:Type Grid}">
-			<Setter Property="Background" Value="#FFC3C3C3"/>
-		</Style>
-		<Style TargetType="{x:Type Slider}">
-            <Setter Property="Minimum" Value="-255"/>
-            <Setter Property="Maximum" Value="255"/>
-            <Setter Property="TickPlacement" Value="TopLeft"/>
-            <Setter Property="TickFrequency" Value="51"/>
-        </Style>
-<!--        <ObjectDataProvider x:Key="HistorgamImageProvider" ObjectType="{x:Type imageEditorView:MainView}"-->
-<!--                            MethodName="GetImage"/>-->
-	</Window.Resources>
+        Title="Image Editor" Height="530" Width="800"
+		MinHeight="530" MinWidth="800" Icon="Resources/brush-pencil.png">
 
 	<Grid Style="{StaticResource Back}" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True">
 		<Grid.ColumnDefinitions>
@@ -82,7 +52,7 @@
 					<Button x:Name="Bucket">
 						<Image Source="Resources\Paint-icon.png"/>
 					</Button>
-					<Button x:Name="SelectColour">
+					<Button x:Name="SelectColour" Click="SelectColour_OnClick">
 						<Image Source="Resources\Eyedropper-icon.png"/>
 					</Button>
 					<Separator Width="10" Visibility="Hidden" />
@@ -299,7 +269,7 @@
 						<Label Content="Reduce Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 						<DockPanel HorizontalAlignment="Center">
 							<RadioButton Content="Median" GroupName="ReductionType" Margin="6,0"/>
-							<RadioButton Content="Bilateral" GroupName="ReductionType" Margin="6,0"/>
+							<RadioButton x:Name="Bilateral" Content="Bilateral" GroupName="ReductionType" Margin="6,0"/>
 						</DockPanel>
 						<Label Content="Radius"/>
 						<StackPanel Orientation="Horizontal">
@@ -309,16 +279,16 @@
 								Minimum="{Binding Minimum, ElementName=RadiusReduce}"
 								Value="{Binding Value, ElementName=RadiusReduce, UpdateSourceTrigger=PropertyChanged}"/>
 						</StackPanel>
-						<Label Content="SpacialFactor"/>
-						<StackPanel Orientation="Horizontal">
+						<Label Content="SpacialFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
+						<StackPanel Orientation="Horizontal" IsEnabled="{Binding IsChecked, ElementName=Bilateral}">
 							<Slider x:Name="SpacialFactor" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	
 							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
 								Maximum="{Binding Maximum, ElementName=SpacialFactor}"
 								Minimum="{Binding Minimum, ElementName=SpacialFactor}"
 								Value="{Binding Value, ElementName=SpacialFactor, UpdateSourceTrigger=PropertyChanged}"/>
 						</StackPanel>
-						<Label Content="ColourFactor"/>
-						<StackPanel Orientation="Horizontal">
+						<Label Content="ColourFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
+						<StackPanel Orientation="Horizontal" IsEnabled="{Binding IsChecked, ElementName=Bilateral}">
 							<Slider x:Name="ColourFactor" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	
 							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
 								Maximum="{Binding Maximum, ElementName=ColourFactor}"
@@ -344,12 +314,33 @@
 								</Canvas.Background>
 							</Canvas>						
 						</DockPanel>
+						<Label Content="Window Size"/>
+						<StackPanel Orientation="Horizontal">
+							<Slider x:Name="WindowSize" Maximum="25" TickPlacement="TopLeft"
+							 TickFrequency="5" Minimum="0" Width="165" Value="{Binding WindowSize, ElementName=Window}"/>	
+							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
+								Maximum="{Binding Maximum, ElementName=WindowSize}"
+								Minimum="{Binding Minimum, ElementName=WindowSize}"
+								Value="{Binding Value, ElementName=WindowSize, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+						<Label Content="Inpaint Block Size"/>
+						<StackPanel Orientation="Horizontal">
+							<Slider x:Name="InpaintBlockSize" Maximum="50" TickPlacement="TopLeft"
+							 TickFrequency="10" Minimum="0" Width="165" Value="{Binding InpaintBlockSize, ElementName=Window}"/>	
+							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
+								Maximum="{Binding Maximum, ElementName=InpaintBlockSize}"
+								Minimum="{Binding Minimum, ElementName=InpaintBlockSize}"
+								Value="{Binding Value, ElementName=InpaintBlockSize, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
 						<Button x:Name="Inpaint" HorizontalAlignment="Center" Margin="0,10" Click="Inpaint_OnClick">
 							<DockPanel HorizontalAlignment="Center">
 								<Image Height="32" Source="Resources/12-Magic-Hat-icon.png"/>
 								<Label Content="Inpaint" VerticalAlignment="Center"/>
 							</DockPanel>
 						</Button>
+						<Border Margin="6,0" MaxHeight="150">
+							<Image x:Name="Mask"/>
+						</Border>
 					</StackPanel>
 				</TabItem>
 			</TabControl>

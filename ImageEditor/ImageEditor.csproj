@@ -104,6 +104,8 @@
     <Compile Include="Command\RotateCommand.cs" />
     <Compile Include="Command\SaveAsCommand.cs" />
     <Compile Include="Command\SaveCommand.cs" />
+    <Compile Include="Command\ZoomCommand.cs" />
+    <Compile Include="Model\EditableImage.cs" />
     <Compile Include="Model\Tool\Brush.cs" />
     <Compile Include="Model\Tool\Bucket.cs" />
     <Compile Include="Model\Tool\Drag.cs" />

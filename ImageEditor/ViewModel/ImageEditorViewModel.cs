@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ImageEditor.Annotations;
+using ImageEditor.Model;
 using ImageEditor.Model.Tool;
 using ImageProcessing;
 using Microsoft.Win32;
@@ -84,17 +85,18 @@ namespace ImageEditor.ViewModel
             }
         }
 
-        private Image _image;
-        private Image _tempImage;
+        private EditableImage _image;
+        private EditableImage _tempImage;
 
-        public Image Image
+        public EditableImage Image
         {
             get { return _image; }
-            set { _image = value; }
+            set
+            {
+                _image = value;
+                _tempImage = value;
+            }
         }
-
-        public int Width { get; set; }
-        public int Height { get; set; }
 
         public float NoiseCoverage { get; set; }
 
@@ -102,7 +104,11 @@ namespace ImageEditor.ViewModel
         public int SpatialFactor { get; set; }
         public int ColourFactor { get; set; }
 
+
+
         public float Zoom { get; set; }
+
+        public Color SelectedColor { get; set; }
 
 
 
@@ -193,16 +199,15 @@ namespace ImageEditor.ViewModel
 //            }
 //        }
 //
-//        public void Reset()
-//        {
-//            Red = 0;
-//            Green = 0;
-//            Blue = 0;
-//            Brightness = 0;
-//            Contrast = 0;
-//            Saturation = 0;
-//            ShowImage(_image);
-//        }
+        public void ResetFields()
+        {
+            // reset all adjustments, show initial image
+        }
+
+        public void ResetTools()
+        {
+            // reset all tools, zoom, show imageScroller
+        }
 //
 //        private void SaveAs_Click(object sender, RoutedEventArgs e)
 //        {
@@ -252,23 +257,6 @@ namespace ImageEditor.ViewModel
 //            }
 //        }
 //        
-//        private ImageFormat GetImageFormat(string imagePath)
-//        {
-//            ImageFormat result = ImageFormat.Png;
-//            string extention = Path.GetExtension(imagePath);
-//            if(extention == ".jpg"){
-//                result = ImageFormat.Jpeg;
-//            }
-//            else if (extention == ".bmp")
-//            {
-//                result = ImageFormat.Bmp;
-//            }
-//            else if (extention == ".gif")
-//            {
-//                result = ImageFormat.Gif;
-//            }
-//            return result;
-//        }
 //
 //        public void OnAdjustmentChanged()
 //        {

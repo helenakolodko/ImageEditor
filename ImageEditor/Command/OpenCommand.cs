@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ImageEditor.Model;
 using ImageEditor.ViewModel;
+using Microsoft.Win32;
 
 namespace ImageEditor.Command
 {
@@ -19,24 +21,34 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void Execute(object param)
         {
-            throw new NotImplementedException();
+            OpenFileDialog openFileDialog = new OpenFileDialog { Filter = Properties.Resources.filter };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                OpenImage(openFileDialog.FileName);
+            }
+        }
+
+        private void OpenImage(string imagePath)
+        {
+            _viewModel.Image = new EditableImage(imagePath);
+            _viewModel.ResetFields();
+            _viewModel.ResetTools();
+            // clear commandList
         }
 
         public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {
-            throw new NotImplementedException();
         }
 
         public void Redo(CommandContext context)
         {
-            throw new NotImplementedException();
         }
     }
 }

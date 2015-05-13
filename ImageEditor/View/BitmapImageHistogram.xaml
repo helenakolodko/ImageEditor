@@ -19,18 +19,18 @@
 
 	<Grid x:Name="LayoutRoot">
 		<StackPanel Style="{StaticResource Adjustments}">            
-			    <Canvas Style="{StaticResource Panels}" Height="150" Margin="6" ClipToBounds="True">
-                    <Border Height="150">
+			    <Canvas Style="{StaticResource Panels}" Height="150" Width="200" Margin="6" ClipToBounds="True">
+                    <Border Height="150" Width="200">
 						<Polygon Fill="#4CFF0000" Stroke="Red" 
                              Visibility="{Binding IsChecked,ElementName=RedVisible, Converter={StaticResource b2v}}"
                              Points="{Binding RedCurve, ElementName=BiHistogram}" Stretch="Fill"/>
 					</Border>
-                    <Border Height="150">
+                    <Border Height="150" Width="200">
                     <Polygon Fill="#4C00FF00" Stroke="Green" 
                              Visibility="{Binding IsChecked,ElementName=GreenVisible, Converter={StaticResource b2v}}"
                              Points="{Binding GreenCurve, ElementName=BiHistogram}" Stretch="Fill"/>
                     </Border>
-                    <Border Height="150">
+                    <Border Height="150" Width="200">
                     <Polygon Fill="#4C0000FF" Stroke="Blue" 
                              Visibility="{Binding IsChecked,ElementName=BlueVisible, Converter={StaticResource b2v}}"
                              Points="{Binding BlueCurve, ElementName=BiHistogram}" Stretch="Fill"/>

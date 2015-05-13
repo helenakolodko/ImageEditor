@@ -69,9 +69,20 @@ namespace ImageEditor.View
 	    private void GetHistogram()
 	    {
             ImageStatistics rgbStatistics = new ImageStatistics((Bitmap) Image);
-	        RedCurve = GetPoints(rgbStatistics.Red.Values);
-            GreenCurve = GetPoints(rgbStatistics.Green.Values);
-            BlueCurve = GetPoints(rgbStatistics.Blue.Values);
+	        if (rgbStatistics.IsGrayscale)
+	        {
+	            PointCollection points = GetPoints(rgbStatistics.Gray.Values);
+	            RedCurve = points;
+	            GreenCurve = points;
+	            BlueCurve = points;
+	        }
+	        else
+	        {
+                RedCurve = GetPoints(rgbStatistics.Red.Values);
+                GreenCurve = GetPoints(rgbStatistics.Green.Values);
+                BlueCurve = GetPoints(rgbStatistics.Blue.Values);
+	        }
+            
 	    }
 
 	    private PointCollection GetPoints(int[] values)

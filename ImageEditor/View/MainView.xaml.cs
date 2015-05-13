@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -105,6 +106,9 @@ namespace ImageEditor.View
                     case Tool.Select:
                         ImageEdit.Cursor = Cursors.Cross;
                         break;
+                    case Tool.Eyedropper:
+                        ImageEdit.Cursor = Cursors.IBeam;
+                        break;
                     default:
                         ImageEdit.Cursor = Cursors.Arrow;
                         break;
@@ -179,7 +183,12 @@ namespace ImageEditor.View
 
         private void OpenImage(string imagePath)
         {
-            _image = new System.Drawing.Bitmap(imagePath);
+            _image = new Bitmap(imagePath);
+            if (_image.PixelFormat == PixelFormat.Format8bppIndexed)
+            {
+                Bitmap b = (Bitmap) _image;
+                _image = b.Clone(new Rectangle(0, 0, b.Width, b.Height), PixelFormat.Format32bppArgb);
+            }
             ImageScroller.Visibility = Visibility.Visible;
             _zoom = 1;
             ZoomImage();
@@ -190,7 +199,7 @@ namespace ImageEditor.View
         private void ShowImage(System.Drawing.Image image)
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
             ms.Position = 0;
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
@@ -245,6 +254,17 @@ namespace ImageEditor.View
                 margin.Top = _startPoint.Y;
                 Selection.Margin = margin;
             }
+            if (SelectedTool == Tool.Eyedropper)
+            {
+                GetColour(_startPoint);
+            }
+        }
+
+        private void GetColour(Point point)
+        {
+            var b = (Bitmap) _image;
+            Color c = b.GetPixel((int) point.X, (int) point.Y);
+            ColorPicker.SelectedColor = System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B);
         }
 
         private void ImageEdit_MouseMove(object sender, MouseEventArgs e)
@@ -258,6 +278,9 @@ namespace ImageEditor.View
                         break;
                     case Tool.Select:
                         DrawSelectionRectangle(e.GetPosition(CanvasBorder));
+                        break;
+                    case Tool.Eyedropper:
+                        GetColour(e.GetPosition(CanvasBorder));
                         break;
                 }
             }
@@ -287,6 +310,9 @@ namespace ImageEditor.View
                         break;
                     case Tool.Select:
                         DrawSelectionRectangle(e.GetPosition(CanvasBorder));
+                        break;
+                    case Tool.Eyedropper:
+                        GetColour(e.GetPosition(CanvasBorder));
                         break;
                 }
             }
@@ -350,26 +376,35 @@ namespace ImageEditor.View
             int numberOfPixels = _image.Width*_image.Height;
 
             ImageStatistics rgbStatistics = new ImageStatistics((Bitmap)_image);
+            Bitmap b;
+
             int[] histogramR = rgbStatistics.Red.Values;
             int[] histogramG = rgbStatistics.Green.Values;
             int[] histogramB = rgbStatistics.Blue.Values;
 
-            // calculate new intensity levels
             byte[] equalizedHistogramR = EqualizeHistogram(histogramR, numberOfPixels);
             byte[] equalizedHistogramG = EqualizeHistogram(histogramG, numberOfPixels);
             byte[] equalizedHistogramB = EqualizeHistogram(histogramB, numberOfPixels);
-
-            // update pixels' intensities
-            Bitmap b = (Bitmap) _image;
-            for ( int y = 0; y < _image.Height; y++ )
+            b = (Bitmap)_image;
+            Rectangle rect = new Rectangle(0, 0, b.Width, b.Height);
+            BitmapData bmpData = b.LockBits(rect, ImageLockMode.ReadWrite, b.PixelFormat);
+            IntPtr ptr = bmpData.Scan0;
+                 
+            int bytes  = Math.Abs(bmpData.Stride) * b.Height;
+            byte[] rgbValues = new byte[bytes];
+                
+            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+                
+            for (int i = 0; i < rgbValues.Length - 2; i+=3)
             {
-                for ( int x = 0; x < _image.Width; x++ )
-                {
-                    Color c = b.GetPixel(x, y);
-                    b.SetPixel(x, y, Color.FromArgb(
-                        equalizedHistogramR[c.R], equalizedHistogramG[c.G], equalizedHistogramB[c.B]));
-                }
+                rgbValues[i] = equalizedHistogramR[rgbValues[i]];
+                rgbValues[i + 1] = equalizedHistogramG[rgbValues[i + 1]];
+                rgbValues[i + 2] = equalizedHistogramB[rgbValues[i + 2]];
             }
+                
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+            b.UnlockBits(bmpData);
+            
             _image = b;
             ShowImage(_image);
             histogram.Image = _image;
@@ -399,8 +434,13 @@ namespace ImageEditor.View
         {
             System.Windows.Media.Color c = ColorPicker.SelectedColor;
             Color c1 = Color.FromArgb(c.R, c.G, c.B);
-            _tempImage = ColourInpaint.DoInpaint((Bitmap) _image, 55, c1);
+            _tempImage = ColourInpaint.DoInpaint((Bitmap) _image, 15, c1);
             ShowImage(_tempImage);
+        }
+
+        private void SelectColour_OnClick(object sender, RoutedEventArgs e)
+        {
+            SelectedTool = Tool.Eyedropper;
         }
     }
 }
