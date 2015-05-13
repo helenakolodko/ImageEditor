@@ -393,6 +393,14 @@ namespace ImageEditor.View
             }
 
             return equalizedHistogram;
-        } 
+        }
+
+        private void Inpaint_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Media.Color c = ColorPicker.SelectedColor;
+            Color c1 = Color.FromArgb(c.R, c.G, c.B);
+            _tempImage = ColourInpaint.DoInpaint((Bitmap) _image, 55, c1);
+            ShowImage(_tempImage);
+        }
     }
 }

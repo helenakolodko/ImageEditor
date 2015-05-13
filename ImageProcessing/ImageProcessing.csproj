@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColourInpaint.cs" />
     <Compile Include="ImageHistogram.cs" />
     <Compile Include="ImageAdjuster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

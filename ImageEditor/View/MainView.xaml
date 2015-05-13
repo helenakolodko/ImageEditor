@@ -344,7 +344,7 @@
 								</Canvas.Background>
 							</Canvas>						
 						</DockPanel>
-						<Button x:Name="Inpaint" HorizontalAlignment="Center" Margin="0,10">
+						<Button x:Name="Inpaint" HorizontalAlignment="Center" Margin="0,10" Click="Inpaint_OnClick">
 							<DockPanel HorizontalAlignment="Center">
 								<Image Height="32" Source="Resources/12-Magic-Hat-icon.png"/>
 								<Label Content="Inpaint" VerticalAlignment="Center"/>
