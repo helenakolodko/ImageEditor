@@ -86,5 +86,66 @@ namespace ImageEditor.Model
             bi.EndInit();
             return bi;
         }
+
+        public void Resize(int newWidth, int newHeight)
+        {
+            _source = new Bitmap(_source, newWidth, newHeight);
+        }
+
+        public void FlipHorisontal()
+        {
+            _source.RotateFlip(RotateFlipType.RotateNoneFlipX);
+        }
+
+        public void FlipVertical()
+        {
+            _source.RotateFlip(RotateFlipType.RotateNoneFlipY);
+        }
+
+        public void RotateClockwise()
+        {
+            _source.RotateFlip(RotateFlipType.Rotate90FlipNone);
+        }
+
+        public void RotateAntiClockwise()
+        {
+            _source.RotateFlip(RotateFlipType.Rotate270FlipNone);
+        }
+
+        public void ChangeBrightness(float rate, Rectangle region)
+        {
+            
+        }
+
+        public void ChangeContrast(float rate, Rectangle region)
+        {
+
+        }
+
+        public void ChangeSaturation(float rate, Rectangle region)
+        {
+
+        }
+
+        public void ChangeColour(float redRate, float greenRate, float blueRate, Rectangle region)
+        {
+
+        }
+
+        public void FillRegion(Rectangle region, Color color)
+        {
+            Graphics g = Graphics.FromImage(_source);
+            g.FillRectangle(new SolidBrush(color), region);
+        }
+
+
+        public void GetRegion(Rectangle region)
+        {
+            
+        }
+        public void SetRegion(Rectangle region, Bitmap newSource)
+        {
+
+        }
     }
 }

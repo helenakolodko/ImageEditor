@@ -92,12 +92,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\ApplyCommand.cs" />
     <Compile Include="Command\CommandContext.cs" />
     <Compile Include="Command\CommandList.cs" />
     <Compile Include="Command\CropCommand.cs" />
     <Compile Include="Command\FlipCommand.cs" />
     <Compile Include="Command\HistogramEqualizeCommand.cs" />
-    <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Command\IReversableCommand.cs" />
     <Compile Include="Command\InpaintCommand.cs" />
     <Compile Include="Command\OpenCommand.cs" />
     <Compile Include="Command\ResizeCommand.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Command\SaveAsCommand.cs" />
     <Compile Include="Command\SaveCommand.cs" />
     <Compile Include="Command\ZoomCommand.cs" />
+    <Compile Include="Converter\ZoomConverter.cs" />
     <Compile Include="Model\EditableImage.cs" />
     <Compile Include="Model\Tool\Brush.cs" />
     <Compile Include="Model\Tool\Bucket.cs" />
@@ -115,7 +117,7 @@
     <Compile Include="Model\Tool\Line.cs" />
     <Compile Include="Model\Tool\ManageTool.cs" />
     <Compile Include="Model\Tool\Pen.cs" />
-    <Compile Include="Model\Tool\SelectRect.cs" />
+    <Compile Include="Model\Tool\SelectRectangle.cs" />
     <Compile Include="Model\Tool\SelectTool.cs" />
     <Compile Include="Model\Tool\Tool.cs" />
     <Compile Include="Model\Tool\ToolBox.cs" />

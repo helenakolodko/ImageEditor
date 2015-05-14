@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using ImageEditor.Model;
 using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
@@ -28,40 +23,16 @@ namespace ImageEditor.Command
 
         public void Execute(object param)
         {
-       
-//            ImageScroller.ScrollToHorizontalOffset(0);
-//            ImageScroller.ScrollToVerticalOffset(0);
-//            if (_image != null)
-//            {
-//                CanvasBorder.Width = _ * _viewModel.Image.Width;
-//                CanvasBorder.Height = _zoom * _viewModel.Image.Height;
-//                _selection.Zoom = _zoom;
-//            }
+            string direction = (string) param;
+            if (direction == "In")
+            {
+                _viewModel.Zoom += .25f;
+            }
+            else
+            {
+                _viewModel.Zoom -= _viewModel.Zoom > .25f ? .25f : .1f;
+            }
         }
-
-//        private void ZoomIn_Click(object sender, RoutedEventArgs e)
-//        {
-//            _zoom += .25f;
-//            Zoom.Text = (int)(_zoom * 100) + "%";
-//            ZoomOut.IsEnabled = true;
-//            ZoomImage();
-//        }
-//
-//        private void ZoomOut_Click(object sender, RoutedEventArgs e)
-//        {
-//            ImageScroller.ScrollToHorizontalOffset(0);
-//            ImageScroller.ScrollToVerticalOffset(0);
-//            if (_zoom <= .15f)
-//            {
-//                ZoomOut.IsEnabled = false;
-//            }
-//            else
-//            {
-//                _zoom -= _zoom > .25f ? .25f : .1f;
-//            }
-//            Zoom.Text = (int)(_zoom * 100) + "%";
-//            ZoomImage();
-//        }
 
         public event EventHandler CanExecuteChanged;
 

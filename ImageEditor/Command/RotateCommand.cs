@@ -15,12 +15,24 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            if (_viewModel.Image != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         public void Execute(object param)
         {
-            throw new System.NotImplementedException();
+            string direction = (string)param;
+            if (direction == "Clockwise")
+            {
+                _viewModel.Image.RotateClockwise();
+            }
+            else
+            {
+                _viewModel.Image.RotateAntiClockwise();
+            }
         }
 
         public event EventHandler CanExecuteChanged;

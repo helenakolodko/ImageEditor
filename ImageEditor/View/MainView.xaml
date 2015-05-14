@@ -5,11 +5,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:imageEditorView="clr-namespace:ImageEditor.View" 
+        xmlns:databinding="clr-namespace:ImageEditor.Converter"
+        xmlns:imageEditor="clr-namespace:ImageEditor"
         mc:Ignorable="d" 
         x:Class="ImageEditor.View.MainView"
         x:Name="Window"
         Title="Image Editor" Height="530" Width="800"
 		MinHeight="530" MinWidth="800" Icon="Resources/brush-pencil.png">
+    <Window.Resources>
+        <databinding:ZoomConverter x:Key="ZoomConverter"/>
+    </Window.Resources>
 
 	<Grid Style="{StaticResource Back}" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True">
 		<Grid.ColumnDefinitions>
@@ -23,71 +28,77 @@
 		<ToolBarTray Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Panels}">
 			<ToolBar Style="{StaticResource Panels}">
 				<ToolBarPanel Orientation="Horizontal" Height="25">
-					<Button x:Name="Open" Click="Open_Click">
+					<Button x:Name="Open" Click="Open_Click" ToolTip="Open">
 						<Image Source="Resources/opened_folder-32.png"/>
 					</Button>
-					<Button x:Name="Save" Click="Save_Click">
+					<Button x:Name="Save" Click="Save_Click" ToolTip="Save">
 						<Image Source="Resources/save_as-25.png"/>
 					</Button>
-					<Button x:Name="SaveAs" >
+					<Button x:Name="SaveAs" ToolTip="Save As">
 						<Image Source="Resources/save_as-32.png"/>
 					</Button>
 					<Separator Width="10" Visibility="Hidden" />
-					<Button x:Name="Undo" IsEnabled="False">
-						<Image Source="Resources/left2_filled-25.png"/>
-					</Button>
-					<Button x:Name="Redo" IsEnabled="False">
-						<Image Source="Resources/right2_filled-25.png"/>
-					</Button>
-					<Separator Width="10" Visibility="Hidden" />
-					<Button x:Name="Pencil">
-						<Image Source="Resources\Pencil-icon.png"/>
-					</Button>
-					<Button x:Name="Brush">
-						<Image Source="Resources/brush-26.png"/>
-					</Button>
-					<Button x:Name="Line">
-						<Image Source="Resources/Editing-Line-icon.png"/>
-					</Button>
-					<Button x:Name="Bucket">
-						<Image Source="Resources\Paint-icon.png"/>
-					</Button>
-					<Button x:Name="SelectColour" Click="SelectColour_OnClick">
-						<Image Source="Resources\Eyedropper-icon.png"/>
-					</Button>
-					<Separator Width="10" Visibility="Hidden" />
-					<xctk:ColorPicker x:Name="ColorPicker" Style="{StaticResource Panels}" ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="#FF00AEFF" />
-					<Separator Width="10" Visibility="Hidden" />
-					<Button x:Name="SelectRegion" Click="SelectRegion_Click">
-						<Image Source="Resources\Cursor-Select-icon.png" />
-					</Button>
-					<Button x:Name="Crop" IsEnabled="False" Opacity="0.835">
-						<Image Source="Resources/crop-26.png"/>
-					</Button>
-					<Button x:Name="Drag" Click="Drag_Click">
-						<Image Source="Resources\Drag-icon.png"/>
-					</Button>
-					<Separator Width="10" Visibility="Hidden" />
-					<ComboBox x:Name="Zoom" IsEditable="True">
-						<ComboBoxItem Content="10%"/>
-						<ComboBoxItem Content="25%"/>
-						<ComboBoxItem Content="50%"/>
-						<ComboBoxItem Content="75%"/>
-						<ComboBoxItem IsSelected="True" Content="100%"/>
-						<ComboBoxItem Content="125%"/>
-						<ComboBoxItem Content="150%"/>
-						<ComboBoxItem Content="200%"/>
-					</ComboBox>
-					<Button x:Name="ZoomIn" Click="ZoomIn_Click">
-						<Image Source="Resources/zoom_in-25.png"/>
-					</Button>
-					<Button x:Name="ZoomOut" Click="ZoomOut_Click">
-						<Image Source="Resources/zoom_out-25.png"/>
-					</Button>
+                    <DockPanel IsEnabled="{Binding Active, ElementName=Window}">
+						<Button x:Name="Undo" IsEnabled="False" ToolTip="Undo">
+							<Image Source="Resources/left2_filled-25.png"/>
+						</Button>
+						<Button x:Name="Redo" IsEnabled="False" ToolTip="Redo">
+							<Image Source="Resources/right2_filled-25.png"/>
+						</Button>
+						<Separator Width="10" Visibility="Hidden" />
+						<Button x:Name="Pencil" ToolTip="Pencil">
+							<Image Source="Resources\Pencil-icon.png"/>
+						</Button>
+						<Button x:Name="Brush" ToolTip="Brush">
+							<Image Source="Resources/brush-26.png"/>
+						</Button>
+						<Button x:Name="Line" ToolTip="Line">
+							<Image Source="Resources/Editing-Line-icon.png"/>
+						</Button>
+						<Button x:Name="Bucket" ToolTip="Bucket">
+							<Image Source="Resources\Paint-icon.png"/>
+						</Button>
+						<Button x:Name="SelectColour" Click="SelectColour_OnClick" ToolTip="Eyedropper">
+							<Image Source="Resources\Eyedropper-icon.png"/>
+						</Button>
+						<Separator Width="10" Visibility="Hidden" />
+						<xctk:ColorPicker x:Name="ColorPicker" Style="{StaticResource Panels}" ToolTip="Select Colour"
+							ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" 
+							ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="#FF00AEFF" />
+						<Separator Width="10" Visibility="Hidden" />
+						<Button x:Name="SelectRegion" Click="SelectRegion_Click" ToolTip="Select">
+							<Image Source="Resources\Cursor-Select-icon.png" />
+						</Button>
+						<Button x:Name="Crop" IsEnabled="False" ToolTip="Crop">
+							<Image Source="Resources/crop-26.png"/>
+						</Button>
+						<Button x:Name="Drag" Click="Drag_Click" ToolTip="Drag">
+							<Image Source="Resources\Drag-icon.png"/>
+						</Button>
+						<Separator Width="10" Visibility="Hidden" />
+						<ComboBox IsEditable="True" Text="{Binding Path=Zoom, ElementName=Window,
+							ValidatesOnExceptions=True, Converter={StaticResource ZoomConverter}}" ToolTip="Zoom">
+							<ComboBoxItem Content="10%"/>
+							<ComboBoxItem Content="25%"/>
+							<ComboBoxItem Content="50%"/>
+							<ComboBoxItem Content="75%"/>
+							<ComboBoxItem Content="100%"/>
+							<ComboBoxItem Content="125%"/>
+							<ComboBoxItem Content="150%"/>
+							<ComboBoxItem Content="200%"/>
+							<ComboBoxItem Content="300%"/>
+						</ComboBox>
+						<Button x:Name="ZoomIn" Click="ZoomIn_Click" ToolTip="Zoom In">
+							<Image Source="Resources/zoom_in-25.png"/>
+						</Button>
+						<Button x:Name="ZoomOut" Click="ZoomOut_Click" ToolTip="Zoom Out">
+							<Image Source="Resources/zoom_out-25.png"/>
+						</Button>
+					</DockPanel>
 				</ToolBarPanel>
 			</ToolBar>
 		</ToolBarTray>
-		<Grid Grid.Row="1" Grid.Column="0" Background="#FFF3F3F3">
+        <Grid Grid.Row="1" Grid.Column="0" Background="#FFF3F3F3"  IsEnabled="{Binding Active, ElementName=Window}">
 			<TabControl Style="{StaticResource Panels}">
 				<TabItem Style="{StaticResource Panels}">
 					<TabItem.Header>
@@ -158,7 +169,8 @@
 					<StackPanel Style="{StaticResource Adjustments}">
 						<DockPanel HorizontalAlignment="Center" Margin="0,30,0,0">
 							<Label Content="Height" HorizontalAlignment="Right"/>
-							<xctk:IntegerUpDown x:Name="ImageHeight" Minimum="1" ParsingNumberStyle="Integer" Width="65" Maximum="9000">
+							<xctk:IntegerUpDown Minimum="1" ParsingNumberStyle="Integer" Width="65" Maximum="9000"
+                                                Value="{Binding ImageWidth, ElementName=Window}">
 								<xctk:IntegerUpDown.InputScope>
 									<InputScope>
 										<InputScope.Names>
@@ -170,7 +182,8 @@
 						</DockPanel>
 						<DockPanel HorizontalAlignment="Center" Margin="0,0,0,15">
 							<Label Content="Width"/>
-							<xctk:IntegerUpDown x:Name="ImageWidth" Minimum="1" ParsingNumberStyle="Integer" Maximum="7000" Width="65">
+							<xctk:IntegerUpDown Minimum="1" ParsingNumberStyle="Integer" Maximum="9000" Width="65"
+                                                Value="{Binding ImageHeight, ElementName=Window}">
 								<xctk:IntegerUpDown.InputScope>
 									<InputScope>
 										<InputScope.Names>
@@ -216,7 +229,7 @@
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Line-Chart-icon.png" Height="15"/>
-							<TextBlock Text=" Levels"/>
+							<TextBlock Text=" Histogram"/>
 						</StackPanel>
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
@@ -314,24 +327,24 @@
 								</Canvas.Background>
 							</Canvas>						
 						</DockPanel>
-						<Label Content="Window Size"/>
-						<StackPanel Orientation="Horizontal">
-							<Slider x:Name="WindowSize" Maximum="25" TickPlacement="TopLeft"
-							 TickFrequency="5" Minimum="0" Width="165" Value="{Binding WindowSize, ElementName=Window}"/>	
-							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
-								Maximum="{Binding Maximum, ElementName=WindowSize}"
-								Minimum="{Binding Minimum, ElementName=WindowSize}"
-								Value="{Binding Value, ElementName=WindowSize, UpdateSourceTrigger=PropertyChanged}"/>
-						</StackPanel>
-						<Label Content="Inpaint Block Size"/>
-						<StackPanel Orientation="Horizontal">
-							<Slider x:Name="InpaintBlockSize" Maximum="50" TickPlacement="TopLeft"
-							 TickFrequency="10" Minimum="0" Width="165" Value="{Binding InpaintBlockSize, ElementName=Window}"/>	
-							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
-								Maximum="{Binding Maximum, ElementName=InpaintBlockSize}"
-								Minimum="{Binding Minimum, ElementName=InpaintBlockSize}"
-								Value="{Binding Value, ElementName=InpaintBlockSize, UpdateSourceTrigger=PropertyChanged}"/>
-						</StackPanel>
+<!--						<Label Content="Window Size"/>-->
+<!--						<StackPanel Orientation="Horizontal">-->
+<!--							<Slider x:Name="WindowSize" Maximum="25" TickPlacement="TopLeft"-->
+<!--							 TickFrequency="5" Minimum="0" Width="165" Value="{Binding WindowSize, ElementName=Window}"/>	-->
+<!--							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"-->
+<!--								Maximum="{Binding Maximum, ElementName=WindowSize}"-->
+<!--								Minimum="{Binding Minimum, ElementName=WindowSize}"-->
+<!--								Value="{Binding Value, ElementName=WindowSize, UpdateSourceTrigger=PropertyChanged}"/>-->
+<!--						</StackPanel>-->
+<!--						<Label Content="Inpaint Block Size"/>-->
+<!--						<StackPanel Orientation="Horizontal">-->
+<!--							<Slider x:Name="InpaintBlockSize" Maximum="50" TickPlacement="TopLeft"-->
+<!--							 TickFrequency="10" Minimum="0" Width="165" Value="{Binding InpaintBlockSize, ElementName=Window}"/>	-->
+<!--							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"-->
+<!--								Maximum="{Binding Maximum, ElementName=InpaintBlockSize}"-->
+<!--								Minimum="{Binding Minimum, ElementName=InpaintBlockSize}"-->
+<!--								Value="{Binding Value, ElementName=InpaintBlockSize, UpdateSourceTrigger=PropertyChanged}"/>-->
+<!--						</StackPanel>-->
 						<Button x:Name="Inpaint" HorizontalAlignment="Center" Margin="0,10" Click="Inpaint_OnClick">
 							<DockPanel HorizontalAlignment="Center">
 								<Image Height="32" Source="Resources/12-Magic-Hat-icon.png"/>
@@ -346,9 +359,10 @@
 			</TabControl>
 		</Grid>
 		<ScrollViewer x:Name="ImageScroller" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
-			Drop="DropImage" DragOver="DragImageOver" AllowDrop="True">
-			<Border x:Name="CanvasBorder" BorderBrush="Black" BorderThickness="1" Margin="45"
-				VerticalAlignment="Center" HorizontalAlignment="Center" Width="450" Height="350">
+			Drop="DropImage" DragOver="DragImageOver" AllowDrop="True" >
+            <Border x:Name="CanvasBorder"  BorderBrush="Black" BorderThickness="1" Margin="45"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Width="{Binding CanvasWidth, ElementName=Window}" 
+                    Height="{Binding CanvasHeight, ElementName=Window}">
 				<Grid x:Name="DrawingGrid">
 					<Rectangle x:Name="Selection" StrokeDashArray="3 3" Height="1" Width="1" Panel.ZIndex="1"/>
 					<Image x:Name="ImageEdit"  HorizontalAlignment="Left" VerticalAlignment="Top"

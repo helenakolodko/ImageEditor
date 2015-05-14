@@ -37,25 +37,21 @@
 		</Style>
 <!--        <ObjectDataProvider x:Key="HistorgamImageProvider" ObjectType="{x:Type imageEditorView:MainView}"-->
 <!--                            MethodName="GetImage"/>-->
+        
         <!--Scrollbar Thumbs-->
         <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
                         <Grid x:Name="Grid">
-                            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto" Fill="Transparent" />
-                            <Border x:Name="Rectangle1" CornerRadius="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"  Background="{TemplateBinding Background}" Margin="1,0" />
+                            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" 
+                                       Height="Auto" Fill="Transparent" />
+                            <Border x:Name="Rectangle1" CornerRadius="4" HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch" Width="Auto" Height="Auto"  
+                                    Background="{TemplateBinding Background}" Margin="1" />
                         </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="Tag" Value="Horizontal">
-                                <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
-                                <Setter TargetName="Rectangle1" Property="Height" Value="7" />
-                            </Trigger>
-                            <Trigger Property="Tag" Value="Vertical">
-                                <Setter TargetName="Rectangle1" Property="Width" Value="7" />
-                                <Setter TargetName="Rectangle1" Property="Height" Value="Auto" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -63,6 +59,7 @@
 
         <!--ScrollBars-->
         <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
             <Setter Property="Foreground" Value="#FFF3F3F3" />
             <Setter Property="Background" Value="Transparent"/>
@@ -90,7 +87,10 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
-                                <Setter Value="{DynamicResource ButtonSelectBrush}" TargetName="Thumb" Property="Background" />
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger SourceName="Thumb" Property="IsMouseOver" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
                             </Trigger>
                             <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
                                 <Setter Value="#FFE6E6E6" TargetName="Thumb" Property="Background" />
@@ -112,11 +112,47 @@
                                 </Setter>
                                 <Setter Property="Width" Value="Auto" />
                                 <Setter Property="Height" Value="10" />
-                                <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
                                 <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
                                 <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
                             </Trigger>
                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ScrollViewer}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate  TargetType="{x:Type ScrollViewer}">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.ColumnSpan="2" Grid.RowSpan="2" 
+                                CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" 
+                                CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" />
+                            <ScrollBar Grid.Column="1" x:Name="PART_VerticalScrollBar" 
+                                HorizontalAlignment="Right" AutomationProperties.AutomationId="VerticalScrollBar" 
+                                Cursor="Arrow"  Maximum="{TemplateBinding ScrollableHeight}" Minimum="0"
+                                Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
+                                Value="{Binding VerticalOffset, Mode=OneWay, 
+                                RelativeSource={RelativeSource TemplatedParent}}" 
+                                ViewportSize="{TemplateBinding ViewportHeight}"/>
+                            <ScrollBar Grid.Row="1" x:Name="PART_HorizontalScrollBar" 
+                                Orientation="Horizontal" AutomationProperties.AutomationId="HorizontalScrollBar" 
+                                Cursor="Arrow"  Maximum="{TemplateBinding ScrollableWidth}" Minimum="0"
+                                Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" 
+                                Value="{Binding HorizontalOffset, Mode=OneWay, 
+                                RelativeSource={RelativeSource TemplatedParent}}" 
+                                ViewportSize="{TemplateBinding ViewportWidth}"/>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

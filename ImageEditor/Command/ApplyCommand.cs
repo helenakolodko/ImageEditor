@@ -4,11 +4,11 @@ using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    public class ResizeCommand : ICommand
+    class ApplyCommand : ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
-        public ResizeCommand(ImageEditorViewModel viewModel)
+        public ApplyCommand(ImageEditorViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -22,21 +22,22 @@ namespace ImageEditor.Command
             return false;
         }
 
-        public void Execute(object param)
+        public void Execute(object parameter)
         {
-            _viewModel.Image.Resize(_viewModel.ImageWidth, _viewModel.ImageHeight);
+            _viewModel.ApplyChanges();
+            _viewModel.ResetFields();
         }
-
-        public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void Redo(CommandContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

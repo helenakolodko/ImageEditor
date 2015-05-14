@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing.Imaging;
 using System.Windows.Input;
 using ImageEditor.Model;
 using ImageEditor.ViewModel;
@@ -38,10 +35,29 @@ namespace ImageEditor.Command
             };
             if (saveFileDialog.ShowDialog() == true)
             {
-                // format ?
-                image.Source.Save(saveFileDialog.FileName);
+                image.Source.Save(saveFileDialog.FileName, GetImageFormat(saveFileDialog.FileName));
             }
         }
+
+        private ImageFormat GetImageFormat(string imagePath)
+        {
+            ImageFormat result = ImageFormat.Png;
+            string extention = System.IO.Path.GetExtension(imagePath);
+            if (extention == ".jpg")
+            {
+                result = ImageFormat.Jpeg;
+            }
+            else if (extention == ".bmp")
+            {
+                result = ImageFormat.Bmp;
+            }
+            else if (extention == ".gif")
+            {
+                result = ImageFormat.Gif;
+            }
+            return result;
+        }
+
 
         public event EventHandler CanExecuteChanged;
 

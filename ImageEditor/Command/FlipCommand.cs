@@ -15,12 +15,24 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            if (_viewModel.Image != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         public void Execute(object parameter)
         {
-            throw new System.NotImplementedException();
+            string orientation = (string)parameter;
+            if (orientation == "H")
+            {
+                _viewModel.Image.FlipHorisontal();
+            }
+            else
+            {
+                _viewModel.Image.FlipVertical();
+            }
         }
 
         public event EventHandler CanExecuteChanged;

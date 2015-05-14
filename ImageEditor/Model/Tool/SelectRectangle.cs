@@ -1,6 +1,6 @@
 ﻿namespace ImageEditor.Model.Tool
 {
-    class SelectRect : SelectTool
+    class SelectRectangle : SelectTool
     {
     }
 }

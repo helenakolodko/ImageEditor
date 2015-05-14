@@ -18,6 +18,55 @@ namespace ImageEditor.ViewModel
 {
     public class ImageEditorViewModel : INotifyPropertyChanged
     {
+        private EditableImage _image;
+        private EditableImage _tempImage;
+
+        public EditableImage Image
+        {
+            get { return _image; }
+            set
+            {
+                _image = value;
+                _tempImage = value;
+            }
+        }
+
+        private double _zoom;
+        public double Zoom
+        {
+            get
+            {
+                return _zoom;
+            }
+            set
+            {
+                if (value > 0e-3)
+                {
+                    _zoom = value;
+                    ZoomImage();
+                    // Selectedool.Zoom = value
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public Color SelectedColor { get; set; }
+
+        private double _width;
+
+        public double CanvasWidth
+        {
+            get { return _width; } 
+            set { _width = value; OnPropertyChanged(); }
+        }
+
+        private double _height;
+
+        public double CanvasHeight
+        {
+            get { return _height; } 
+            set { _height = value; OnPropertyChanged(); }
+        }
+
         private int _brightness;
         public int Brightness
         {
@@ -85,30 +134,27 @@ namespace ImageEditor.ViewModel
             }
         }
 
-        private EditableImage _image;
-        private EditableImage _tempImage;
-
-        public EditableImage Image
+        private int _imageWidth;
+        public int ImageWidth
         {
-            get { return _image; }
-            set
-            {
-                _image = value;
-                _tempImage = value;
-            }
+            get { return _imageWidth; } 
+            set { _imageWidth = value; OnPropertyChanged(); }
+        }
+
+        private int _imageHeight;
+        public int ImageHeight
+        {
+            get { return _imageHeight; }
+            set { _imageHeight = value; OnPropertyChanged(); }
         }
 
         public float NoiseCoverage { get; set; }
-
         public int ReductionRadius { get; set; }
         public int SpatialFactor { get; set; }
         public int ColourFactor { get; set; }
 
-
-
-        public float Zoom { get; set; }
-
-        public Color SelectedColor { get; set; }
+        
+       
 
 
 
@@ -146,7 +192,7 @@ namespace ImageEditor.ViewModel
 //                        _selection.StartPoint = new Point(0, 0);
 //                        _selection.EndPoint = new Point(CanvasBorder.Width, CanvasBorder.Height);
 //                        break;
-//                    case ToolType.SelectRect:
+//                    case ToolType.SelectRectangle:
 //                        _selection.Active = true;
 //                        ImageEdit.Cursor = Cursors.Cross;
 //                        break;
@@ -245,17 +291,14 @@ namespace ImageEditor.ViewModel
 //            Zoom.Text = (int)(_zoom * 100) + "%";
 //            ZoomImage();
 //        }
-//        private void ZoomImage()
-//        {
-//            ImageScroller.ScrollToHorizontalOffset(0);
-//            ImageScroller.ScrollToVerticalOffset(0);
-//            if (_image != null)
-//            {
-//                CanvasBorder.Width = _zoom * _image.Width;
-//                CanvasBorder.Height = _zoom * _image.Height;
-//                _selection.Zoom = _zoom;
-//            }
-//        }
+        private void ZoomImage()
+        {
+            if (_image != null)
+            {
+                CanvasWidth = _zoom * _image.Width;
+                CanvasHeight = _zoom * _image.Height;
+            }
+        }
 //        
 //
 //        public void OnAdjustmentChanged()
@@ -377,6 +420,12 @@ namespace ImageEditor.ViewModel
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void ApplyChanges()
+        {
+            // ???
+            Image.Source = _tempImage.Source;
         }
     }
 }

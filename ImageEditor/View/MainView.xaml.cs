@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using AForge;
@@ -24,6 +25,9 @@ namespace ImageEditor.View
 
     public partial class MainView : INotifyPropertyChanged
     {
+        private bool _active;
+        public bool Active { get { return _active; } set { _active = value; OnPropertyChanged(); } }
+
         private float _noiseAmount = 10f;
         public float NoiseAmount
         {
@@ -74,7 +78,7 @@ namespace ImageEditor.View
 
         private Image _image;
         private Image _tempImage;
-        private float _zoom;
+        private double _zoom;
         private Tool _selectedTool;
         private int _brightness;
         private int _contrast;
@@ -116,12 +120,55 @@ namespace ImageEditor.View
             }
         }
 
+        private int _imageWidth;
+        public int ImageWidth
+        {
+            get { return _imageWidth; }
+            set { _imageWidth = value; OnPropertyChanged(); }
+        }
+
+        private int _imageHeight;
+        public int ImageHeight
+        {
+            get { return _imageHeight; }
+            set { _imageHeight = value; OnPropertyChanged(); }
+        }
+
+        private double _width;
+        private double _height;
+        public double CanvasWidth { 
+            get { return _width; } 
+            set { _width = value; OnPropertyChanged(); } }
+
+        public double CanvasHeight
+        {
+            get { return _height; } 
+            set { _height = value; OnPropertyChanged(); }
+        }
+
+        public double Zoom
+        {
+            get
+            {
+                return _zoom;
+            }
+            set
+            {
+                if (value > 0e-3)
+                {
+                    _zoom = value;
+                    ZoomImage();
+                    // Selectedool.Zoom = value
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public MainView()
         {
             InitializeComponent();
             SelectedTool = Tool.Hand;
-            ImageScroller.Visibility = Visibility.Hidden;
-            _zoom = 1.0f;
+            Zoom = 1.0;
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
@@ -137,43 +184,27 @@ namespace ImageEditor.View
 
         private void ZoomIn_Click(object sender, RoutedEventArgs e)
         {
-            _zoom += .25f;
-            Zoom.Text = (int)(_zoom * 100) + "%";
+            Zoom += .25f;
             ZoomOut.IsEnabled = true;
-            ZoomImage();
         }
 
         private void ZoomImage()
         {
-            ImageScroller.ScrollToHorizontalOffset(0);
-            ImageScroller.ScrollToVerticalOffset(0);
             if (_image != null)
             {
-                CanvasBorder.Width = _zoom * _image.Width;
-                CanvasBorder.Height = _zoom * _image.Height;
+                CanvasWidth = _zoom * _image.Width;
+                CanvasHeight = _zoom * _image.Height;
             }
         }
 
         private void ZoomOut_Click(object sender, RoutedEventArgs e)
         {
-            ImageScroller.ScrollToHorizontalOffset(0);
-            ImageScroller.ScrollToVerticalOffset(0);
-            if (_zoom <= .15f)
-            {
-                ZoomOut.IsEnabled = false;
-            }
-            else
-            {
-                _zoom -= _zoom > .25f ? .25f : .1f;
-            }
-            Zoom.Text = (int)(_zoom * 100) + "%";
-            ZoomImage();
+             Zoom -= _zoom > .25f ? .25f : .1f;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-            //saveFileDialog.DefaultExt = ".txt";
             saveFileDialog.Filter = ImageEditor.Properties.Resources.filter;
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -190,8 +221,8 @@ namespace ImageEditor.View
                 _image = b.Clone(new Rectangle(0, 0, b.Width, b.Height), PixelFormat.Format32bppArgb);
             }
             ImageScroller.Visibility = Visibility.Visible;
-            _zoom = 1;
-            ZoomImage();
+            Zoom = 1.0;
+            Active = true;
             ShowImage(_image);
             histogram.Image = _image;
         }

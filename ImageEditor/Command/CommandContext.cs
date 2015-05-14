@@ -4,10 +4,10 @@ namespace ImageEditor.Command
 {
     public class CommandContext
     {
-        private ICommand _command;
+        private IReversableCommand _command;
         // imageEditor context
         // command params
-        public CommandContext(ICommand command)
+        public CommandContext(IReversableCommand command)
         {
             _command = command;
         }
