@@ -1,7 +1,5 @@
-﻿using ImageEditor.View;
+﻿using System.Drawing;
 using Xceed.Wpf.Toolkit;
-using Color = System.Drawing.Color;
-using Point = System.Drawing.Point;
 
 namespace ImageEditor.Model.Tool
 {
@@ -28,6 +26,9 @@ namespace ImageEditor.Model.Tool
         public Color GetColor()
         {
             return _selectedColor;
+//            var b = (Bitmap)_image;
+//            Color c = b.GetPixel((int)point.X, (int)point.Y);
+//            ColorPicker.SelectedColor = System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B);
         }
 
         protected Point StartPoint

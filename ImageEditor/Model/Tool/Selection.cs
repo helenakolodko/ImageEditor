@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Rectangle = System.Windows.Shapes.Rectangle;
+using System.Windows.Shapes;
 
 namespace ImageEditor.Model.Tool
 {

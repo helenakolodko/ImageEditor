@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace ImageEditor.Model.Tool
 {
@@ -6,7 +7,7 @@ namespace ImageEditor.Model.Tool
     {
         public override void MouseUp(Point position)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

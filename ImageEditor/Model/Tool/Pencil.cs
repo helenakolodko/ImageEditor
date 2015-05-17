@@ -7,7 +7,7 @@ using Xceed.Wpf.Toolkit;
 
 namespace ImageEditor.Model.Tool
 {
-    class Pen : DrawingTool
+    class Pencil : DrawingTool
     {
         private readonly Image _imageControl;
         private ColorPicker _colorPicker;
@@ -22,12 +22,12 @@ namespace ImageEditor.Model.Tool
             
         }
 
-        private System.Windows.Media.Color _penColor
+        private Color _penColor
         {
             get { return _colorPicker.SelectedColor; }
         }
 
-        public Pen(Image imageControl, ColorPicker colorPicker, Grid drawinGrid)
+        public Pencil(Image imageControl, ColorPicker colorPicker, Grid drawinGrid)
         {
             _imageControl = imageControl;
             _colorPicker = colorPicker;
@@ -41,13 +41,13 @@ namespace ImageEditor.Model.Tool
         private PathGeometry _pathGeometry;
         protected PathFigure _pathFigure;
         protected Path _path;
-        protected System.Windows.Media.Pen _pen;
+        protected Pen _pen;
 
         protected override void SetStartPoint(Point value)
         {
             _startPoint = value;
             this.Thickness = 1;
-            _pen = new System.Windows.Media.Pen(new SolidColorBrush(_penColor), Thickness);
+            _pen = new Pen(new SolidColorBrush(_penColor), Thickness);
             _pathGeometry = new PathGeometry {FillRule = FillRule.Nonzero};
             _pathFigure = new PathFigure
             {

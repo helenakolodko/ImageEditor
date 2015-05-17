@@ -16,11 +16,7 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            if (_viewModel.Image != null)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public void Execute(object parameter)
@@ -29,7 +25,7 @@ namespace ImageEditor.Command
             ToolType result;
             if (ToolType.TryParse(type, true, out result))
             {
-                _viewModel.SelectedTool = _viewModel.GetTool(result);
+                _viewModel.GetTool(result);
             }
            _viewModel.ResetTools();
         }

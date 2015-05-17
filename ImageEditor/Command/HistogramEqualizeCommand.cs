@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using ImageEditor.ViewModel;
+using ImageProcessing;
 
 namespace ImageEditor.Command
 {
@@ -15,29 +16,24 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            if (_viewModel.Image != null)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public void Execute(object param)
         {
-
-            throw new System.NotImplementedException();
+            _viewModel.Image.Source = HistogramEqualazer.Equalize(_viewModel.Image.Source, _viewModel.SelectedRegion);
         }
 
         public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void Redo(CommandContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

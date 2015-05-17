@@ -15,11 +15,7 @@ namespace ImageEditor.Command
         }
         public bool CanExecute(object parameter)
         {
-            if (_viewModel.Image != null)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public void Execute(object param)

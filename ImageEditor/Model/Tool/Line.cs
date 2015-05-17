@@ -2,11 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Microsoft.Expression.Utility.Extensions;
 using Xceed.Wpf.Toolkit;
-using Color = System.Drawing.Color;
-using Image = System.Windows.Controls.Image;
-using Point = System.Windows.Point;
 
 namespace ImageEditor.Model.Tool
 {
@@ -25,7 +21,7 @@ namespace ImageEditor.Model.Tool
             
         }
 
-        private System.Windows.Media.Color _penColor
+        private Color _penColor
         {
             get { return _colorPicker.SelectedColor; }
         }
@@ -40,14 +36,14 @@ namespace ImageEditor.Model.Tool
         public int Thickness { get; set; }
 
         private DrawingContext _drawingContext;
-        private System.Windows.Media.Pen _pen;
+        private Pen _pen;
         private System.Windows.Shapes.Line _line;
 
         protected override void SetStartPoint(Point value)
         {
             _startPoint = value;
             this.Thickness = 1;
-            _pen = new System.Windows.Media.Pen(new SolidColorBrush(_penColor), Thickness);
+            _pen = new Pen(new SolidColorBrush(_penColor), Thickness);
             _line = new System.Windows.Shapes.Line
             {
                 X1 = _startPoint.X,

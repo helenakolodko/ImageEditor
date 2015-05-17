@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Input;
 using ImageEditor.Model;
+using ImageEditor.Properties;
 using ImageEditor.ViewModel;
 using Microsoft.Win32;
 
@@ -18,11 +20,7 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            if (_viewModel.Image != null)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public void Execute(object param)
@@ -31,7 +29,7 @@ namespace ImageEditor.Command
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 DefaultExt = "." + image.Format.ToString().ToLower(),
-                Filter = Properties.Resources.filter
+                Filter = Resources.filter
             };
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -42,7 +40,7 @@ namespace ImageEditor.Command
         private ImageFormat GetImageFormat(string imagePath)
         {
             ImageFormat result = ImageFormat.Png;
-            string extention = System.IO.Path.GetExtension(imagePath);
+            string extention = Path.GetExtension(imagePath);
             if (extention == ".jpg")
             {
                 result = ImageFormat.Jpeg;

@@ -1,11 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
 
 namespace ImageEditor.Model.Tool
 {
-    internal class Brush : Pen
+    internal class Brush : Pencil
     {
         public Brush(Image imageControl, ColorPicker colorPicker, Grid drawinGrid) 
             : base(imageControl, colorPicker, drawinGrid)

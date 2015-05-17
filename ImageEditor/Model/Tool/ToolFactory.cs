@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ImageEditor.Model.Tool
 {
-    enum ToolType { Drag, Selection, Eyedropper, Pen, Brush, Line, Bucket };
+    public enum ToolType { Drag, Selection, Eyedropper, Pen, Brush, Line, Bucket };
     class ToolFactory
     {
         private Dictionary<ToolType, Type> _toolConstructors;
@@ -28,7 +28,7 @@ namespace ImageEditor.Model.Tool
             _toolConstructors[ToolType.Drag] = typeof(Drag);
             _toolConstructors[ToolType.Selection] = typeof(Selection);
             _toolConstructors[ToolType.Eyedropper] = typeof(Eyedropper);
-            _toolConstructors[ToolType.Pen] = typeof(Pen);
+            _toolConstructors[ToolType.Pen] = typeof(Pencil);
             _toolConstructors[ToolType.Brush] = typeof(Brush);
             _toolConstructors[ToolType.Line] = typeof(Line);
             _toolConstructors[ToolType.Bucket] = typeof(Bucket);

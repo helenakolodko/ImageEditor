@@ -1,19 +1,11 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using ImageEditor.Annotations;
 using ImageEditor.Command;
 using ImageEditor.Model;
 using ImageEditor.Model.Tool;
-using ImageProcessing;
-using Microsoft.Win32;
-using Point = System.Windows.Point;
 
 namespace ImageEditor.ViewModel
 {
@@ -30,16 +22,26 @@ namespace ImageEditor.ViewModel
                 _image = value;
                 _tempImage = value;
                 ImageToDisplay = value.Source;
+                OnPropertyChanged("CanvasHeight");
+                OnPropertyChanged("CanvasWidth");
+                OnPropertyChanged();
             }
         }
 
         public Bitmap ImageToDisplay
         {
-            get { return _tempImage.Source; }
+            get
+            {
+                if (_tempImage != null)
+                {
+                    return _tempImage.Source;
+                }
+                return null;
+            }
             set { _tempImage.Source = value; OnPropertyChanged(); }
         }
 
-        private double _zoom;
+        private double _zoom = 1;
         public double Zoom
         {
             get
@@ -51,14 +53,15 @@ namespace ImageEditor.ViewModel
                 if (value > 0e-3)
                 {
                     _zoom = value;
-                    ZoomImage();
+                    OnPropertyChanged("CanvasHeight");
+                    OnPropertyChanged("CanvasWidth");
                     // Selectedool.Zoom = value
                     OnPropertyChanged();
                 }
             }
         }
 
-        private bool _active;
+        private bool _active = false;
         public bool Active { get { return _active; } set { _active = value; OnPropertyChanged(); } }
 
         private Selection _selection;
@@ -73,20 +76,28 @@ namespace ImageEditor.ViewModel
 
         public Color SelectedColor { get; set; }
 
-        private double _width;
-
         public double CanvasWidth
         {
-            get { return _width; } 
-            set { _width = value; OnPropertyChanged(); }
+            get 
+            {
+                if (_tempImage != null)
+                {
+                    return _tempImage.Width* Zoom;
+                }
+                return 0;
+            } 
         }
-
-        private double _height;
 
         public double CanvasHeight
         {
-            get { return _height; } 
-            set { _height = value; OnPropertyChanged(); }
+            get
+            {
+                if (_tempImage != null)
+                {
+                    return _tempImage.Height * Zoom;
+                }
+                return 0;
+            } 
         }
 
         private int _brightness;
@@ -178,6 +189,26 @@ namespace ImageEditor.ViewModel
             set { _noiseCoverage = value; OnPropertyChanged(); }
         }
 
+        public bool SaltAndPapper { get; set; }
+
+        public void OnNoiseCoverageChanged()
+        {
+//            if (SaltAndPapper)
+//            {
+//                _tempImage = NoiseGenerator.SaltAndPapper(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+//                    NoiseCoverage);
+//            }
+//            else
+//            {
+//                _tempImage = NoiseGenerator.Additive(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+//                    NoiseCoverage);
+//            }
+//
+//            ShowImage(_tempImage);
+        }
+
+        public bool Median { get; set; }
+
         private int _medianRadius;
         public int MedianRadius
         {
@@ -206,6 +237,58 @@ namespace ImageEditor.ViewModel
             set { _colourFactor = value; OnPropertyChanged(); }
         }
 
+        public void OnNoiseReduceParamsChanged()
+        {
+//            if (Median)
+//            {
+//                _tempImage = NoiseReducer.Median(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+//                    MedianRadius);
+//            }
+//            else
+//            {
+//                _tempImage = NoiseReducer.Bilateral(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+//                    KernelSize, SpatialFactor, ColourFactor);
+//            }
+//            ShowImage(_tempImage);
+        }
+
+        private int _histogramLeft;
+        private int _histogramRight = 255;
+
+        public int HistogramLeft
+        {
+            get { return _histogramLeft; }
+            set
+            {
+                if (_histogramRight >= value)
+                {
+                    _histogramLeft = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int HistogramRight
+        {
+            get { return _histogramRight; }
+            set
+            {
+                if (_histogramLeft <= value)
+                {
+                    _histogramRight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public void OnHistogramBoundsChanged()
+        {
+//            _tempImage = HistogramEqualazer.Squeeze(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+//                HistogramLeft, HistogramRight);
+//            ShowImage(_tempImage);
+//            Histogram.Image = _tempImage;
+        }
+
         private int _lbpWindowSize;
         public int LbpWindowSize
         {
@@ -220,85 +303,6 @@ namespace ImageEditor.ViewModel
             set { _inpaintBlockSize = value; OnPropertyChanged(); }
         }
         
-
-//
-//        private Image _image;
-//        private Image _tempImage;
-//        private float _zoom;
-//        private Selection _selection;
-//        private ToolType _selectedTool;
-//        private Point _startPoint;
-//        private bool _draw;
-//        private string _imagePath;
-//        private ImageFormat _imageFormat;
-//        private ToolType SelectedTool
-//        {
-//            get { return _selectedTool; }
-//            set
-//            {
-//                _selectedTool = value;
-//                _tempImage = _image;
-//                switch (value)
-//                {
-//                    case ToolType.Drag:
-//                        ImageEdit.Cursor = Cursors.Hand;
-//                        _selection.Active = false;
-//                        _selection.StartPoint = new Point(0, 0);
-//                        _selection.EndPoint = new Point(CanvasBorder.Width, CanvasBorder.Height);
-//                        break;
-//                    case ToolType.Selection:
-//                        _selection.Active = true;
-//                        ImageEdit.Cursor = Cursors.Cross;
-//                        break;
-//                    default:
-//                        ImageEdit.Cursor = Cursors.Arrow;
-//                        break;
-//                }
-//            }
-//        }
-//        private void Open_Click(object sender, RoutedEventArgs e)
-//        {
-//            OpenFileDialog openFileDialog = new OpenFileDialog {Filter = Properties.Resources.filter};
-//            if (openFileDialog.ShowDialog() == true)
-//            {
-//                OpenImage(openFileDialog.FileName);
-//            }
-//        }
-//
-//        private void OpenImage(string imagePath)
-//        {
-//            _imagePath = imagePath;
-//            _imageFormat = GetImageFormat(imagePath);
-//            _image = new Bitmap(imagePath);
-//            _tempImage = _image;
-//            ImageScroller.Visibility = Visibility.Visible;
-//            _zoom = 1;
-//            _selection.StartPoint = new Point(0, 0);
-//            ZoomImage();
-//            _selection.EndPoint = new Point(CanvasBorder.Width, CanvasBorder.Height);
-//            Reset();
-//        }
-//
-//        private void ShowImage(Image image)
-//        {
-//            MemoryStream ms = new MemoryStream();
-//            image.Save(ms, ImageFormat.Jpeg);
-//            ms.Position = 0;
-//            BitmapImage bi = new BitmapImage();
-//            bi.BeginInit();
-//            bi.StreamSource = ms;
-//            bi.EndInit();
-//            ImageEdit.Source = bi;
-//        }
-//
-//        private void Save_Click(object sender, RoutedEventArgs e)
-//        {
-//            if (_imagePath != "")
-//            {
-//                _image.Save(_imagePath);
-//            }
-//        }
-//
         public void ResetFields()
         {
             Brightness = 0;
@@ -326,53 +330,11 @@ namespace ImageEditor.ViewModel
 
         public void ResetTools()
         {
-            // reset all tools, zoom, show imageScroller
+            // reset all tools
+            Zoom = 1;
         }
-//
-//        private void SaveAs_Click(object sender, RoutedEventArgs e)
-//        {
-//            SaveFileDialog saveFileDialog = new SaveFileDialog
-//            {
-//                DefaultExt = "." + _imageFormat.ToString().ToLower(),
-//                Filter = Properties.Resources.filter
-//            };
-//            if (saveFileDialog.ShowDialog() == true)
-//            {
-//                _image.Save(saveFileDialog.FileName, _imageFormat);
-//            }
-//        }
-//
-//        private void ZoomIn_Click(object sender, RoutedEventArgs e)
-//        {
-//            _zoom += .25f;
-//            Zoom.Text = (int)(_zoom * 100) + "%";
-//            ZoomOut.IsEnabled = true;
-//            ZoomImage();
-//        }
-//
-//        private void ZoomOut_Click(object sender, RoutedEventArgs e)
-//        {
-//            ImageScroller.ScrollToHorizontalOffset(0);
-//            ImageScroller.ScrollToVerticalOffset(0);
-//            if (_zoom <= .15f)
-//            {
-//                ZoomOut.IsEnabled = false;
-//            }
-//            else
-//            {
-//                _zoom -= _zoom > .25f ? .25f : .1f;
-//            }
-//            Zoom.Text = (int)(_zoom * 100) + "%";
-//            ZoomImage();
-//        }
-        private void ZoomImage()
-        {
-            if (_image != null)
-            {
-                CanvasWidth = _zoom * _image.Width;
-                CanvasHeight = _zoom * _image.Height;
-            }
-        }
+
+
 //        
 //
 //        public void OnAdjustmentChanged()
@@ -406,88 +368,17 @@ namespace ImageEditor.ViewModel
 //            Reset();
 //        }
 //
-//        private void ImageEdit_MouseDown(object sender, MouseButtonEventArgs e)
-//        {
-//            _draw = true;
-//            _startPoint = e.GetPosition(CanvasBorder);
-//            if (SelectedTool == Tool.Select)
-//            {
-//                _selection.StartPoint = _startPoint;
-//                _selection.EndPoint = _startPoint;
-//            }
-//        }
-//
-//        private void ImageEdit_MouseMove(object sender, MouseEventArgs e)
-//        {
-//            if (_draw)
-//            {
-//                switch (_selectedTool)
-//                {
-//                    case Tool.Hand:
-//                        MoveImage(e.GetPosition(CanvasBorder));
-//                        break;
-//                    case Tool.Select:
-//                        _selection.EndPoint = e.GetPosition(CanvasBorder);
-//                        break;
-//                }
-//            }
-//        }
-//
-//        private void MoveImage(Point point)
-//        {
-//            ImageScroller.ScrollToHorizontalOffset(ImageScroller.HorizontalOffset + _startPoint.X - point.X);
-//            ImageScroller.ScrollToVerticalOffset(ImageScroller.VerticalOffset + _startPoint.Y - point.Y);
-//            ImageScroller.UpdateLayout();
-//        }
-//
-//        private void ImageEdit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-//        {
-//            if (_draw)
-//            {
-//                switch (_selectedTool)
-//                {
-//                    case Tool.Hand:
-//                        MoveImage(e.GetPosition(CanvasBorder));
-//                        break;
-//                    case Tool.Select:
-//                        _selection.EndPoint = e.GetPosition(CanvasBorder);
-//                        break;
-//                }
-//            }
-//            _draw = false;
-//        }
-//
-//        private void Drag_Click(object sender, RoutedEventArgs e)
-//        {
-//            SelectedTool = ToolType.Drag;
-//        }
-//
-//        private void SelectRegion_Click(object sender, RoutedEventArgs e)
-//        {
-//            SelectedTool = Tool.Select;
-//        }
-//
-//        private void ImageDrop(object sender, DragEventArgs e)
-//        {
-//            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-//            {
-//                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-//                OpenImage(files[0]);
-//            }
-//        }
-//
-//        private void ImageDragOver(object sender, DragEventArgs e)
-//        {
-//            e.Effects = e.Data.GetDataPresent(DataFormats.Bitmap) ? DragDropEffects.All : DragDropEffects.None;
-//            e.Handled = false;
-//        }
-//
-//        private void Cancel_OnClick(object sender, RoutedEventArgs e)
-//        {
-//            Reset();
-//        }
+        public void OpenImage(string path)
+        {
+            Image = new EditableImage(path);
+            ResetFields();
+            ResetTools();
+            Active = true;
+        }
+
 
         public ICommand ApplyCommand { get; private set; }
+        public ICommand OpenCommand { get; private set; }        
         public ICommand FlipCommand { get; private set; }
         public ICommand HistogramEqualizeCommand { get; private set; }
         public ICommand CropCommand { get; private set; }
@@ -500,11 +391,14 @@ namespace ImageEditor.ViewModel
         public ICommand ZoomCommand { get; private set; }
         public ICommand ResetCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
+        public ICommand SelectToolCommand { get; private set; }
+
 
         private readonly ToolBox _toolBox;
 
         public ImageEditorViewModel()
         {
+            OpenCommand = new OpenCommand(this);
             ApplyCommand = new ApplyCommand(this);
             FlipCommand = new FlipCommand(this);
             HistogramEqualizeCommand = new HistogramEqualizeCommand(this);
@@ -518,12 +412,13 @@ namespace ImageEditor.ViewModel
             ZoomCommand = new ZoomCommand(this);
             ResetCommand = new ResetCommand(this);
             CloseCommand = new CloseCommand(this);
+            SelectToolCommand = new SelectToolCommand(this);
             _toolBox = new ToolBox(this);
             _selection = (Selection)_toolBox.GetTool(ToolType.Selection);
             SelectedTool = _toolBox.GetTool(ToolType.Drag);
         }
 
-        public Tool GetTool(ToolType type)
+        public void GetTool(ToolType type)
         {
             SelectedTool = _toolBox.GetTool(type);
         }

@@ -9,7 +9,7 @@ namespace ImageProcessing
 {
     static public class HistogramEqualazer
     {
-        public static Image Equalize(Image image, Rectangle region)
+        public static Bitmap Equalize(Image image, Rectangle region)
         {
             int startX = region.Left;
             int startY = region.Top;
@@ -71,7 +71,7 @@ namespace ImageProcessing
             return equalizedHistogram;
         }
 
-        public static Image Stretch(Image image, Rectangle region)
+        public static Bitmap Stretch(Image image, Rectangle region)
         {
             int startX = region.Left;
             int startY = region.Top;

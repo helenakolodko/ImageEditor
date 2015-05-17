@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using ImageEditor.Model;
+using ImageEditor.Properties;
 using ImageEditor.ViewModel;
 using Microsoft.Win32;
 
@@ -22,7 +23,7 @@ namespace ImageEditor.Command
 
         public void Execute(object param)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog { Filter = Properties.Resources.filter };
+            OpenFileDialog openFileDialog = new OpenFileDialog { Filter = Resources.filter };
             if (openFileDialog.ShowDialog() == true)
             {
                 OpenImage(openFileDialog.FileName);
@@ -34,6 +35,7 @@ namespace ImageEditor.Command
             _viewModel.Image = new EditableImage(imagePath);
             _viewModel.ResetFields();
             _viewModel.ResetTools();
+            _viewModel.Active = true;
             // clear commandList
         }
 

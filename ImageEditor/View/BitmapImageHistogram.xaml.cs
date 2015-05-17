@@ -2,12 +2,11 @@
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media;
-using ImageEditor.Annotations;
 using AForge.Imaging;
+using ImageEditor.Annotations;
+using Image = System.Drawing.Image;
+using Point = System.Windows.Point;
 
 namespace ImageEditor.View
 {
@@ -16,8 +15,8 @@ namespace ImageEditor.View
 	/// </summary>
 	public partial class BitmapImageHistogram:INotifyPropertyChanged
 	{
-        private System.Drawing.Image _image;
-        public System.Drawing.Image Image
+        private Image _image;
+        public Image Image
 	    {
 	        get { return _image; }
 	        set
@@ -90,12 +89,12 @@ namespace ImageEditor.View
             int max = values.Max();
 
             PointCollection points = new PointCollection();
-            points.Add(new System.Windows.Point(0, max));
+            points.Add(new Point(0, max));
             for (int i = 0; i < values.Length; i++)
             {
-                points.Add(new System.Windows.Point(i, max - values[i]));
+                points.Add(new Point(i, max - values[i]));
             }
-            points.Add(new System.Windows.Point(values.Length - 1, max));
+            points.Add(new Point(values.Length - 1, max));
 	        return points;
 	    }
 

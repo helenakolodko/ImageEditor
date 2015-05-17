@@ -15,28 +15,24 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            if (_viewModel.Image != null)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public void Execute(object param)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void Redo(CommandContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
