@@ -15,9 +15,8 @@
 		MinHeight="550" MinWidth="800" Icon="Resources/brush-pencil.png">
     <Window.Resources>
         <databinding:ZoomConverter x:Key="ZoomConverter"/>
-        <databinding:ContrastConverter x:Key="ContrastConverter"/>
-        <databinding:SaturationConverter x:Key="SaturationConverter"/>
-        <databinding:BrightnessConverter x:Key="BrightnessConverter"/>
+        <databinding:BitmapToImageSourceConverter x:Key="BitmapToImageSourceConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 <!--        <ObjectDataProvider x:Key="HistorgamImageProvider" ObjectType="{x:Type imageEditorView:MainView}"-->
 <!--                            MethodName="GetImage"/>-->
     </Window.Resources>
@@ -31,7 +30,10 @@
 			<RowDefinition Height="29"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-        <DockPanel  Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Panels}" >
+
+        <!-- TOOLBAR PANEL -->
+
+        <DockPanel  Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Adjustments}" >
 			<DockPanel Height="25" Margin="6,2,2,2" LastChildFill="False">
                 <Button x:Name="Open" Click="Open_Click" ToolTip="Open">
                     <Image Source="Resources/opened_folder-32.png"/>
@@ -69,8 +71,8 @@
                     <Separator Width="10" Visibility="Hidden" />
                     <xctk:ColorPicker x:Name="ColorPicker" ToolTip="Select Colour"
 						    ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" 
-						    ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="#FF00AEFF" />
-                    <Separator Width="10" Visibility="Hidden" />
+						    ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="#FF00AEFF" Background="{x:Null}" BorderBrush="{x:Null}" />
+					<Separator Width="10" Visibility="Hidden" />
                     <Button x:Name="SelectRegion" Click="SelectRegion_Click" ToolTip="Select">
                         <Image Source="Resources\Cursor-Select-icon.png" />
                     </Button>
@@ -79,6 +81,10 @@
                     </Button>
                     <Button x:Name="Drag" Click="Drag_Click" ToolTip="Drag">
                         <Image Source="Resources\Drag-icon.png"/>
+                    </Button>
+                    <Separator Width="10" Visibility="Hidden" />
+                    <Button x:Name="Cancel" ToolTip="Reset">
+                    	<Image Source="Resources/cancel-26.png" />
                     </Button>
                     <Separator Width="10" Visibility="Hidden" />
                     <ComboBox IsEditable="True" Text="{Binding Zoom, ElementName=Window,
@@ -103,10 +109,20 @@
                 </DockPanel>
             </DockPanel>
         </DockPanel>
-        <Grid Grid.Row="1" Grid.Column="0" IsEnabled="{Binding Active, ElementName=Window}"
+
+
+
+        <!-- ADJUSTMENTS PANEL -->
+
+
+        <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding Active, ElementName=Window, Converter={StaticResource BoolToVis}}"
               Background="{StaticResource ButtonBrush}">
-			<TabControl>
-				<TabItem>
+            <TabControl>
+
+                
+                <!-- FILTERS -->
+
+                <TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Contrast-icon.png" Height="15"/>
@@ -134,7 +150,11 @@
                         <Button x:Name="ApplyBrightness" Content="Apply Filters"  HorizontalAlignment="Center"/>
                     </StackPanel>
 				</TabItem>
-				<TabItem>
+
+
+                <!-- IMAGE EDIT -->
+
+                <TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Cursor-Move-icon.png" Height="15"/>
@@ -188,7 +208,11 @@
 						</Button>					
 					</StackPanel>
 				</TabItem>
-				<TabItem>
+
+
+                <!-- HISTOGRAM -->
+
+                <TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Line-Chart-icon.png" Height="15"/>
@@ -220,10 +244,14 @@
                         </DockPanel>
 					</StackPanel>
 				</TabItem>
-				<TabItem Height="24.96" VerticalAlignment="Bottom">
+
+
+                <!-- NOISE -->
+
+                <TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
-							<Image Source="Resources/File-Pictures-icon.png" Height="15"/>
+							<Image Source="Resources/Pixel-Art-icon.png" Height="15"/>
 							<TextBlock Text=" Noise"/>
 						</StackPanel>
 					</TabItem.Header>
@@ -253,8 +281,8 @@
                                          Margin="6,0" IsChecked="True"/>
 						</DockPanel>
                         <Label Content="Radius" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"/>
-                        <Slider Maximum="25" TickFrequency="5" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"
-                                Minimum="0"  Value="{Binding ReductionRadius, ElementName=Window, Mode=TwoWay}" Margin="6,0" SmallChange="1">
+                        <Slider Maximum="25" TickFrequency="2" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"
+                                Minimum="1"  Value="{Binding ReductionRadius, ElementName=Window, Mode=TwoWay}" Margin="6,0" SmallChange="2" LargeChange="2" IsSnapToTickEnabled="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnNoiseReduceParamsChanged"/>
@@ -292,7 +320,11 @@
 						<Button x:Name="ReduceNoise" Content="Apply" Width="45" />					
 					</StackPanel>
 				</TabItem>
-				<TabItem Height="24.96" VerticalAlignment="Bottom" >
+
+
+                <!-- INPAINTING -->
+
+                <TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/12-Magic-Hat-icon.png" Height="15"/>
@@ -302,12 +334,12 @@
 					<StackPanel Style="{StaticResource Adjustments}">
 						<DockPanel HorizontalAlignment="Center" Margin="6,10,0,0">
 							<Label Content="Marker Color" VerticalAlignment="Center"/>
-							<Canvas Height="35" Width="35" Margin="10,0">
-								<Canvas.Background>
+							<Border CornerRadius="5" Height="35" Width="35" Margin="10,0">
+								<Border.Background>
 									<SolidColorBrush Color="{Binding SelectedColor, ElementName=ColorPicker,
                                         UpdateSourceTrigger=PropertyChanged}" />
-								</Canvas.Background>
-							</Canvas>						
+								</Border.Background>
+							</Border>													
 						</DockPanel>
 						<Label Content="Window Size"/>
 						<Slider x:Name="WindowSize" Maximum="25"  Margin="6,0"
@@ -326,9 +358,16 @@
 						</Border>
 					</StackPanel>
 				</TabItem>
+                
 			</TabControl>
 		</Grid>
-		<ScrollViewer x:Name="ImageScroller" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" 
+
+
+
+        <!-- IMAGE PANEL -->
+
+
+        <ScrollViewer x:Name="ImageScroller" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" 
                       VerticalScrollBarVisibility="Auto" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True" >
             <Border x:Name="CanvasBorder"  BorderBrush="Black" BorderThickness="1" Margin="45"
                     VerticalAlignment="Center" HorizontalAlignment="Center" Width="{Binding CanvasWidth,

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ImageEditor.Annotations;
+using ImageEditor.Command;
 using ImageEditor.Model;
 using ImageEditor.Model.Tool;
 using ImageProcessing;
@@ -28,7 +29,14 @@ namespace ImageEditor.ViewModel
             {
                 _image = value;
                 _tempImage = value;
+                ImageToDisplay = value.Source;
             }
+        }
+
+        public Bitmap ImageToDisplay
+        {
+            get { return _tempImage.Source; }
+            set { _tempImage.Source = value; OnPropertyChanged(); }
         }
 
         private double _zoom;
@@ -60,6 +68,8 @@ namespace ImageEditor.ViewModel
                 return _selection.Active ? _selection.GetRegion() : new Rectangle(0, 0, _image.Width, _image.Height);
             }
         }
+
+        public Tool SelectedTool { get; set; }
 
         public Color SelectedColor { get; set; }
 
@@ -160,25 +170,57 @@ namespace ImageEditor.ViewModel
             set { _imageHeight = value; OnPropertyChanged(); }
         }
 
-        public float NoiseCoverage { get; set; }
-        public int ReductionRadius { get; set; }
-        public int SpatialFactor { get; set; }
-        public int ColourFactor { get; set; }
+        private int _noiseCoverage;
 
-        public int LbpWindowSize { get; set; }
-        public int InpaintBlockSize { get; set; }
+        public int NoiseCoverage
+        {
+            get { return _noiseCoverage; } 
+            set { _noiseCoverage = value; OnPropertyChanged(); }
+        }
 
+        private int _medianRadius;
+        public int MedianRadius
+        {
+            get { return _medianRadius; }
+            set { _medianRadius = value; OnPropertyChanged(); }
+        }
 
+        private int _kernelSize;
+        public int KernelSize
+        {
+            get { return _kernelSize; }
+            set { _kernelSize = value; OnPropertyChanged(); }
+        }
 
-        //
-//        public MainWindow()
-//        {
-//            InitializeComponent();
-//            _selection = new Selection(Selection);
-//            SelectedTool = Tool.Hand;
-//            ImageScroller.Visibility = Visibility.Hidden;
-//            _zoom = 1.0f;
-//        }
+        private int _spatialFactor;
+        public int SpatialFactor
+        {
+            get { return _spatialFactor; }
+            set { _spatialFactor = value; OnPropertyChanged(); }
+        }
+
+        private int _colourFactor;
+        public int ColourFactor
+        {
+            get { return _colourFactor; }
+            set { _colourFactor = value; OnPropertyChanged(); }
+        }
+
+        private int _lbpWindowSize;
+        public int LbpWindowSize
+        {
+            get { return _lbpWindowSize; }
+            set { _lbpWindowSize = value; OnPropertyChanged(); }
+        }
+
+        private int _inpaintBlockSize;
+        public int InpaintBlockSize
+        {
+            get { return _inpaintBlockSize; }
+            set { _inpaintBlockSize = value; OnPropertyChanged(); }
+        }
+        
+
 //
 //        private Image _image;
 //        private Image _tempImage;
@@ -259,7 +301,27 @@ namespace ImageEditor.ViewModel
 //
         public void ResetFields()
         {
-            // reset all adjustments, show initial image
+            Brightness = 0;
+            Contrast = 0;
+            Saturation = 0;
+            Red = 0;
+            Green = 0;
+            Blue = 0;
+            Brightness = 0;
+            NoiseCoverage = 0;
+            MedianRadius = 1;
+            KernelSize = 3;
+            SpatialFactor = 0;
+            ColourFactor = 0;
+            LbpWindowSize = 0;
+            InpaintBlockSize = 0;
+            // show initial image
+        }
+
+        public void ApplyChanges()
+        {
+            // ???
+            Image.Source = _tempImage.Source;
         }
 
         public void ResetTools()
@@ -425,6 +487,47 @@ namespace ImageEditor.ViewModel
 //            Reset();
 //        }
 
+        public ICommand ApplyCommand { get; private set; }
+        public ICommand FlipCommand { get; private set; }
+        public ICommand HistogramEqualizeCommand { get; private set; }
+        public ICommand CropCommand { get; private set; }
+        public ICommand HistogramStretchCommand { get; private set; }
+        public ICommand InpaintCommand { get; private set; }
+        public ICommand ResizeCommand { get; private set; }
+        public ICommand RotateCommand { get; private set; }
+        public ICommand SaveAsCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+        public ICommand ZoomCommand { get; private set; }
+        public ICommand ResetCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
+
+        private readonly ToolBox _toolBox;
+
+        public ImageEditorViewModel()
+        {
+            ApplyCommand = new ApplyCommand(this);
+            FlipCommand = new FlipCommand(this);
+            HistogramEqualizeCommand = new HistogramEqualizeCommand(this);
+            HistogramStretchCommand = new HistogramStretchCommand(this);
+            CropCommand = new CropCommand(this);
+            InpaintCommand = new InpaintCommand(this);
+            ResizeCommand = new ResizeCommand(this);
+            RotateCommand = new RotateCommand(this);
+            SaveAsCommand = new SaveAsCommand(this);
+            SaveCommand = new SaveCommand(this);
+            ZoomCommand = new ZoomCommand(this);
+            ResetCommand = new ResetCommand(this);
+            CloseCommand = new CloseCommand(this);
+            _toolBox = new ToolBox(this);
+            _selection = (Selection)_toolBox.GetTool(ToolType.Selection);
+            SelectedTool = _toolBox.GetTool(ToolType.Drag);
+        }
+
+        public Tool GetTool(ToolType type)
+        {
+            SelectedTool = _toolBox.GetTool(type);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -432,12 +535,6 @@ namespace ImageEditor.ViewModel
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public void ApplyChanges()
-        {
-            // ???
-            Image.Source = _tempImage.Source;
         }
     }
 }

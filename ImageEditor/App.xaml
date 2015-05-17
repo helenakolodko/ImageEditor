@@ -285,12 +285,13 @@
         <Style x:Key="SliderThumb" TargetType="{x:Type Thumb}">
         	<Setter Property="SnapsToDevicePixels" Value="true" />
         	<Setter Property="OverridesDefaultStyle" Value="true" />
-        	<Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
+            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
+            <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
         	<Setter Property="Template">
         		<Setter.Value>
         			<ControlTemplate TargetType="{x:Type Thumb}">
         				<StackPanel Width="24" Orientation="Vertical" >
-        					<TextBlock Foreground="{StaticResource TextBrush}" HorizontalAlignment="Center"  Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
+        					<TextBlock Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center"  Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
         					<Ellipse x:Name="Circle" HorizontalAlignment="Center" Fill="{StaticResource ButtonBrush}"
         						Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" Height="10" Width="10"/>
         				</StackPanel>
@@ -312,6 +313,7 @@
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="IsMoveToPointEnabled" Value="True"/>
             <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Slider}">
@@ -356,6 +358,9 @@
                             <Trigger Property="TickPlacement" Value="Both">
                                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
                                 <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -423,6 +428,7 @@
                             </Trigger>
                             <Trigger Property="IsSelected" Value="False">
                                 <Setter TargetName="Border" Property="Background" Value="{StaticResource ButtonBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource ButtonBorderBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

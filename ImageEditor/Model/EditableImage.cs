@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
+using ImageProcessing;
 
 namespace ImageEditor.Model
 {
@@ -43,16 +44,6 @@ namespace ImageEditor.Model
 
         public int Height { get { return _source.Height; } }
         public int Width { get { return _source.Width; }  }
-
-        public byte[] GetBytes()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetBytes(byte[] bytes)
-        {
-            throw new NotImplementedException();
-        }
 
         private ImageFormat GetImageFormat(string imagePath)
         {
@@ -111,25 +102,30 @@ namespace ImageEditor.Model
 
         public void ChangeBrightness(float rate, Rectangle region)
         {
-            
+            _source = ImageAdjuster.ChangeBrightness(_source, region, rate);
         }
 
         public void ChangeContrast(float rate, Rectangle region)
         {
-
+            _source = ImageAdjuster.ChangeContrast(_source, region, rate);
         }
 
         public void ChangeSaturation(float rate, Rectangle region)
         {
-
+            _source = ImageAdjuster.ChangeSaturation(_source, region, rate);
         }
 
         public void ChangeColour(float redRate, float greenRate, float blueRate, Rectangle region)
         {
-
+            _source = ImageAdjuster.ChangeColour(_source, region, redRate, greenRate, blueRate);
         }
 
 //        public void DrawLine
+
+//        public void DrawPath
+
+//        public void DrawBrush
+        
 
         public void FillRegion(Rectangle region, Color color)
         {

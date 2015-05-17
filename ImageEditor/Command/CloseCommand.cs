@@ -4,11 +4,11 @@ using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    class CropCommand : ICommand
+    public class CloseCommand : ICommand
     {
-        private readonly ImageEditorViewModel _viewModel;
+         private readonly ImageEditorViewModel _viewModel;
 
-        public CropCommand(ImageEditorViewModel viewModel)
+        public CloseCommand(ImageEditorViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -24,11 +24,8 @@ namespace ImageEditor.Command
 
         public void Execute(object parameter)
         {
-            _viewModel.ResetFields();
-            throw new NotImplementedException();
+            // ???????????????
         }
-
-        public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {
@@ -39,5 +36,7 @@ namespace ImageEditor.Command
         {
             throw new NotImplementedException();
         }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

@@ -94,6 +94,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\ApplyCommand.cs" />
+    <Compile Include="Command\CloseCommand.cs" />
     <Compile Include="Command\CommandContext.cs" />
     <Compile Include="Command\CommandList.cs" />
     <Compile Include="Command\CropCommand.cs" />
@@ -103,11 +104,13 @@
     <Compile Include="Command\IReversableCommand.cs" />
     <Compile Include="Command\InpaintCommand.cs" />
     <Compile Include="Command\OpenCommand.cs" />
+    <Compile Include="Command\ResetCommand.cs" />
     <Compile Include="Command\ResizeCommand.cs" />
     <Compile Include="Command\RotateCommand.cs" />
     <Compile Include="Command\SaveAsCommand.cs" />
     <Compile Include="Command\SaveCommand.cs" />
     <Compile Include="Command\ZoomCommand.cs" />
+    <Compile Include="Converter\BitmapToImageSourceConverter.cs" />
     <Compile Include="Converter\BrightnessConverter.cs" />
     <Compile Include="Converter\ContrastConverter.cs" />
     <Compile Include="Converter\SaturationConverter.cs" />
@@ -229,6 +232,9 @@
   <ItemGroup>
     <Resource Include="View\Resources\rotate-26.png" />
     <Resource Include="View\Resources\rotate_right-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Resources\Pixel-Art-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

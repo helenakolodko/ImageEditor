@@ -392,6 +392,16 @@ namespace ImageEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Pixel_Art_icon {
+            get {
+                object obj = ResourceManager.GetObject("Pixel_Art_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap resize_26 {
             get {
                 object obj = ResourceManager.GetObject("resize_26", resourceCulture);

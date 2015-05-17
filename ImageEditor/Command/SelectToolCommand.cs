@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Windows.Input;
+using ImageEditor.Model.Tool;
 using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    class CropCommand : ICommand
+    public class SelectToolCommand: ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
-        public CropCommand(ImageEditorViewModel viewModel)
+        public SelectToolCommand(ImageEditorViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -24,11 +25,14 @@ namespace ImageEditor.Command
 
         public void Execute(object parameter)
         {
-            _viewModel.ResetFields();
-            throw new NotImplementedException();
+            string type = (string)parameter;
+            ToolType result;
+            if (ToolType.TryParse(type, true, out result))
+            {
+                _viewModel.SelectedTool = _viewModel.GetTool(result);
+            }
+           _viewModel.ResetTools();
         }
-
-        public event EventHandler CanExecuteChanged;
 
         public void Undo(CommandContext context)
         {
@@ -39,5 +43,7 @@ namespace ImageEditor.Command
         {
             throw new NotImplementedException();
         }
+
+        public event EventHandler CanExecuteChanged;
     }
 }
