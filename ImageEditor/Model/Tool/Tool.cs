@@ -2,12 +2,16 @@ using System.Windows;
 
 namespace ImageEditor.Model.Tool
 {
-    abstract class Tool
+    public abstract class Tool
     {
-        private double _zoom;
+        protected double _zoom;
         public double Zoom { get; set; }
 
-        private Point _startPoint;
+        protected Point _startPoint;
+        protected bool _draw;
+
+        protected bool _active;
+        public bool Active{ get; set; }
 
         public abstract void MouseDown(Point position);
         public abstract void MouseMove(Point position);

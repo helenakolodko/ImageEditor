@@ -49,6 +49,18 @@ namespace ImageEditor.ViewModel
                 }
             }
         }
+
+        private bool _active;
+        public bool Active { get { return _active; } set { _active = value; OnPropertyChanged(); } }
+
+        private Selection _selection;
+        public Rectangle SelectedRegion
+        {
+            get {
+                return _selection.Active ? _selection.GetRegion() : new Rectangle(0, 0, _image.Width, _image.Height);
+            }
+        }
+
         public Color SelectedColor { get; set; }
 
         private double _width;
@@ -153,8 +165,8 @@ namespace ImageEditor.ViewModel
         public int SpatialFactor { get; set; }
         public int ColourFactor { get; set; }
 
-        
-       
+        public int LbpWindowSize { get; set; }
+        public int InpaintBlockSize { get; set; }
 
 
 
@@ -192,7 +204,7 @@ namespace ImageEditor.ViewModel
 //                        _selection.StartPoint = new Point(0, 0);
 //                        _selection.EndPoint = new Point(CanvasBorder.Width, CanvasBorder.Height);
 //                        break;
-//                    case ToolType.SelectRectangle:
+//                    case ToolType.Selection:
 //                        _selection.Active = true;
 //                        ImageEdit.Cursor = Cursors.Cross;
 //                        break;

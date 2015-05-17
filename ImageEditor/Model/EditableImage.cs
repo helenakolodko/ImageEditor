@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace ImageEditor.Model
@@ -27,8 +23,9 @@ namespace ImageEditor.Model
                 _source = new Bitmap(value);
                 if (_source.PixelFormat != PixelFormat.Format32bppArgb)
                 {
-                    Bitmap b = (Bitmap)_source;
+                    Bitmap b = _source;
                     _source = b.Clone(new Rectangle(0, 0, b.Width, b.Height), PixelFormat.Format32bppArgb);
+
                 }
             }
         }
@@ -132,6 +129,8 @@ namespace ImageEditor.Model
 
         }
 
+//        public void DrawLine
+
         public void FillRegion(Rectangle region, Color color)
         {
             Graphics g = Graphics.FromImage(_source);
@@ -139,13 +138,22 @@ namespace ImageEditor.Model
         }
 
 
-        public void GetRegion(Rectangle region)
+        public Bitmap GetRegion(Rectangle region)
         {
-            
+            Bitmap b = new Bitmap(region.Width, region.Height);
+            Graphics g = Graphics.FromImage(b);
+            g.DrawImage(_source, new Rectangle(0, 0, region.Width, region.Height), region, GraphicsUnit.Pixel);
+            return b;
         }
         public void SetRegion(Rectangle region, Bitmap newSource)
         {
+            Graphics g = Graphics.FromImage(_source);
+            g.DrawImage(newSource, region, 0, 0, newSource.Width, newSource.Height, GraphicsUnit.Pixel);
+        }
 
+        public void Crop(Rectangle region)
+        {
+            _source = GetRegion(region);
         }
     }
 }

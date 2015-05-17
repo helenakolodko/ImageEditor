@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Windows.Data;
 using System.Globalization;
-using Microsoft.Expression.Utility.Extensions.Math;
+using System.Windows.Data;
 
 namespace ImageEditor.Converter
 {
-    [ValueConversion(typeof(double), typeof(string))]
-    public class ZoomConverter : IValueConverter
+    [ValueConversion(typeof(float), typeof(double))]
+    class SaturationConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((double) value * 100).RoundToSignificantDigits(3) + "%";
+            return .0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -18,11 +17,11 @@ namespace ImageEditor.Converter
             double result;
             if (Double.TryParse(value.ToString(), NumberStyles.Any, culture, out result))
             {
-                return result / 100;
-            }
-            else if (Double.TryParse(value.ToString().Replace("%", ""), NumberStyles.Any, culture, out result))
-            {
-                return result / 100;
+                if (result > 0)
+                {
+                    result *= 10;
+                }
+                return (float)(255 + result) / 255;
             }
             return value;
         }

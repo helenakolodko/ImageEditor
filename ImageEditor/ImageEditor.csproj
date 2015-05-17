@@ -47,6 +47,7 @@
     <Reference Include="Microsoft.Expression.Effects" />
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="microsoft.expression.utility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -98,6 +99,7 @@
     <Compile Include="Command\CropCommand.cs" />
     <Compile Include="Command\FlipCommand.cs" />
     <Compile Include="Command\HistogramEqualizeCommand.cs" />
+    <Compile Include="Command\HistogramStretchCommand.cs" />
     <Compile Include="Command\IReversableCommand.cs" />
     <Compile Include="Command\InpaintCommand.cs" />
     <Compile Include="Command\OpenCommand.cs" />
@@ -106,6 +108,9 @@
     <Compile Include="Command\SaveAsCommand.cs" />
     <Compile Include="Command\SaveCommand.cs" />
     <Compile Include="Command\ZoomCommand.cs" />
+    <Compile Include="Converter\BrightnessConverter.cs" />
+    <Compile Include="Converter\ContrastConverter.cs" />
+    <Compile Include="Converter\SaturationConverter.cs" />
     <Compile Include="Converter\ZoomConverter.cs" />
     <Compile Include="Model\EditableImage.cs" />
     <Compile Include="Model\Tool\Brush.cs" />
@@ -117,7 +122,7 @@
     <Compile Include="Model\Tool\Line.cs" />
     <Compile Include="Model\Tool\ManageTool.cs" />
     <Compile Include="Model\Tool\Pen.cs" />
-    <Compile Include="Model\Tool\SelectRectangle.cs" />
+    <Compile Include="Model\Tool\Selection.cs" />
     <Compile Include="Model\Tool\SelectTool.cs" />
     <Compile Include="Model\Tool\Tool.cs" />
     <Compile Include="Model\Tool\ToolBox.cs" />

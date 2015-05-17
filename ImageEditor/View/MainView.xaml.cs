@@ -12,8 +12,10 @@ using AForge;
 using AForge.Imaging;
 using AForge.Math.Random;
 using ImageEditor.Annotations;
+using ImageEditor.Model.Tool;
 using ImageProcessing;
 using Image = System.Drawing.Image;
+using Pen = ImageEditor.Model.Tool.Pen;
 using Point = System.Windows.Point;
 
 namespace ImageEditor.View
@@ -25,76 +27,191 @@ namespace ImageEditor.View
 
     public partial class MainView : INotifyPropertyChanged
     {
+        private ImageEditor.Model.Tool.Tool _line;
+        public MainView()
+        {
+            InitializeComponent();
+            SelectedTool = Tool.Hand;
+            Zoom = 1.0;
+            System.Windows.Shapes.Rectangle rect = new System.Windows.Shapes.Rectangle();
+            _line = new ImageEditor.Model.Tool.Brush(ImageEdit, ColorPicker, DrawingGrid);
+        }
+
         private bool _active;
         public bool Active { get { return _active; } set { _active = value; OnPropertyChanged(); } }
 
-        private float _noiseAmount = 10f;
-        public float NoiseAmount
+        private int _brightness;
+        public int Brightness
+        {
+            get { return _brightness; }
+            set
+            {
+                _brightness = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _contrast;
+        public int Contrast
+        {
+            get { return _contrast; }
+            set
+            {
+                _contrast = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _saturation;
+        public int Saturation
+        {
+            get { return _saturation; }
+            set
+            {
+                _saturation = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private int _red;
+        public int Red
+        {
+            get { return _red; }
+            set
+            {
+                _red = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _green;
+        public int Green
+        {
+            get { return _green; }
+            set
+            {
+                _green = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _blue;
+        public int Blue
+        {
+            get { return _blue; }
+            set
+            {
+                _blue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #region Noise
+
+        public bool SaltAndPapper { get; set; }
+        public bool Median { get; set; }
+
+        private int _noiseAmount;
+
+        public int NoiseAmount
         {
             get { return _noiseAmount; }
             set
             {
                 _noiseAmount = Math.Max(0, Math.Min(100, value));
-                GenerateNoise();
                 OnPropertyChanged();
             }
         }
 
-        private void GenerateNoise()
+        public void OnNoiseCoverageChanged()
         {
-            int width = _image.Width;
-            int height = _image.Height;
-
-            ///// Salt-n-Pepper
-
-            int noisyPixels = (int)((width * height * _noiseAmount) / 100);
-            Color[] values = new Color[2] { Color.Black, Color.White };
-            Random rand = new Random();
-            Bitmap b = new Bitmap(_image, width, height);
-            for (int i = 0; i < noisyPixels; i++)
+            if (SaltAndPapper)
             {
-                int x = 0 + rand.Next(width);
-                int y = 0 + rand.Next(height);
-                int colorPlane = rand.Next(3);
-
-                b.SetPixel(x, y, values[rand.Next(2)]);
+                _tempImage = NoiseGenerator.SaltAndPapper(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+                    NoiseAmount);
             }
-            //// Additive
+            else
+            {
+                _tempImage = NoiseGenerator.Additive(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+                    NoiseAmount);
+            }
 
-//            IRandomNumberGenerator generator = new UniformGenerator(new Range(-_noiseAmount, _noiseAmount));
-//            for (int y = 0; y < height; y++)
-//            {
-//                for (int x = 0; x < width; x++)
-//                {
-//                    Color c = b.GetPixel(x, y);
-//                    b.SetPixel(x, y, Color.FromArgb((byte)Math.Max(0, Math.Min(255, c.R + generator.Next())),
-//                            (byte)Math.Max(0, Math.Min(255, c.G + generator.Next())),
-//                            (byte)Math.Max(0, Math.Min(255, c.B + generator.Next()))));
-//                }
-//            }
-            _tempImage = b;
             ShowImage(_tempImage);
         }
+
+        private int _radius;
+
+        public int ReductionRadius
+        {
+            get { return _radius; }
+            set
+            {
+                _radius = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _kernelSize = 3;
+        public int KernelSize
+        {
+            get { return _kernelSize; }
+            set
+            {
+                _kernelSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _spacialFactor;
+
+        public int SpatialFactor
+        {
+            get { return _spacialFactor; }
+            set
+            {
+                _spacialFactor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _colourFactor;
+
+        public int ColourFactor
+        {
+            get { return _colourFactor; }
+            set
+            {
+                _colourFactor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void OnNoiseReduceParamsChanged()
+        {
+            if (Median)
+            {
+                _tempImage = NoiseReducer.Median(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+                    ReductionRadius);
+            }
+            else
+            {
+                _tempImage = NoiseReducer.Bilateral(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+                    KernelSize, SpatialFactor, ColourFactor);
+            }
+            ShowImage(_tempImage);
+        }
+
+        #endregion
+
 
         private Image _image;
         private Image _tempImage;
         private double _zoom;
         private Tool _selectedTool;
-        private int _brightness;
-        private int _contrast;
         private Point _startPoint;
         private bool _draw;
-        public int BrightnessValue 
-        { 
-            get { return _brightness; }
-            set { _brightness = value; AdjustBrightness(); } 
-        }
 
-        public int ContrastValue
-        {
-            get { return _contrast; }
-            set { _contrast = value; AdjustContrast(); }
-        }
 
         private Tool SelectedTool
         {
@@ -164,12 +281,64 @@ namespace ImageEditor.View
             }
         }
 
-        public MainView()
+        #region Histogram
+
+        private int _histogramLeft;
+        private int _histogramRight = 255;
+
+        public int HistogramLeft
         {
-            InitializeComponent();
-            SelectedTool = Tool.Hand;
-            Zoom = 1.0;
+            get { return _histogramLeft; }
+            set
+            {
+                if (_histogramRight >= value)
+                {
+                    _histogramLeft = value;
+                    OnPropertyChanged();
+                }
+            }
         }
+
+        public int HistogramRight
+        {
+            get { return _histogramRight; }
+            set
+            {
+                if (_histogramLeft <= value)
+                {
+                    _histogramRight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void Equalize_OnClick(object sender, RoutedEventArgs e)
+        {
+            _image = HistogramEqualazer.Equalize(_image, new Rectangle(0, 0, _image.Width, _image.Height));
+            ShowImage(_image);
+            Histogram.Image = _image;
+        }
+
+        private void Stretch_OnClick(object sender, RoutedEventArgs e)
+        {
+            _image = HistogramEqualazer.Stretch(_image, new Rectangle(0, 0, _image.Width, _image.Height));
+            ShowImage(_image);
+            Histogram.Image = _image;
+        }
+
+        public void OnHistogramBoundsChanged()
+        {
+            _tempImage = HistogramEqualazer.Squeeze(_image, new Rectangle(0, 0, _image.Width, _image.Height),
+                HistogramLeft, HistogramRight);
+            ShowImage(_tempImage);
+            Histogram.Image = _tempImage;
+        }
+
+        #endregion
+
+
+        public int LbpWindowSize { get; set; }
+        public int InpaintBlockSize { get; set; }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
@@ -177,7 +346,6 @@ namespace ImageEditor.View
             openFileDialog.Filter = ImageEditor.Properties.Resources.filter;
             if (openFileDialog.ShowDialog() == true)
             {
-                //System.Drawing.Bitmap image = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(openFileDialog.FileName, true);
                 OpenImage(openFileDialog.FileName);
             }
         }
@@ -215,7 +383,7 @@ namespace ImageEditor.View
         private void OpenImage(string imagePath)
         {
             _image = new Bitmap(imagePath);
-            if (_image.PixelFormat == PixelFormat.Format8bppIndexed)
+            if (_image.PixelFormat != PixelFormat.Format32bppArgb)
             {
                 Bitmap b = (Bitmap) _image;
                 _image = b.Clone(new Rectangle(0, 0, b.Width, b.Height), PixelFormat.Format32bppArgb);
@@ -224,7 +392,7 @@ namespace ImageEditor.View
             Zoom = 1.0;
             Active = true;
             ShowImage(_image);
-            histogram.Image = _image;
+            Histogram.Image = _image;
         }
 
         private void ShowImage(System.Drawing.Image image)
@@ -239,51 +407,13 @@ namespace ImageEditor.View
             ImageEdit.Source = bi;
         }
 
-        /**
-         * private void Button_Click(object sender, RoutedEventArgs e)
-         * {
-         *      this.WindowState = System.Windows.WindowState.Minimized;
-         *      this.nIcon.Icon = new Icon(@"../../Cartman-General.ico");
-         *      this.nIcon.ShowBalloonTip(5000, "Hi", "This is a BallonTip from Windows Notification", ToolTipIcon.Info);
-         * }
-         */
-
-        private void AdjustBrightness()
-        {
-            float rate = BrightnessValue / 100.0f;
-
-            _tempImage = ImageAdjuster.ChangeBrightness(_image, rate);
-
-            ShowImage(_tempImage);
-        }
-
-        private void AdjustContrast()
-        {
-            float rate = (ContrastValue < 0) ? (ContrastValue + 50.0f) / 50.0f : (ContrastValue / 30.0f + 1);
-
-            _tempImage = ImageAdjuster.ChangeContrast(_image, rate);
-
-            ShowImage(_tempImage);
-        }
-
-        private void ApplyBrightness_Click(object sender, RoutedEventArgs e)
-        {
-            _image = _tempImage;
-            _tempImage = null;
-            Brightness.Value = 0;
-            Contrast.Value = 0;
-        }
-
         private void ImageEdit_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _draw = true;
             _startPoint = e.GetPosition(CanvasBorder);
             if (SelectedTool == Tool.Select)
             {
-                Thickness margin = Selection.Margin;
-                margin.Left = _startPoint.X;
-                margin.Top = _startPoint.Y;
-                Selection.Margin = margin;
+                _line.MouseDown(_startPoint);   
             }
             if (SelectedTool == Tool.Eyedropper)
             {
@@ -308,7 +438,7 @@ namespace ImageEditor.View
                         MoveImage(e.GetPosition(CanvasBorder));
                         break;
                     case Tool.Select:
-                        DrawSelectionRectangle(e.GetPosition(CanvasBorder));
+                        _line.MouseMove(e.GetPosition(CanvasBorder));
                         break;
                     case Tool.Eyedropper:
                         GetColour(e.GetPosition(CanvasBorder));
@@ -340,7 +470,7 @@ namespace ImageEditor.View
                         MoveImage(e.GetPosition(CanvasBorder));
                         break;
                     case Tool.Select:
-                        DrawSelectionRectangle(e.GetPosition(CanvasBorder));
+                        _line.MouseUp(e.GetPosition(CanvasBorder));
                         break;
                     case Tool.Eyedropper:
                         GetColour(e.GetPosition(CanvasBorder));
@@ -371,28 +501,26 @@ namespace ImageEditor.View
 
         private void DragImageOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effects = DragDropEffects.All;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-            }
+            e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.All : DragDropEffects.None;
             e.Handled = false;
         }
 
-//        public Image GetImage()
-//        {
-//            if (_image != null)
-//            {
-//                return _image;
-//            }
-//            else
-//            {
-//                return new Bitmap(0, 0);
-//            }
-//        }
+
+        private void Inpaint_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Media.Color c = ColorPicker.SelectedColor;
+            Color c1 = Color.FromArgb(c.R, c.G, c.B);
+           // _tempImage = ColourInpaint.DoInpaint((Bitmap) _image, 15, c1);
+            ShowImage(_tempImage);
+        }
+
+        private void SelectColour_OnClick(object sender, RoutedEventArgs e)
+        {
+            SelectedTool = Tool.Eyedropper;
+        }
+
+        #region NotifyProprrtyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -402,76 +530,7 @@ namespace ImageEditor.View
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void Equalize_OnClick(object sender, RoutedEventArgs e)
-        {
-            int numberOfPixels = _image.Width*_image.Height;
+        #endregion
 
-            ImageStatistics rgbStatistics = new ImageStatistics((Bitmap)_image);
-            Bitmap b;
-
-            int[] histogramR = rgbStatistics.Red.Values;
-            int[] histogramG = rgbStatistics.Green.Values;
-            int[] histogramB = rgbStatistics.Blue.Values;
-
-            byte[] equalizedHistogramR = EqualizeHistogram(histogramR, numberOfPixels);
-            byte[] equalizedHistogramG = EqualizeHistogram(histogramG, numberOfPixels);
-            byte[] equalizedHistogramB = EqualizeHistogram(histogramB, numberOfPixels);
-            b = (Bitmap)_image;
-            Rectangle rect = new Rectangle(0, 0, b.Width, b.Height);
-            BitmapData bmpData = b.LockBits(rect, ImageLockMode.ReadWrite, b.PixelFormat);
-            IntPtr ptr = bmpData.Scan0;
-                 
-            int bytes  = Math.Abs(bmpData.Stride) * b.Height;
-            byte[] rgbValues = new byte[bytes];
-                
-            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-                
-            for (int i = 0; i < rgbValues.Length - 2; i+=3)
-            {
-                rgbValues[i] = equalizedHistogramR[rgbValues[i]];
-                rgbValues[i + 1] = equalizedHistogramG[rgbValues[i + 1]];
-                rgbValues[i + 2] = equalizedHistogramB[rgbValues[i + 2]];
-            }
-                
-            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
-            b.UnlockBits(bmpData);
-            
-            _image = b;
-            ShowImage(_image);
-            histogram.Image = _image;
-        }
-
-        // Histogram 
-        private byte[] EqualizeHistogram(int[] h, long numPixel)
-        {
-            byte[] equalizedHistogram = new byte[256];
-            float coeffitient = 255.0f / numPixel;
-
-            // calculate the first value
-            float prev = h[0] * coeffitient;
-            equalizedHistogram[0] = (byte)prev;
-
-            // calcualte the rest of values
-            for (int i = 1; i < 256; i++)
-            {
-                prev += h[i] * coeffitient;
-                equalizedHistogram[i] = (byte)prev;
-            }
-
-            return equalizedHistogram;
-        }
-
-        private void Inpaint_OnClick(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Media.Color c = ColorPicker.SelectedColor;
-            Color c1 = Color.FromArgb(c.R, c.G, c.B);
-            _tempImage = ColourInpaint.DoInpaint((Bitmap) _image, 15, c1);
-            ShowImage(_tempImage);
-        }
-
-        private void SelectColour_OnClick(object sender, RoutedEventArgs e)
-        {
-            SelectedTool = Tool.Eyedropper;
-        }
     }
 }

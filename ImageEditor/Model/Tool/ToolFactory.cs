@@ -27,7 +27,7 @@ namespace ImageEditor.Model.Tool
         {
             _toolConstructors = new Dictionary<ToolType, Type>();
             _toolConstructors[ToolType.Drag] = typeof(Drag);
-            _toolConstructors[ToolType.SelectRect] = typeof(SelectRectangle);
+            _toolConstructors[ToolType.SelectRect] = typeof(Selection);
             _toolConstructors[ToolType.Eyedropper] = typeof(Eyedropper);
             _toolConstructors[ToolType.Pen] = typeof(Pen);
             _toolConstructors[ToolType.Brush] = typeof(Brush);

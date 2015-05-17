@@ -2,21 +2,36 @@ using System.Windows;
 
 namespace ImageEditor.Model.Tool
 {
-    abstract class DrawingTool : Tool
+    public abstract class DrawingTool : Tool
     {
         public override void MouseDown(Point position)
         {
-            throw new System.NotImplementedException();
+            SetStartPoint(position);
+            SetEndPoint(position);
+            _draw = true;
         }
 
         public override void MouseMove(Point position)
         {
-            throw new System.NotImplementedException();
+            if (_draw)
+            {
+                SetEndPoint(position);
+            }
         }
 
         public override void MouseUp(Point position)
         {
-            throw new System.NotImplementedException();
+            if (_draw)
+            {
+                Finish(position);
+                _draw = false;
+            }
         }
+
+        protected abstract void Finish(Point value);
+
+        protected abstract void SetStartPoint(Point value);
+        
+        protected abstract void SetEndPoint(Point value);
     }
 }

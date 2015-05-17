@@ -4,16 +4,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:imageEditorView="clr-namespace:ImageEditor.View" 
         xmlns:databinding="clr-namespace:ImageEditor.Converter"
-        xmlns:imageEditor="clr-namespace:ImageEditor"
         mc:Ignorable="d" 
         x:Class="ImageEditor.View.MainView"
         x:Name="Window"
-        Title="Image Editor" Height="530" Width="800"
-		MinHeight="530" MinWidth="800" Icon="Resources/brush-pencil.png">
+        Title="Image Editor" Height="601" Width="800"
+		MinHeight="550" MinWidth="800" Icon="Resources/brush-pencil.png">
     <Window.Resources>
         <databinding:ZoomConverter x:Key="ZoomConverter"/>
+        <databinding:ContrastConverter x:Key="ContrastConverter"/>
+        <databinding:SaturationConverter x:Key="SaturationConverter"/>
+        <databinding:BrightnessConverter x:Key="BrightnessConverter"/>
+<!--        <ObjectDataProvider x:Key="HistorgamImageProvider" ObjectType="{x:Type imageEditorView:MainView}"-->
+<!--                            MethodName="GetImage"/>-->
     </Window.Resources>
 
 	<Grid Style="{StaticResource Back}" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True">
@@ -25,141 +31,110 @@
 			<RowDefinition Height="29"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<ToolBarTray Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Panels}">
-			<ToolBar Style="{StaticResource Panels}">
-				<ToolBarPanel Orientation="Horizontal" Height="25">
-					<Button x:Name="Open" Click="Open_Click" ToolTip="Open">
-						<Image Source="Resources/opened_folder-32.png"/>
-					</Button>
-					<Button x:Name="Save" Click="Save_Click" ToolTip="Save">
-						<Image Source="Resources/save_as-25.png"/>
-					</Button>
-					<Button x:Name="SaveAs" ToolTip="Save As">
-						<Image Source="Resources/save_as-32.png"/>
-					</Button>
-					<Separator Width="10" Visibility="Hidden" />
-                    <DockPanel IsEnabled="{Binding Active, ElementName=Window}">
-						<Button x:Name="Undo" IsEnabled="False" ToolTip="Undo">
-							<Image Source="Resources/left2_filled-25.png"/>
-						</Button>
-						<Button x:Name="Redo" IsEnabled="False" ToolTip="Redo">
-							<Image Source="Resources/right2_filled-25.png"/>
-						</Button>
-						<Separator Width="10" Visibility="Hidden" />
-						<Button x:Name="Pencil" ToolTip="Pencil">
-							<Image Source="Resources\Pencil-icon.png"/>
-						</Button>
-						<Button x:Name="Brush" ToolTip="Brush">
-							<Image Source="Resources/brush-26.png"/>
-						</Button>
-						<Button x:Name="Line" ToolTip="Line">
-							<Image Source="Resources/Editing-Line-icon.png"/>
-						</Button>
-						<Button x:Name="Bucket" ToolTip="Bucket">
-							<Image Source="Resources\Paint-icon.png"/>
-						</Button>
-						<Button x:Name="SelectColour" Click="SelectColour_OnClick" ToolTip="Eyedropper">
-							<Image Source="Resources\Eyedropper-icon.png"/>
-						</Button>
-						<Separator Width="10" Visibility="Hidden" />
-						<xctk:ColorPicker x:Name="ColorPicker" Style="{StaticResource Panels}" ToolTip="Select Colour"
-							ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" 
-							ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="#FF00AEFF" />
-						<Separator Width="10" Visibility="Hidden" />
-						<Button x:Name="SelectRegion" Click="SelectRegion_Click" ToolTip="Select">
-							<Image Source="Resources\Cursor-Select-icon.png" />
-						</Button>
-						<Button x:Name="Crop" IsEnabled="False" ToolTip="Crop">
-							<Image Source="Resources/crop-26.png"/>
-						</Button>
-						<Button x:Name="Drag" Click="Drag_Click" ToolTip="Drag">
-							<Image Source="Resources\Drag-icon.png"/>
-						</Button>
-						<Separator Width="10" Visibility="Hidden" />
-						<ComboBox IsEditable="True" Text="{Binding Path=Zoom, ElementName=Window,
-							ValidatesOnExceptions=True, Converter={StaticResource ZoomConverter}}" ToolTip="Zoom">
-							<ComboBoxItem Content="10%"/>
-							<ComboBoxItem Content="25%"/>
-							<ComboBoxItem Content="50%"/>
-							<ComboBoxItem Content="75%"/>
-							<ComboBoxItem Content="100%"/>
-							<ComboBoxItem Content="125%"/>
-							<ComboBoxItem Content="150%"/>
-							<ComboBoxItem Content="200%"/>
-							<ComboBoxItem Content="300%"/>
-						</ComboBox>
-						<Button x:Name="ZoomIn" Click="ZoomIn_Click" ToolTip="Zoom In">
-							<Image Source="Resources/zoom_in-25.png"/>
-						</Button>
-						<Button x:Name="ZoomOut" Click="ZoomOut_Click" ToolTip="Zoom Out">
-							<Image Source="Resources/zoom_out-25.png"/>
-						</Button>
-					</DockPanel>
-				</ToolBarPanel>
-			</ToolBar>
-		</ToolBarTray>
-        <Grid Grid.Row="1" Grid.Column="0" Background="#FFF3F3F3"  IsEnabled="{Binding Active, ElementName=Window}">
-			<TabControl Style="{StaticResource Panels}">
-				<TabItem Style="{StaticResource Panels}">
+        <DockPanel  Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Panels}" >
+			<DockPanel Height="25" Margin="6,2,2,2" LastChildFill="False">
+                <Button x:Name="Open" Click="Open_Click" ToolTip="Open">
+                    <Image Source="Resources/opened_folder-32.png"/>
+                </Button>
+                <DockPanel IsEnabled="{Binding Active, ElementName=Window}">
+                    <Button x:Name="Save" Click="Save_Click" ToolTip="Save">
+                        <Image Source="Resources/save_as-25.png"/>
+                    </Button>
+                    <Button x:Name="SaveAs" ToolTip="Save As">
+                        <Image Source="Resources/save_as-32.png"/>
+                    </Button>
+                    <Separator Width="10" Visibility="Hidden" />
+                    <Button x:Name="Undo" IsEnabled="False" ToolTip="Undo">
+                        <Image Source="Resources/left2_filled-25.png"/>
+                    </Button>
+                    <Button x:Name="Redo" IsEnabled="False" ToolTip="Redo">
+                        <Image Source="Resources/right2_filled-25.png"/>
+                    </Button>
+                    <Separator Width="10" Visibility="Hidden" />
+                    <Button x:Name="Pencil" ToolTip="Pencil">
+                        <Image Source="Resources\Pencil-icon.png"/>
+                    </Button>
+                    <Button x:Name="Brush" ToolTip="Brush">
+                        <Image Source="Resources/brush-26.png"/>
+                    </Button>
+                    <Button x:Name="Line" ToolTip="Line">
+                        <Image Source="Resources/Editing-Line-icon.png"/>
+                    </Button>
+                    <Button x:Name="Bucket" ToolTip="Bucket">
+                        <Image Source="Resources\Paint-icon.png"/>
+                    </Button>
+                    <Button x:Name="SelectColour" Click="SelectColour_OnClick" ToolTip="Eyedropper">
+                        <Image Source="Resources\Eyedropper-icon.png"/>
+                    </Button>
+                    <Separator Width="10" Visibility="Hidden" />
+                    <xctk:ColorPicker x:Name="ColorPicker" ToolTip="Select Colour"
+						    ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" 
+						    ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="#FF00AEFF" />
+                    <Separator Width="10" Visibility="Hidden" />
+                    <Button x:Name="SelectRegion" Click="SelectRegion_Click" ToolTip="Select">
+                        <Image Source="Resources\Cursor-Select-icon.png" />
+                    </Button>
+                    <Button x:Name="Crop" IsEnabled="False" ToolTip="Crop">
+                        <Image Source="Resources/crop-26.png"/>
+                    </Button>
+                    <Button x:Name="Drag" Click="Drag_Click" ToolTip="Drag">
+                        <Image Source="Resources\Drag-icon.png"/>
+                    </Button>
+                    <Separator Width="10" Visibility="Hidden" />
+                    <ComboBox IsEditable="True" Text="{Binding Zoom, ElementName=Window,
+						    ValidatesOnExceptions=True, Converter={StaticResource ZoomConverter}}" 
+							ToolTip="Zoom">
+                        <ComboBoxItem Content="10%"/>
+                        <ComboBoxItem Content="25%"/>
+                        <ComboBoxItem Content="50%"/>
+                        <ComboBoxItem Content="75%"/>
+                        <ComboBoxItem Content="100%"/>
+                        <ComboBoxItem Content="125%"/>
+                        <ComboBoxItem Content="150%"/>
+                        <ComboBoxItem Content="200%"/>
+                        <ComboBoxItem Content="300%"/>
+                    </ComboBox>
+                    <Button x:Name="ZoomIn" Click="ZoomIn_Click" ToolTip="Zoom In">
+                        <Image Source="Resources/zoom_in-25.png"/>
+                    </Button>
+                    <Button x:Name="ZoomOut" Click="ZoomOut_Click" ToolTip="Zoom Out">
+                        <Image Source="Resources/zoom_out-25.png"/>
+                    </Button>
+                </DockPanel>
+            </DockPanel>
+        </DockPanel>
+        <Grid Grid.Row="1" Grid.Column="0" IsEnabled="{Binding Active, ElementName=Window}"
+              Background="{StaticResource ButtonBrush}">
+			<TabControl>
+				<TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Contrast-icon.png" Height="15"/>
 							<TextBlock Text=" Filters"/>
 						</StackPanel>
 					</TabItem.Header>
-					<StackPanel Style="{StaticResource Adjustments}"><Label Content="Brightness"/>
-						<DockPanel>							
-							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"   
-								Minimum="{Binding Minimum, ElementName=Brightness}" 
-								Maximum="{Binding Maximum, ElementName=Brightness}" 
-								Value="{Binding Value, ElementName=Brightness, UpdateSourceTrigger=PropertyChanged}"/>
-							<Slider x:Name="Brightness"	Value="{Binding BrightnessValue, ElementName=Window}"/>	
-						</DockPanel>
-						<Label Content="Contrast" HorizontalAlignment="Left" />
-						<DockPanel>
-							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"
-								Minimum="{Binding Minimum, ElementName=Contrast}"  
-								Maximum="{Binding Maximum, ElementName=Contrast}"
-								Value="{Binding Value, ElementName=Contrast, UpdateSourceTrigger=PropertyChanged}"/>
-							<Slider x:Name="Contrast" Value="{Binding ContrastValue, ElementName=Window}"/>	
-						</DockPanel>
-						<Label Content="Saturation" HorizontalAlignment="Left"/>
-						<DockPanel>
-							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"  
-								Minimum="{Binding Minimum, ElementName=Saturation}"  
-								Maximum="{Binding Maximum, ElementName=Saturation}" 
-								Value="{Binding Value, ElementName=Saturation, UpdateSourceTrigger=PropertyChanged}"/>
-							<Slider x:Name="Saturation"/>	
-						</DockPanel>
-						<Label Content="Red" Margin="0,15,0,0"/>
-						<DockPanel>							
-							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"   
-								Minimum="{Binding Minimum, ElementName=Red}" 
-								Maximum="{Binding Maximum, ElementName=Red}" 
-								Value="{Binding Value, ElementName=Red, UpdateSourceTrigger=PropertyChanged}"/>
-							<Slider x:Name="Red"	Value="{Binding BrightnessValue, ElementName=Window}"/>	
-						</DockPanel>
-						<Label Content="Green" HorizontalAlignment="Left" />
-						<DockPanel>
-							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"
-								Minimum="{Binding Minimum, ElementName=Green}"  
-								Maximum="{Binding Maximum, ElementName=Green}"
-								Value="{Binding Value, ElementName=Green, UpdateSourceTrigger=PropertyChanged}"/>
-							<Slider x:Name="Green" Value="{Binding ContrastValue, ElementName=Window}"/>	
-						</DockPanel>
-						<Label Content="Blue" HorizontalAlignment="Left"/>
-						<DockPanel>
-							<xctk:IntegerUpDown DockPanel.Dock="Right" Margin="6,0"  
-								Minimum="{Binding Minimum, ElementName=Blue}"  
-								Maximum="{Binding Maximum, ElementName=Blue}" 
-								Value="{Binding Value, ElementName=Blue, UpdateSourceTrigger=PropertyChanged}"/>
-							<Slider x:Name="Blue"/>	
-						</DockPanel>
-						<Button x:Name="ApplyBrightness" Content="Apply Filters"  Margin="0,10" HorizontalAlignment="Center"
-							Click="ApplyBrightness_Click"/>						
-					</StackPanel>
+					<StackPanel Style="{StaticResource Adjustments}">
+                        <Label Content="Brightness"/>
+                        <Slider x:Name="BrightnessValue" Margin="6,0" Value="{Binding Brightness, ElementName=Window,
+                                Mode=TwoWay}"/>
+                        <Label Content="Contrast" HorizontalAlignment="Left" />
+                        <Slider x:Name="ContrastValue" Margin="6,0" Value="{Binding Contrast, ElementName=Window, 
+                                ValidatesOnExceptions=True, Mode=TwoWay}"/>
+                        <Label Content="Saturation" HorizontalAlignment="Left"/>
+                        <Slider x:Name="SaturationValue" Margin="6,0"  Value="{Binding Saturation, ElementName=Window,
+                                Mode=TwoWay}"/>
+                        <Separator Height="15" Visibility="Hidden"/>
+                        <Label Content="Red"/>
+                        <Slider x:Name="RedValue" Margin="6,0" Value="{Binding Red, ElementName=Window, Mode=TwoWay}"/>
+                        <Label Content="Green" HorizontalAlignment="Left" />
+                        <Slider x:Name="GreenValue" Margin="6,0" Value="{Binding Green, ElementName=Window, Mode=TwoWay}"/>
+                        <Label Content="Blue" HorizontalAlignment="Left"/>
+                        <Slider x:Name="BlueValue" Margin="6,0" Value="{Binding Blue, ElementName=Window,  Mode=TwoWay}"/>
+                        <Separator Height="10" Visibility="Hidden"/>
+                        <Button x:Name="ApplyBrightness" Content="Apply Filters"  HorizontalAlignment="Center"/>
+                    </StackPanel>
 				</TabItem>
-				<TabItem Style="{StaticResource Panels}">
+				<TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Cursor-Move-icon.png" Height="15"/>
@@ -167,50 +142,38 @@
 						</StackPanel>
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
-						<DockPanel HorizontalAlignment="Center" Margin="0,30,0,0">
+						<Separator Height="25" Visibility="Hidden"/>
+						<DockPanel HorizontalAlignment="Center">
 							<Label Content="Height" HorizontalAlignment="Right"/>
-							<xctk:IntegerUpDown Minimum="1" ParsingNumberStyle="Integer" Width="65" Maximum="9000"
-                                                Value="{Binding ImageWidth, ElementName=Window}">
-								<xctk:IntegerUpDown.InputScope>
-									<InputScope>
-										<InputScope.Names>
-											<InputScopeName NameValue="PersonalMiddleName"/>
-										</InputScope.Names>
-									</InputScope>
-								</xctk:IntegerUpDown.InputScope>
-							</xctk:IntegerUpDown>
+							<xctk:IntegerUpDown Minimum="1" ParsingNumberStyle="Integer" Width="55" Maximum="9000"
+                                                Value="{Binding ImageWidth, ElementName=Window}"/>
 						</DockPanel>
-						<DockPanel HorizontalAlignment="Center" Margin="0,0,0,15">
-							<Label Content="Width"/>
-							<xctk:IntegerUpDown Minimum="1" ParsingNumberStyle="Integer" Maximum="9000" Width="65"
-                                                Value="{Binding ImageHeight, ElementName=Window}">
-								<xctk:IntegerUpDown.InputScope>
-									<InputScope>
-										<InputScope.Names>
-											<InputScopeName NameValue="PersonalMiddleName"/>
-										</InputScope.Names>
-									</InputScope>
-								</xctk:IntegerUpDown.InputScope>
-							</xctk:IntegerUpDown>
+						<DockPanel HorizontalAlignment="Center">
+							<Label Content=" Width"/>
+							<xctk:IntegerUpDown Minimum="1" ParsingNumberStyle="Integer" Maximum="9000" Width="55"
+                                                Value="{Binding ImageHeight, ElementName=Window}"/>
 						</DockPanel>
+						<Separator Height="25" Visibility="Hidden"/>
 						<Button x:Name="Resize" Width="85" Height="25">
-								<DockPanel>
-									<Image Source="Resources/resize-26.png" />
-									<TextBlock Text=" Resize"/>
-								</DockPanel>
-							</Button>
-						<Button x:Name="RotateLeft" Height="25" Width="110" Margin="0,30,0,0">
+							<DockPanel>
+								<Image Source="Resources/resize-26.png" />
+								<TextBlock Text=" Resize"/>
+							</DockPanel>
+						</Button>
+						<Separator Height="25" Visibility="Hidden"/>
+						<Button x:Name="RotateLeft" Height="25" Width="110">
 							<DockPanel>
 								<Image Source="Resources/rotate-26.png" />
 								<TextBlock Text=" Rotate Left"/>
 							</DockPanel>							
 						</Button>
-						<Button x:Name="RotateRight" Height="25" Margin="0,0,0,30"  Width="110" >
+						<Button x:Name="RotateRight" Height="25"  Width="110" >
 							<DockPanel>
 								<Image Source="Resources/rotate_right-26.png" />
 								<TextBlock Text=" Rotate Right"/>
 							</DockPanel>
 						</Button>
+						<Separator Height="5" Visibility="Hidden"/>
 						<Button x:Name="FlipHorizontal" Height="25" Width="110">
 							<DockPanel>
 								<Image Source="Resources/flip_horizontal-26.png" />
@@ -225,7 +188,7 @@
 						</Button>					
 					</StackPanel>
 				</TabItem>
-				<TabItem Style="{StaticResource Panels}">
+				<TabItem>
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Line-Chart-icon.png" Height="15"/>
@@ -233,14 +196,31 @@
 						</StackPanel>
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
-                        <imageEditorView:BitmapImageHistogram x:Name="histogram"/>
-						<Slider Minimum="0" Maximum="255" Margin="6" Value="255"/>
-						<Slider Minimum="0" Maximum="255" Margin="6" Value="0"/>
-						<Button x:Name="Equalize"  Content="Equalize" HorizontalAlignment="Center" Margin="0,6" 
+                        <imageEditorView:BitmapImageHistogram x:Name="Histogram"/>
+                        <Slider Minimum="0" Maximum="255" Margin="6" Value="{Binding HistogramRight, ElementName=Window, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnHistogramBoundsChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+                        <Slider Minimum="0" Maximum="255" Margin="6" Value="{Binding HistogramLeft, ElementName=Window, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnHistogramBoundsChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+                        <DockPanel HorizontalAlignment="Center">
+                            <Button Content="Apply Shifts" HorizontalAlignment="Center"/>
+                            <Button x:Name="Equalize"  Content="Equalize" HorizontalAlignment="Center"
                                 Click="Equalize_OnClick"/>
+                            <Button x:Name="Stretch"  Content="Stretch" HorizontalAlignment="Center"
+                                Click="Stretch_OnClick"/>
+                        </DockPanel>
 					</StackPanel>
 				</TabItem>
-				<TabItem Style="{StaticResource Panels}">
+				<TabItem Height="24.96" VerticalAlignment="Bottom">
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/File-Pictures-icon.png" Height="15"/>
@@ -249,69 +229,70 @@
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
 						<Label Content="Add Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
-<!--						<Label Content="Radius"/>-->
-<!--						<StackPanel Orientation="Horizontal">-->
-<!--							<Slider x:Name="RadiusAdd" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	-->
-<!--							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45" -->
-<!--								Maximum="{Binding Maximum, ElementName=RadiusAdd}"-->
-<!--								Minimum="{Binding Minimum, ElementName=RadiusAdd}"-->
-<!--								Value="{Binding Value, ElementName=RadiusAdd, UpdateSourceTrigger=PropertyChanged}"/>-->
-<!--						</StackPanel>-->
-<!--						<Label Content="Color Saturation"/>-->
-<!--						<StackPanel Orientation="Horizontal">-->
-<!--							<Slider x:Name="SaturationAdd" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	-->
-<!--							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"-->
-<!--								Maximum="{Binding Maximum, ElementName=SaturationAdd}"-->
-<!--								Minimum="{Binding Minimum, ElementName=SaturationAdd}"-->
-<!--								Value="{Binding Value, ElementName=SaturationAdd, UpdateSourceTrigger=PropertyChanged}"/>-->
-<!--						</StackPanel>-->
 						<DockPanel HorizontalAlignment="Center">
-							<RadioButton Content="Salt-n-Papper" GroupName="NoiseType" Margin="6,0"/>
-							<RadioButton Content="Additive" GroupName="NoiseType" Margin="6,0"/>
+							<RadioButton Content="Salt-n-Papper" GroupName="NoiseType" Margin="6,0" 
+                                         IsChecked="{Binding SaltAndPapper, ElementName=Window}"/>
+							<RadioButton Content="Additive" GroupName="NoiseType" Margin="6,0" IsChecked="True"/>
 						</DockPanel>
 						<Label Content="Coverage"/>
-						<StackPanel Orientation="Horizontal">
-							<Slider x:Name="Coverage" Maximum="100" TickPlacement="TopLeft"
-							 TickFrequency="10" Minimum="0" Width="165" Value="{Binding NoiseAmount, ElementName=Window}"/>	
-							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
-								Maximum="{Binding Maximum, ElementName=Coverage}"
-								Minimum="{Binding Minimum, ElementName=Coverage}"
-								Value="{Binding Value, ElementName=Coverage, UpdateSourceTrigger=PropertyChanged}"/>
-						</StackPanel>
-						<Button x:Name="AddNoise" Content="Apply" Width="45" Margin="0,10,0,30"/>
+                        <Slider Maximum="100"  Margin="6,0"
+							 TickFrequency="10" Minimum="0" Value="{Binding NoiseAmount, ElementName=Window, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnNoiseCoverageChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+                        <Button x:Name="AddNoise" Content="Apply" Width="45" />
+						<Separator Height="15" Visibility="Hidden"/>
 						<Label Content="Reduce Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 						<DockPanel HorizontalAlignment="Center">
-							<RadioButton Content="Median" GroupName="ReductionType" Margin="6,0"/>
-							<RadioButton x:Name="Bilateral" Content="Bilateral" GroupName="ReductionType" Margin="6,0"/>
+							<RadioButton x:Name="MedianCheck"  Content="Median" GroupName="ReductionType" Margin="6,0" 
+                                         IsChecked="{Binding Median, ElementName=Window}"/>
+                            <RadioButton x:Name="Bilateral" Content="Bilateral" GroupName="ReductionType" 
+                                         Margin="6,0" IsChecked="True"/>
 						</DockPanel>
-						<Label Content="Radius"/>
-						<StackPanel Orientation="Horizontal">
-							<Slider x:Name="RadiusReduce" Maximum="25" TickPlacement="TopLeft" TickFrequency="5" Minimum="0" Width="165"/>	
-							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45" 
-								Maximum="{Binding Maximum, ElementName=RadiusReduce}"
-								Minimum="{Binding Minimum, ElementName=RadiusReduce}"
-								Value="{Binding Value, ElementName=RadiusReduce, UpdateSourceTrigger=PropertyChanged}"/>
-						</StackPanel>
-						<Label Content="SpacialFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
-						<StackPanel Orientation="Horizontal" IsEnabled="{Binding IsChecked, ElementName=Bilateral}">
-							<Slider x:Name="SpacialFactor" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	
-							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
-								Maximum="{Binding Maximum, ElementName=SpacialFactor}"
-								Minimum="{Binding Minimum, ElementName=SpacialFactor}"
-								Value="{Binding Value, ElementName=SpacialFactor, UpdateSourceTrigger=PropertyChanged}"/>
-						</StackPanel>
+                        <Label Content="Radius" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"/>
+                        <Slider Maximum="25" TickFrequency="5" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"
+                                Minimum="0"  Value="{Binding ReductionRadius, ElementName=Window, Mode=TwoWay}" Margin="6,0" SmallChange="1">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnNoiseReduceParamsChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+                        <Label Content="Kernel Size" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
+                        <Slider Maximum="25" TickFrequency="2" Margin="6,0" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"
+                                Minimum="3" Value="{Binding KernelSize, ElementName=Window, Mode=TwoWay}"
+                                LargeChange="2" SmallChange="2" IsSnapToTickEnabled="True">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnNoiseReduceParamsChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+                        <Label Content="SpatialFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
+                        <Slider Maximum="100" Margin="6,0" TickFrequency="10" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"
+                                    Minimum="0" Value="{Binding SpatialFactor, ElementName=Window, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnNoiseReduceParamsChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>	
 						<Label Content="ColourFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
-						<StackPanel Orientation="Horizontal" IsEnabled="{Binding IsChecked, ElementName=Bilateral}">
-							<Slider x:Name="ColourFactor" Maximum="100" TickPlacement="TopLeft" TickFrequency="10" Minimum="0" Width="165"/>	
-							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"
-								Maximum="{Binding Maximum, ElementName=ColourFactor}"
-								Minimum="{Binding Minimum, ElementName=ColourFactor}"
-								Value="{Binding Value, ElementName=ColourFactor, UpdateSourceTrigger=PropertyChanged}"/>
-						</StackPanel>	
-						<Button x:Name="ReduceNoise" Content="Apply" Width="45" Margin="0,10"/>					
+                        <Slider Maximum="100" TickFrequency="10" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"
+                                Minimum="0" Margin="6,0" Value="{Binding ColourFactor, ElementName=Window, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding ElementName=Window}" MethodName="OnNoiseReduceParamsChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>		
+						<Button x:Name="ReduceNoise" Content="Apply" Width="45" />					
 					</StackPanel>
 				</TabItem>
-				<TabItem Style="{StaticResource Panels}">
+				<TabItem Height="24.96" VerticalAlignment="Bottom" >
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/12-Magic-Hat-icon.png" Height="15"/>
@@ -323,28 +304,17 @@
 							<Label Content="Marker Color" VerticalAlignment="Center"/>
 							<Canvas Height="35" Width="35" Margin="10,0">
 								<Canvas.Background>
-									<SolidColorBrush Color="{Binding SelectedColor, ElementName=ColorPicker, UpdateSourceTrigger=PropertyChanged}" />
+									<SolidColorBrush Color="{Binding SelectedColor, ElementName=ColorPicker,
+                                        UpdateSourceTrigger=PropertyChanged}" />
 								</Canvas.Background>
 							</Canvas>						
 						</DockPanel>
-<!--						<Label Content="Window Size"/>-->
-<!--						<StackPanel Orientation="Horizontal">-->
-<!--							<Slider x:Name="WindowSize" Maximum="25" TickPlacement="TopLeft"-->
-<!--							 TickFrequency="5" Minimum="0" Width="165" Value="{Binding WindowSize, ElementName=Window}"/>	-->
-<!--							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"-->
-<!--								Maximum="{Binding Maximum, ElementName=WindowSize}"-->
-<!--								Minimum="{Binding Minimum, ElementName=WindowSize}"-->
-<!--								Value="{Binding Value, ElementName=WindowSize, UpdateSourceTrigger=PropertyChanged}"/>-->
-<!--						</StackPanel>-->
-<!--						<Label Content="Inpaint Block Size"/>-->
-<!--						<StackPanel Orientation="Horizontal">-->
-<!--							<Slider x:Name="InpaintBlockSize" Maximum="50" TickPlacement="TopLeft"-->
-<!--							 TickFrequency="10" Minimum="0" Width="165" Value="{Binding InpaintBlockSize, ElementName=Window}"/>	-->
-<!--							<xctk:IntegerUpDown Margin="6,0,0,0" Width="45"-->
-<!--								Maximum="{Binding Maximum, ElementName=InpaintBlockSize}"-->
-<!--								Minimum="{Binding Minimum, ElementName=InpaintBlockSize}"-->
-<!--								Value="{Binding Value, ElementName=InpaintBlockSize, UpdateSourceTrigger=PropertyChanged}"/>-->
-<!--						</StackPanel>-->
+						<Label Content="Window Size"/>
+						<Slider x:Name="WindowSize" Maximum="25"  Margin="6,0"
+							 TickFrequency="5" Minimum="0"  Value="{Binding LbpWindowSize, ElementName=Window}"/>	
+						<Label Content="Inpaint Block Size"/>
+						<Slider x:Name="BlockSize" Maximum="50"  Margin="6,0"
+							 TickFrequency="10" Minimum="0" Value="{Binding InpaintBlockSize, ElementName=Window}"/>	
 						<Button x:Name="Inpaint" HorizontalAlignment="Center" Margin="0,10" Click="Inpaint_OnClick">
 							<DockPanel HorizontalAlignment="Center">
 								<Image Height="32" Source="Resources/12-Magic-Hat-icon.png"/>
@@ -358,14 +328,15 @@
 				</TabItem>
 			</TabControl>
 		</Grid>
-		<ScrollViewer x:Name="ImageScroller" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
-			Drop="DropImage" DragOver="DragImageOver" AllowDrop="True" >
+		<ScrollViewer x:Name="ImageScroller" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Auto" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True" >
             <Border x:Name="CanvasBorder"  BorderBrush="Black" BorderThickness="1" Margin="45"
-                    VerticalAlignment="Center" HorizontalAlignment="Center" Width="{Binding CanvasWidth, ElementName=Window}" 
-                    Height="{Binding CanvasHeight, ElementName=Window}">
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Width="{Binding CanvasWidth,
+                    ElementName=Window}" Height="{Binding CanvasHeight, ElementName=Window}">
 				<Grid x:Name="DrawingGrid">
 					<Rectangle x:Name="Selection" StrokeDashArray="3 3" Height="1" Width="1" Panel.ZIndex="1"/>
 					<Image x:Name="ImageEdit"  HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="{Binding CanvasWidth, ElementName=Window}" Height="{Binding CanvasHeight, ElementName=Window}"
 						MouseLeftButtonDown="ImageEdit_MouseDown"
 						MouseMove="ImageEdit_MouseMove"
 						MouseLeftButtonUp="ImageEdit_MouseLeftButtonUp"/>

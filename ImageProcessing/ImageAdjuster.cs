@@ -6,6 +6,13 @@ namespace ImageProcessing
 {
     public static class ImageAdjuster
     {
+        public static Bitmap ToGrayscale(Image image)
+        {
+            ImageAttributes imageAttributes = GetGrayscaleAttributes();
+
+            return applyAttributes(image, imageAttributes);
+        }
+
         public static Bitmap ChangeSaturation(Image image, float rate)
         {
             ImageAttributes imageAttributes = GetSaturationAttributes(rate);
@@ -76,6 +83,28 @@ namespace ImageProcessing
         private static float _lumR = (float)0.3086;
         private static float _lumG = (float)0.6094;
         private static float _lumB = (float)0.0820;
+
+        private static ImageAttributes GetGrayscaleAttributes()
+        {
+            ImageAttributes imageAttributes = new ImageAttributes();
+
+            ColorMatrix colorMatrix = new ColorMatrix(GetGrayscaleMatrix());
+
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            return imageAttributes;
+        }
+
+        private static float[][] GetGrayscaleMatrix()
+        {
+            float[][] matrix = {
+                                new float[]{_lumR,  _lumR,  _lumR,  0, 0},
+                                new float[]{_lumG,  _lumG,  _lumG,  0, 0}, 
+                                new float[]{_lumB,  _lumB,  _lumB,  0, 0}, 
+                                new float[]{0,      0,      0,      1, 0}, 
+                                new float[]{0,      0,      0,      0, 1} 
+            };
+            return matrix;
+        }
 
         private static float[][] GetSaturationMatrix(float rate)
         {

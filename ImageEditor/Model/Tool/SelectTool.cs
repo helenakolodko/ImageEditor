@@ -4,19 +4,30 @@ namespace ImageEditor.Model.Tool
 {
     class SelectTool : Tool
     {
+        protected Point StartPoint { get; set; }
+        protected Point EndPoint { get; set; }
         public override void MouseDown(Point position)
         {
-            throw new System.NotImplementedException();
+            StartPoint = position;
+            EndPoint = position;
+            _draw = true;
         }
 
         public override void MouseMove(Point position)
         {
-            throw new System.NotImplementedException();
+            if (_draw)
+            {
+                EndPoint = position;
+            }
         }
 
         public override void MouseUp(Point position)
         {
-            throw new System.NotImplementedException();
+            if (_draw)
+            {
+                EndPoint = position;
+                _draw = false;
+            }
         }
     }
 }
