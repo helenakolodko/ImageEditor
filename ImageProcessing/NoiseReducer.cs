@@ -2,13 +2,12 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using AForge.Imaging.Filters;
-using Image = System.Drawing.Image;
 
 namespace ImageProcessing
 {
     public static class NoiseReducer
     {
-        public static Image Median(Image image, Rectangle region, int size)
+        public static Bitmap Median(Bitmap image, Rectangle region, int size)
         {
             int startX = region.Left;
             int startY = region.Top;
@@ -23,7 +22,7 @@ namespace ImageProcessing
             byte[] b = new byte[size * size];
             int i, j, k;
 
-            Bitmap sBitmap = (Bitmap) image;
+            Bitmap sBitmap = image;
             var bitmap = new Bitmap(image);
             BitmapData sBitmapData = sBitmap.LockBits(region, ImageLockMode.ReadOnly, image.PixelFormat);
             IntPtr ptr = sBitmapData.Scan0;
@@ -88,7 +87,7 @@ namespace ImageProcessing
             return bitmap;
         }
 
-        public static Image Bilateral(Image image, Rectangle region, int kernelSize, int spatialFactor, int colorFactor)
+        public static Bitmap Bilateral(Bitmap image, Rectangle region, int kernelSize, int spatialFactor, int colorFactor)
         {
             BilateralSmoothing filter = new BilateralSmoothing
             {

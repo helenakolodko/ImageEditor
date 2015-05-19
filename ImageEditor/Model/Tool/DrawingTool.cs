@@ -1,37 +1,31 @@
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
+using ImageEditor.ViewModel;
 
 namespace ImageEditor.Model.Tool
 {
-    public abstract class DrawingTool : Tool
+    public abstract class DrawingTool : FixedPointsTool
     {
-        public override void MouseDown(Point position)
+        protected System.Drawing.Point StartPoint;
+        protected System.Drawing.Point EndPoint;
+        protected DrawingTool(ImageEditorViewModel viewModel) : base(viewModel)
         {
-            SetStartPoint(position);
-            SetEndPoint(position);
-            _draw = true;
-        }
-
-        public override void MouseMove(Point position)
-        {
-            if (_draw)
-            {
-                SetEndPoint(position);
-            }
         }
 
         public override void MouseUp(Point position)
         {
-            if (_draw)
+            if (IsWorking)
             {
                 Finish(position);
-                _draw = false;
+                IsWorking = false;
             }
         }
 
-        protected abstract void Finish(Point value);
+        public override Cursor GetCursor()
+        {
+            return Cursors.Pen;
+        }
 
-        protected abstract void SetStartPoint(Point value);
-        
-        protected abstract void SetEndPoint(Point value);
+        protected abstract void Finish(Point position);
     }
 }

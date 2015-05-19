@@ -114,22 +114,22 @@
     <Compile Include="Command\UndoCommand.cs" />
     <Compile Include="Command\ZoomCommand.cs" />
     <Compile Include="Converter\BitmapToImageSourceConverter.cs" />
-    <Compile Include="Converter\BrightnessConverter.cs" />
-    <Compile Include="Converter\ContrastConverter.cs" />
-    <Compile Include="Converter\SaturationConverter.cs" />
+    <Compile Include="Converter\ColorConverter.cs" />
+    <Compile Include="Converter\ScrollViewerOffsetMediator.cs" />
+    <Compile Include="Converter\ToolToCursorConverter.cs" />
     <Compile Include="Converter\ZoomConverter.cs" />
     <Compile Include="Model\EditableImage.cs" />
     <Compile Include="Model\Tool\Brush.cs" />
     <Compile Include="Model\Tool\Bucket.cs" />
+    <Compile Include="Model\Tool\CurrentPointTool.cs" />
     <Compile Include="Model\Tool\Drag.cs" />
     <Compile Include="Model\Tool\DrawingTool.cs" />
+    <Compile Include="Model\Tool\EndPointTool.cs" />
     <Compile Include="Model\Tool\Eyedropper.cs" />
-    <Compile Include="Model\Tool\FillingTool.cs" />
+    <Compile Include="Model\Tool\FixedPointsTool.cs" />
     <Compile Include="Model\Tool\Line.cs" />
-    <Compile Include="Model\Tool\ManageTool.cs" />
     <Compile Include="Model\Tool\Pencil.cs" />
     <Compile Include="Model\Tool\Selection.cs" />
-    <Compile Include="Model\Tool\SelectTool.cs" />
     <Compile Include="Model\Tool\Tool.cs" />
     <Compile Include="Model\Tool\ToolBox.cs" />
     <Compile Include="Model\Tool\ToolFactory.cs" />
@@ -238,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Resources\Pixel-Art-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Resources\image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

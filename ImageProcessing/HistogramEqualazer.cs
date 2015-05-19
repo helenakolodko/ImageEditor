@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
+using System.Threading.Tasks;
 using AForge.Imaging;
-using Image = System.Drawing.Image;
 
 namespace ImageProcessing
 {
     static public class HistogramEqualazer
     {
-        public static Bitmap Equalize(Image image, Rectangle region)
+        public static Bitmap Equalize(Bitmap image, Rectangle region)
         {
             int startX = region.Left;
             int startY = region.Top;
@@ -37,7 +36,7 @@ namespace ImageProcessing
 
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            for (int y = startY; y < stopY; y++)
+            Parallel.For(startY, stopY, y =>
             {
                 for (int x = startX; x < stopX; x++)
                 {
@@ -46,7 +45,7 @@ namespace ImageProcessing
                     rgbValues[i + 1] = equalizedHistogramG[rgbValues[i + 1]];
                     rgbValues[i + 2] = equalizedHistogramB[rgbValues[i + 2]];
                 }
-            }
+            });
 
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
             b.UnlockBits(bmpData);
@@ -71,15 +70,12 @@ namespace ImageProcessing
             return equalizedHistogram;
         }
 
-        public static Bitmap Stretch(Image image, Rectangle region)
+        public static Bitmap Stretch(Bitmap image, Rectangle region)
         {
             int startX = region.Left;
             int startY = region.Top;
             int stopX = startX + region.Width;
             int stopY = startY + region.Height;
-            int width = image.Width;
-
-            int numberOfPixels = (stopX - startX) * (stopY - startY);
 
             Bitmap bitmap = new Bitmap(region.Width, region.Height);
             Graphics g = Graphics.FromImage(bitmap);
@@ -100,16 +96,16 @@ namespace ImageProcessing
 
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            for (int y = startY; y < stopY; y++)
+            Parallel.For(startY, stopY, y =>
             {
                 for (int x = startX; x < stopX; x++)
                 {
-                    int i = y * stride + x * 4;
+                    int i = y*stride + x*4;
                     rgbValues[i] = stretchedHistogramR[rgbValues[i]];
                     rgbValues[i + 1] = stretchedHistogramG[rgbValues[i + 1]];
                     rgbValues[i + 2] = stretchedHistogramB[rgbValues[i + 2]];
                 }
-            }
+            });
 
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
             b.UnlockBits(bmpData);
@@ -129,16 +125,13 @@ namespace ImageProcessing
 
             return stretchedHistogram;
         }
-
-        public static Image Squeeze(Image image, Rectangle region, int min, int max)
+        
+        public static Bitmap Squeeze(Bitmap image, Rectangle region, int min, int max)
         {
             int startX = region.Left;
             int startY = region.Top;
             int stopX = startX + region.Width;
             int stopY = startY + region.Height;
-            int width = image.Width;
-
-            int numberOfPixels = (stopX - startX) * (stopY - startY);
 
             byte[] squeezedHistogramR = SqueezeHistogram(max, min);
             byte[] squeezedHistogramG = SqueezeHistogram(max, min);
@@ -154,16 +147,16 @@ namespace ImageProcessing
 
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            for (int y = startY; y < stopY; y++)
+            Parallel.For(startY, stopY, y =>
             {
                 for (int x = startX; x < stopX; x++)
                 {
-                    int i = y * stride + x * 4;
+                    int i = y*stride + x*4;
                     rgbValues[i] = squeezedHistogramR[rgbValues[i]];
                     rgbValues[i + 1] = squeezedHistogramG[rgbValues[i + 1]];
                     rgbValues[i + 2] = squeezedHistogramB[rgbValues[i + 2]];
                 }
-            }
+            });
 
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
             b.UnlockBits(bmpData);

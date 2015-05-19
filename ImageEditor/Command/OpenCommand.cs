@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Windows.Input;
-using ImageEditor.Model;
 using ImageEditor.Properties;
 using ImageEditor.ViewModel;
 using Microsoft.Win32;
 
 namespace ImageEditor.Command
 {
-    class OpenCommand : ICommand
+    class OpenCommand : IReversableCommand, ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
@@ -26,17 +25,8 @@ namespace ImageEditor.Command
             OpenFileDialog openFileDialog = new OpenFileDialog { Filter = Resources.filter };
             if (openFileDialog.ShowDialog() == true)
             {
-                OpenImage(openFileDialog.FileName);
+                _viewModel.OpenImage(openFileDialog.FileName);
             }
-        }
-
-        private void OpenImage(string imagePath)
-        {
-            _viewModel.Image = new EditableImage(imagePath);
-            _viewModel.ResetFields();
-            _viewModel.ResetTools();
-            _viewModel.Active = true;
-            // clear commandList
         }
 
         public event EventHandler CanExecuteChanged;
@@ -46,6 +36,10 @@ namespace ImageEditor.Command
         }
 
         public void Redo(CommandContext context)
+        {
+        }
+
+        public void RaiseCanExecuteChanged()
         {
         }
     }

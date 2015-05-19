@@ -1,11 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using AForge.Imaging;
 using ImageEditor.Annotations;
-using Image = System.Drawing.Image;
 using Point = System.Windows.Point;
 
 namespace ImageEditor.View
@@ -13,18 +15,28 @@ namespace ImageEditor.View
 	/// <summary>
 	/// Interaction logic for BitmapImageHistogram.xaml
 	/// </summary>
-	public partial class BitmapImageHistogram:INotifyPropertyChanged
+	public partial class BitmapImageHistogram : INotifyPropertyChanged
 	{
-        private Image _image;
-        public Image Image
+        private Bitmap _image;
+        public Bitmap Image
 	    {
-	        get { return _image; }
-	        set
-	        {
-	            _image = value;
-	            GetHistogram();
-	        }
+            get { return (Bitmap)GetValue(ImageProperty); }
+	        set { SetValue(ImageProperty, value); }
 	    }
+
+        public static readonly DependencyProperty ImageProperty = 
+            DependencyProperty.Register("Image", typeof(Bitmap), typeof(BitmapImageHistogram),
+            new PropertyMetadata(default(Bitmap), OnImagePropertyChanged));
+
+        private static void OnImagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var h = d  as BitmapImageHistogram;
+            if (h != null)
+            {
+                h.GetHistogram();
+                h._image = (Bitmap) e.NewValue;
+            }
+        }
 
 	    private PointCollection _rCurve;
 
@@ -67,34 +79,29 @@ namespace ImageEditor.View
 
 	    private void GetHistogram()
 	    {
-            ImageStatistics rgbStatistics = new ImageStatistics((Bitmap) Image);
-	        if (rgbStatistics.IsGrayscale)
-	        {
-	            PointCollection points = GetPoints(rgbStatistics.Gray.Values);
-	            RedCurve = points;
-	            GreenCurve = points;
-	            BlueCurve = points;
-	        }
-	        else
-	        {
-                RedCurve = GetPoints(rgbStatistics.Red.Values);
-                GreenCurve = GetPoints(rgbStatistics.Green.Values);
-                BlueCurve = GetPoints(rgbStatistics.Blue.Values);
-	        }
-            
+            ImageStatistics rgbStatistics = new ImageStatistics(Image);
+            Point[] red = null;
+            Point[] green = null;
+            Point[] blue = null; 
+            Parallel.Invoke(
+                delegate { red = GetPoints(rgbStatistics.Red.Values); },
+                delegate { green = GetPoints(rgbStatistics.Green.Values); },
+                delegate { blue = GetPoints(rgbStatistics.Blue.Values); });
+            RedCurve = new PointCollection(red);
+            GreenCurve = new PointCollection(green);
+            BlueCurve = new PointCollection(blue);
 	    }
 
-	    private PointCollection GetPoints(int[] values)
+	    private Point[] GetPoints(int[] values)
 	    {
             int max = values.Max();
-
-            PointCollection points = new PointCollection();
-            points.Add(new Point(0, max));
+            Point[] points = new Point[values.Length + 2];
+            points[0] = new Point(0, max);
             for (int i = 0; i < values.Length; i++)
             {
-                points.Add(new Point(i, max - values[i]));
+                points[i + 1] = new Point(i, max - values[i]);
             }
-            points.Add(new Point(values.Length - 1, max));
+            points[values.Length + 1] = new Point(values.Length - 1, max);
 	        return points;
 	    }
 

@@ -13,9 +13,9 @@ namespace ImageEditor.Model.Tool
         {
             Tool result;
             _tools.TryGetValue(type, out result);
-            if (result != null)
+            if (result == null)
             {
-                result = _factory.GetTool(type);
+                result = _factory.GetTool(type, new object[]{_viewModel});
                 _tools[type] = result;
             }
             return result;

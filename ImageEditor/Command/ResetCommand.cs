@@ -4,7 +4,7 @@ using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    public class ResetCommand : ICommand
+    public class ResetCommand : IReversableCommand, ICommand
     {
          private readonly ImageEditorViewModel _viewModel;
 
@@ -15,11 +15,12 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _viewModel.Image != null;
         }
 
         public void Execute(object parameter)
         {
+            _viewModel.Image = _viewModel.Image;
             _viewModel.ResetFields();
         }
 
@@ -31,6 +32,12 @@ namespace ImageEditor.Command
         public void Redo(CommandContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
 
         public event EventHandler CanExecuteChanged;

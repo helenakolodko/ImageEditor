@@ -12,106 +12,112 @@
         mc:Ignorable="d" 
         x:Class="ImageEditor.View.MainView"
         x:Name="Window"
-        Title="Image Editor" Height="600" Width="800"
-		MinHeight="600" MinWidth="800" Icon="Resources/brush-pencil.png">
+        Title="Image Editor" Height="650" Width="850"
+		MinHeight="650" MinWidth="850" Icon="Resources/image.png" FontSize="13">
     <Window.Resources>
         <converter:ZoomConverter x:Key="ZoomConverter"/>
         <converter:BitmapToImageSourceConverter x:Key="BitmapToImageSourceConverter"/>
+        <converter:ToolToCursorConverter x:Key="ToolToCursorConverter"/>
+        <converter:ColorConverter x:Key="ColorConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-<!--        <ObjectDataProvider x:Key="HistorgamImageProvider" ObjectType="{x:Type imageEditorView:MainView}"-->
-<!--                            MethodName="GetImage"/>-->
     </Window.Resources>
-
-    <Window.DataContext>
-        <viewModel:ImageEditorViewModel/>
-    </Window.DataContext>
 
     <Grid Style="{StaticResource Back}" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="230"/>
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="29"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
         <!-- TOOLBAR PANEL -->
 
         <DockPanel  Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Adjustments}" >
-			<DockPanel Height="25" Margin="6,2,2,2" LastChildFill="False">
+			<DockPanel Margin="6,2,2,2" LastChildFill="False">
                 <Button x:Name="Open" ToolTip="Open" Command="{Binding OpenCommand}">
                     <Image Source="Resources/opened_folder-32.png"/>
                 </Button>
-                <DockPanel IsEnabled="{Binding Active}">
-                    <Button ToolTip="Save" Command="{Binding SaveCommand}">
-                        <Image Source="Resources/save_as-25.png"/>
-                    </Button>
-                    <Button ToolTip="Save As"  Command="{Binding SaveAsCommand}">
-                        <Image Source="Resources/save_as-32.png"/>
-                    </Button>
-                    <Separator Width="10" Visibility="Hidden" />
-                    <Button IsEnabled="False" ToolTip="Undo">
-                        <Image Source="Resources/left2_filled-25.png"/>
-                    </Button>
-                    <Button IsEnabled="False" ToolTip="Redo">
-                        <Image Source="Resources/right2_filled-25.png"/>
-                    </Button>
-                    <Separator Width="10" Visibility="Hidden" />
-                    <Button ToolTip="Pencil" Command="{Binding SelectToolCommand}" CommandParameter="Pencil">
-                        <Image Source="Resources\Pencil-icon.png"/>
-                    </Button>
-                    <Button ToolTip="Brush" Command="{Binding SelectToolCommand}" CommandParameter="Brush">
-                        <Image Source="Resources/brush-26.png"/>
-                    </Button>
-                    <Button ToolTip="Line" Command="{Binding SelectToolCommand}" CommandParameter="Line">
-                        <Image Source="Resources/Editing-Line-icon.png"/>
-                    </Button>
-                    <Button ToolTip="Bucket" Command="{Binding SelectToolCommand}" CommandParameter="Bucket">
-                        <Image Source="Resources\Paint-icon.png"/>
-                    </Button>
-                    <Button ToolTip="Eyedropper" Command="{Binding SelectToolCommand}" CommandParameter="Eyedropper">
-                        <Image Source="Resources\Eyedropper-icon.png"/>
-                    </Button>
-                    <Separator Width="10" Visibility="Hidden" />
-                    <xctk:ColorPicker x:Name="ColorPicker" ToolTip="Select Colour"
-						    ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" 
-						    ShowStandardColors="False" UsingAlphaChannel="False" SelectedColor="{Binding SelectedColor}"
-                            Background="{x:Null}" BorderBrush="{x:Null}" />
-					<Separator Width="10" Visibility="Hidden" />
-                    <Button ToolTip="Select" Command="{Binding SelectToolCommand}" CommandParameter="Selection">
-                        <Image Source="Resources\Cursor-Select-icon.png" />
-                    </Button>
-                    <Button IsEnabled="False" ToolTip="Crop" Command="{Binding CropCommand}">
-                        <Image Source="Resources/crop-26.png"/>
-                    </Button>
-                    <Button ToolTip="Drag" Command="{Binding SelectToolCommand}" CommandParameter="Drag">
-                        <Image Source="Resources\Drag-icon.png"/>
-                    </Button>
-                    <Separator Width="10" Visibility="Hidden" />
-                    <Button ToolTip="Reset" Command="{Binding ResetCommand}">
-                    	<Image Source="Resources/cancel-26.png" />
-                    </Button>
-                    <Separator Width="10" Visibility="Hidden" />
-                    <ComboBox IsEditable="True" ToolTip="Zoom"
-                              Text="{Binding Zoom, ValidatesOnExceptions=True, Converter={StaticResource ZoomConverter}}" >
-                        <ComboBoxItem Content="10%"/>
-                        <ComboBoxItem Content="25%"/>
-                        <ComboBoxItem Content="50%"/>
-                        <ComboBoxItem Content="75%"/>
-                        <ComboBoxItem Content="100%"/>
-                        <ComboBoxItem Content="125%"/>
-                        <ComboBoxItem Content="150%"/>
-                        <ComboBoxItem Content="200%"/>
-                        <ComboBoxItem Content="300%"/>
-                    </ComboBox>
-                    <Button ToolTip="Zoom In" Command="{Binding ZoomCommand}" CommandParameter="In">
-                        <Image Source="Resources/zoom_in-25.png"/>
-                    </Button>
-                    <Button ToolTip="Zoom Out" Command="{Binding ZoomCommand}" CommandParameter="Out">
-                        <Image Source="Resources/zoom_out-25.png"/>
-                    </Button>
-                </DockPanel>
+                <Button ToolTip="Save" Command="{Binding SaveCommand}">
+                    <Image Source="Resources/save_as-25.png"/>
+                </Button>
+                <Button ToolTip="Save As"  Command="{Binding SaveAsCommand}">
+                    <Image Source="Resources/save_as-32.png"/>
+                </Button>
+                <Separator Width="10" Visibility="Hidden" />
+                <Button IsEnabled="False" ToolTip="Undo" Command="{Binding UndoCommand}">
+                    <Image Source="Resources/left2_filled-25.png"/>
+                </Button>
+                <Button IsEnabled="False" ToolTip="Redo" Command="{Binding RedoCommand}">
+                    <Image Source="Resources/right2_filled-25.png"/>
+                </Button>
+                <Separator Width="10" Visibility="Hidden" />
+                <Button ToolTip="Pencil" Command="{Binding SelectToolCommand}" CommandParameter="Pencil">
+                    <Image Source="Resources\Pencil-icon.png"/>
+                </Button>
+                <Button ToolTip="Brush" Command="{Binding SelectToolCommand}" CommandParameter="Brush">
+                    <Image Source="Resources/brush-26.png"/>
+                </Button>
+                <Button ToolTip="Line" Command="{Binding SelectToolCommand}" CommandParameter="Line">
+                    <Image Source="Resources/Editing-Line-icon.png"/>
+                </Button>
+				<ComboBox IsEditable="True" ToolTip="Stroke Thickness" Text="{Binding StrokeThickness}" >
+                    <ComboBoxItem Content="1"/>
+                    <ComboBoxItem Content="2"/>
+                    <ComboBoxItem Content="3"/>
+                    <ComboBoxItem Content="5"/>
+                    <ComboBoxItem Content="7"/>
+                    <ComboBoxItem Content="10"/>
+                    <ComboBoxItem Content="15"/>
+                    <ComboBoxItem Content="20"/>
+                </ComboBox>
+                <Separator Width="10" Visibility="Hidden" />
+                <Button ToolTip="Bucket" Command="{Binding SelectToolCommand}" CommandParameter="Bucket">
+                    <Image Source="Resources\Paint-icon.png"/>
+                </Button>
+                <Button ToolTip="Eyedropper" Command="{Binding SelectToolCommand}" CommandParameter="Eyedropper">
+                    <Image Source="Resources\Eyedropper-icon.png"/>
+                </Button>
+                <Separator Width="10" Visibility="Hidden" />
+                <xctk:ColorPicker x:Name="ColorPicker" ToolTip="Select Colour"
+						ColorMode="ColorCanvas" ShowDropDownButton="False" ShowRecentColors="True" 
+						ShowStandardColors="False" UsingAlphaChannel="False" 
+                        SelectedColor="{Binding SelectedColor, Converter={StaticResource ColorConverter}}"
+                        Background="{x:Null}" BorderBrush="{x:Null}" />
+				<Separator Width="10" Visibility="Hidden" />
+                <Button ToolTip="Select" Command="{Binding SelectToolCommand}" CommandParameter="Selection">
+                    <Image Source="Resources\Cursor-Select-icon.png" />
+                </Button>
+                <Button IsEnabled="False" ToolTip="Crop" Command="{Binding CropCommand}">
+                    <Image Source="Resources/crop-26.png"/>
+                </Button>
+                <Button ToolTip="Drag" Command="{Binding SelectToolCommand}" CommandParameter="Drag">
+                    <Image Source="Resources\Drag-icon.png"/>
+                </Button>
+                <Separator Width="10" Visibility="Hidden" />
+                <Button ToolTip="Reset" Command="{Binding ResetCommand}">
+                    <Image Source="Resources/cancel-26.png" />
+                </Button>
+                <Separator Width="10" Visibility="Hidden" />
+                <ComboBox IsEditable="True" ToolTip="Zoom"
+                            Text="{Binding Zoom, ValidatesOnExceptions=True, Converter={StaticResource ZoomConverter}}" >
+                    <ComboBoxItem Content="10%"/>
+                    <ComboBoxItem Content="25%"/>
+                    <ComboBoxItem Content="50%"/>
+                    <ComboBoxItem Content="75%"/>
+                    <ComboBoxItem Content="100%"/>
+                    <ComboBoxItem Content="125%"/>
+                    <ComboBoxItem Content="150%"/>
+                    <ComboBoxItem Content="200%"/>
+                    <ComboBoxItem Content="300%"/>
+                </ComboBox>
+                <Button ToolTip="Zoom In" Command="{Binding ZoomCommand}" CommandParameter="In">
+                    <Image Source="Resources/zoom_in-25.png"/>
+                </Button>
+                <Button ToolTip="Zoom Out" Command="{Binding ZoomCommand}" CommandParameter="Out">
+                    <Image Source="Resources/zoom_out-25.png"/>
+                </Button>
             </DockPanel>
         </DockPanel>
 
@@ -136,18 +142,60 @@
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
                         <Label Content="Brightness"/>
-                        <Slider Margin="6,0" Value="{Binding Brightness, Mode=TwoWay}"/>
+                        <Slider Margin="6,0" Value="{Binding Brightness}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
+                                                         MethodName="OnFilterChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
                         <Label Content="Contrast" HorizontalAlignment="Left" />
-                        <Slider Margin="6,0" Value="{Binding Contrast, Mode=TwoWay}"/>
+                        <Slider Margin="6,0" Value="{Binding Contrast}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
+                                                         MethodName="OnFilterChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
                         <Label Content="Saturation" HorizontalAlignment="Left"/>
-                        <Slider Margin="6,0"  Value="{Binding Saturation, Mode=TwoWay}"/>
+                        <Slider Margin="6,0"  Value="{Binding Saturation}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
+                                                         MethodName="OnFilterChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
                         <Separator Height="15" Visibility="Hidden"/>
                         <Label Content="Red"/>
-                        <Slider Margin="6,0" Value="{Binding Red, Mode=TwoWay}"/>
+                        <Slider Margin="6,0" Value="{Binding Red}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
+                                                         MethodName="OnFilterChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
                         <Label Content="Green" HorizontalAlignment="Left" />
-                        <Slider Margin="6,0" Value="{Binding Green, Mode=TwoWay}"/>
+                        <Slider Margin="6,0" Value="{Binding Green}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
+                                                         MethodName="OnFilterChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
                         <Label Content="Blue" HorizontalAlignment="Left"/>
-                        <Slider Margin="6,0" Value="{Binding Blue, Mode=TwoWay}"/>
+                        <Slider Margin="6,0" Value="{Binding Blue}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                         MethodName="OnFilterChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
                         <Separator Height="10" Visibility="Hidden"/>
                         <Button Content="Apply Filters"  HorizontalAlignment="Center" Command="{Binding ApplyCommand}"/>
                     </StackPanel>
@@ -176,22 +224,22 @@
                                                 Value="{Binding ImageHeight}"/>
 						</DockPanel>
 						<Separator Height="25" Visibility="Hidden"/>
-						<Button x:Name="Resize" Width="85" Height="25" Command="{Binding ResetCommand}">
+						<Button Width="85" Height="25" Command="{Binding ResetCommand}">
 							<DockPanel>
 								<Image Source="Resources/resize-26.png" />
 								<TextBlock Text=" Resize"/>
 							</DockPanel>
 						</Button>
 						<Separator Height="25" Visibility="Hidden"/>
-						<Button x:Name="RotateLeft" Height="25" Width="110" Command="{Binding RotateCommand}"
-                                CommandParameter="Clockwise">
+						<Button Height="25" Width="110" Command="{Binding RotateCommand}"
+                                CommandParameter="AntiClockwise">
 							<DockPanel>
 								<Image Source="Resources/rotate-26.png" />
 								<TextBlock Text=" Rotate Left"/>
 							</DockPanel>							
 						</Button>
-                        <Button x:Name="RotateRight" Height="25"  Width="110" Command="{Binding RotateCommand}"
-                                CommandParameter="AntiClockwise">
+                        <Button Height="25"  Width="110" Command="{Binding RotateCommand}"
+                                CommandParameter="Clockwise">
 							<DockPanel>
 								<Image Source="Resources/rotate_right-26.png" />
 								<TextBlock Text=" Rotate Right"/>
@@ -226,7 +274,7 @@
 						</StackPanel>
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
-                        <view:BitmapImageHistogram x:Name="Histogram"/>
+                        <view:BitmapImageHistogram x:Name="Histogram" Image="{Binding ImageToDisplay.Source}"/>
                         <Slider Minimum="0" Maximum="255" Margin="6" Value="{Binding HistogramRight,  Mode=TwoWay}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
@@ -376,7 +424,9 @@
 
 
         <ScrollViewer x:Name="ImageScroller" Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" 
-                      VerticalScrollBarVisibility="Auto" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True" >
+                      VerticalScrollBarVisibility="Auto" Drop="DropImage" DragOver="DragImageOver" AllowDrop="True" 
+                      Cursor="{Binding SelectedTool, Mode=OneWay, Converter={StaticResource ToolToCursorConverter}}"
+                      >
             <Border x:Name="CanvasBorder"  BorderBrush="Black" BorderThickness="1" Margin="45"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
@@ -384,12 +434,15 @@
 					<Rectangle x:Name="Selection" StrokeDashArray="3 3" Height="1" Width="1" Panel.ZIndex="1"/>
 					<Image x:Name="ImageEdit"  HorizontalAlignment="Left" VerticalAlignment="Top"
                         Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
-                        Source="{Binding ImageToDisplay, Converter={StaticResource BitmapToImageSourceConverter},
+                        Source="{Binding ImageToDisplay.Source, Converter={StaticResource BitmapToImageSourceConverter},
                         UpdateSourceTrigger=PropertyChanged}"
 						MouseLeftButtonDown="ImageEdit_MouseDown" MouseMove="ImageEdit_MouseMove"
 						MouseLeftButtonUp="ImageEdit_MouseLeftButtonUp"/>
 				</Grid>				
 			</Border>
-		</ScrollViewer>        
-	</Grid>
+		</ScrollViewer>
+
+        <converter:ScrollViewerOffsetMediator ScrollViewer="{Binding ElementName=ImageScroller}"
+            VerticalOffset="{Binding VerticalOffset}" HorizontalOffset="{Binding HorizontalOffset}"/>
+    </Grid>
 </Window>

@@ -1,121 +1,47 @@
-﻿using System.Windows;
-using System.Windows.Shapes;
+﻿using System.Drawing;
+using System.Windows.Input;
+using ImageEditor.ViewModel;
+using Point = System.Windows.Point;
 
 namespace ImageEditor.Model.Tool
 {
-    class Selection : SelectTool
+    public class Selection : FixedPointsTool
     {
-        private readonly Rectangle _shape;
-        private System.Drawing.Rectangle _region;
-        public double Zoom
+        public override void RaiseOnZoomChanged()
         {
-            private get { return _zoom; }
-            set
-            {
-                _zoom = value;
-                _startPoint.X = _region.X * value;
-                _startPoint.Y = _region.Y * value;
-                TopLeft = _startPoint;
-                Width = _region.Width * value;
-                Height = _region.Height * value;
-            }
-            
-        }
-        public bool Active {
-            get { return _active; } 
-            set
-            {
-                _shape.Visibility = value ? Visibility.Visible : Visibility.Hidden;
-            } 
+            throw new System.NotImplementedException();
         }
 
-        public Selection(Rectangle shape)
-        {
-            _shape = shape;
-            Active = false;
-            _region = new System.Drawing.Rectangle((int)shape.Margin.Left, (int)shape.Margin.Top,
-                (int)shape.Width, (int)shape.Height);
+        private bool _active;
+        public bool Active {
+            get { return _active; } 
+            set { _active = value;} 
         }
+
+        private Rectangle _region;
 
         public System.Drawing.Rectangle GetRegion()
         {
             return _region;
         }
 
-        protected Point StartPoint
+        public Selection(ImageEditorViewModel viewModel) : base(viewModel)
         {
-            set
-            {
-                _startPoint = value;
-                TopLeft = value;
-            }
         }
 
-        protected Point EndPoint
+        protected override void SetStartPoint(Point position)
         {
-            set
-            {
-                double xDelta = value.X - _startPoint.X;
-                double yDelta = value.Y - _startPoint.Y;
-                Point newTopLeft = TopLeft;
-                if (xDelta < 0)
-                {
-                    newTopLeft.X = value.X;
-                    xDelta = -xDelta;
-                }
-                else
-                {
-                    newTopLeft.X = _startPoint.X;
-                }
-
-                if (yDelta < 0)
-                {
-                    newTopLeft.Y = value.Y;
-                    yDelta = -yDelta;
-                }
-                else
-                {
-                    newTopLeft.Y = _startPoint.Y;
-                }
-
-                Width = xDelta;
-                Height = yDelta;
-                TopLeft = newTopLeft;
-            }
+            throw new System.NotImplementedException();
         }
 
-        private Point TopLeft
+        public override Cursor GetCursor()
         {
-            get
-            {
-                return new Point(_shape.Margin.Left, _shape.Margin.Top);
-            }
-            set
-            {
-                Thickness margin = _shape.Margin;
-                margin.Top = value.Y;
-                margin.Left = value.X;
-                _shape.Margin = margin;
-                _region.Y = (int)(value.Y / Zoom);
-                _region.X = (int)(value.X / Zoom);
-            } 
+            return Cursors.Cross;
         }
 
-        private double Width 
+        protected override void SetEndPoint(Point position)
         {
-            set
-            {
-                _shape.Width = value;
-                _region.Width = (int)(value / Zoom);
-            }
-        }
-        private double Height
-        {
-            set
-            {
-                _shape.Height = value;
-                _region.Height = (int)(value / Zoom);
-            }
+            throw new System.NotImplementedException();
         }
     }
 }

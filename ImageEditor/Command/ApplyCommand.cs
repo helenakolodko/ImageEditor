@@ -4,7 +4,7 @@ using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    class ApplyCommand : ICommand
+    class ApplyCommand : IReversableCommand, ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
@@ -15,7 +15,7 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _viewModel.Image != null;
         }
 
         public void Execute(object parameter)
@@ -32,6 +32,12 @@ namespace ImageEditor.Command
         public void Redo(CommandContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
 
         public event EventHandler CanExecuteChanged;

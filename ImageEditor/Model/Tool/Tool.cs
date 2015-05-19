@@ -1,17 +1,25 @@
 using System.Windows;
+using System.Windows.Input;
+using ImageEditor.ViewModel;
 
 namespace ImageEditor.Model.Tool
 {
     public abstract class Tool
     {
-        protected double _zoom;
-        public double Zoom { get; set; }
+        protected ImageEditorViewModel ViewModel;
+        public abstract void RaiseOnZoomChanged();
 
-        protected Point _startPoint;
-        protected bool _draw;
+        protected Tool(ImageEditorViewModel viewModel)
+        {
+            ViewModel = viewModel;
+        }
 
-        protected bool _active;
-        public bool Active{ get; set; }
+        protected bool IsWorking;
+
+        public virtual Cursor GetCursor()
+        {
+            return Cursors.Arrow;
+        }
 
         public abstract void MouseDown(Point position);
         public abstract void MouseMove(Point position);

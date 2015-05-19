@@ -1,51 +1,21 @@
 ﻿using System.Drawing;
+using ImageEditor.ViewModel;
 using Xceed.Wpf.Toolkit;
+using Point = System.Windows.Point;
 
 namespace ImageEditor.Model.Tool
 {
-    class Eyedropper : SelectTool
+    public class Eyedropper : CurrentPointTool
     {
-        private readonly EditableImage _image;
-        private Color _selectedColor;
-        private ColorPicker _colorPicker;
-        public double Zoom
+        public Eyedropper(ImageEditorViewModel viewModel) : base(viewModel)
         {
-            private get { return _zoom; }
-            set
-            {
-                
-            }
         }
 
-        public Eyedropper(EditableImage image, ColorPicker colorPicker)
+        protected override void ProcessPoint(Point position)
         {
-            _image = image;
-            _colorPicker = colorPicker;
+            Bitmap bitmap = ViewModel.ImageToDisplay.Source;
+            Color selectedColor = bitmap.GetPixel((int) (position.X/ViewModel.Zoom), (int) (position.Y/ViewModel.Zoom));
+            ViewModel.SelectedColor = selectedColor;
         }
-
-        public Color GetColor()
-        {
-            return _selectedColor;
-//            var b = (Bitmap)_image;
-//            Color c = b.GetPixel((int)point.X, (int)point.Y);
-//            ColorPicker.SelectedColor = System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B);
-        }
-
-        protected Point StartPoint
-        {
-            set
-            {
-               
-            }
-        }
-
-        protected Point EndPoint
-        {
-            set
-            {
-                
-            }
-        }
-
     }
 }

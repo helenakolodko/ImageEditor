@@ -4,7 +4,7 @@ using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    class ZoomCommand : ICommand
+    class ZoomCommand : IReversableCommand, ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
@@ -14,7 +14,7 @@ namespace ImageEditor.Command
         }
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _viewModel.Image != null;
         }
 
         public void Execute(object param)
@@ -38,6 +38,12 @@ namespace ImageEditor.Command
 
         public void Redo(CommandContext context)
         {
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

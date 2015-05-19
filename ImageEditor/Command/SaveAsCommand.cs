@@ -9,7 +9,7 @@ using Microsoft.Win32;
 
 namespace ImageEditor.Command
 {
-    class SaveAsCommand : ICommand
+    class SaveAsCommand : IReversableCommand, ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
@@ -20,7 +20,7 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _viewModel.Image != null;
         }
 
         public void Execute(object param)
@@ -65,6 +65,12 @@ namespace ImageEditor.Command
 
         public void Redo(CommandContext context)
         {
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

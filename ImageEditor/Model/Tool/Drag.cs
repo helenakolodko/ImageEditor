@@ -1,27 +1,41 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using ImageEditor.ViewModel;
 
 namespace ImageEditor.Model.Tool
 {
-    class Drag : ManageTool
+    class Drag : FixedPointsTool
     {
-        private ScrollViewer _scrollViewer;
-
-        public Point StartPoint { get { return _startPoint; } set { _startPoint = value; } }
-
-        private Point _endPoint;
-        public Point EndPoint { get { return _endPoint; } set { _endPoint = value; MoveImage(value); } }
-
-        private void MoveImage(Point point)
+        public Drag(ImageEditorViewModel viewModel) : base(viewModel)
         {
-            _scrollViewer.ScrollToHorizontalOffset(_scrollViewer.HorizontalOffset + _startPoint.X - point.X);
-            _scrollViewer.ScrollToVerticalOffset(_scrollViewer.VerticalOffset + _startPoint.Y - point.Y);
-            _scrollViewer.UpdateLayout();
         }
 
-        public Drag(ScrollViewer scrollViewer)
+        private void MoveImage()
         {
-            _scrollViewer = scrollViewer;
+            ViewModel.HorizontalOffset += StartPoint.X - EndPoint.X;
+            ViewModel.VerticalOffset  += StartPoint.Y - EndPoint.Y;
         }
+
+        protected override void SetStartPoint(Point position)
+        {
+            StartPoint = position;
+        }
+
+        protected override void SetEndPoint(Point position)
+        {
+            EndPoint = position;
+            MoveImage();
+        }
+
+        public override Cursor GetCursor()
+        {
+            return Cursors.Hand;
+        }
+
+        public override void RaiseOnZoomChanged()
+        {
+        }
+        
     }
 }

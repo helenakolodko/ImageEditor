@@ -4,7 +4,7 @@ using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
-    public class RotateCommand : ICommand
+    public class RotateCommand : IReversableCommand, ICommand
     {
         private readonly ImageEditorViewModel _viewModel;
 
@@ -15,7 +15,7 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _viewModel.Image != null;
         }
 
         public void Execute(object param)
@@ -29,7 +29,7 @@ namespace ImageEditor.Command
             {
                 _viewModel.Image.RotateAntiClockwise();
             }
-
+            _viewModel.Image = _viewModel.Image;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -42,6 +42,12 @@ namespace ImageEditor.Command
         public void Redo(CommandContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

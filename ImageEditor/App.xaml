@@ -406,7 +406,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+
+
+        <!-- TOOLTIP -->
         
+        <Style TargetType="{x:Type ToolTip}">
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{StaticResource PanelsBackgroundBrush}"/>
+        </Style>
+
 
 
         <!-- TABCONTROL -->

@@ -1,12 +1,15 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using ImageEditor.Annotations;
 using ImageProcessing;
 
 namespace ImageEditor.Model
 {
-    public class EditableImage
+    public class EditableImage : INotifyPropertyChanged
     {
         private string _path ;
 
@@ -27,6 +30,7 @@ namespace ImageEditor.Model
                     _source = b.Clone(new Rectangle(0, 0, b.Width, b.Height), PixelFormat.Format32bppArgb);
 
                 }
+                OnPropertyChanged("Source");
             }
         }
 
@@ -37,7 +41,11 @@ namespace ImageEditor.Model
             Path = path;
         }
 
-        public Bitmap Source { get { return _source; } set { _source = value; } }
+        public Bitmap Source
+        {
+            get { return _source; } 
+            set { _source = value;  OnPropertyChanged();}
+        }
 
         public ImageFormat Format { get; set; }
 
@@ -76,47 +84,47 @@ namespace ImageEditor.Model
 
         public void Resize(int newWidth, int newHeight)
         {
-            _source = new Bitmap(_source, newWidth, newHeight);
+            Source = new Bitmap(_source, newWidth, newHeight);
         }
 
         public void FlipHorisontal()
         {
-            _source.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            Source.RotateFlip(RotateFlipType.RotateNoneFlipY);
         }
 
         public void FlipVertical()
         {
-            _source.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            Source.RotateFlip(RotateFlipType.RotateNoneFlipX);
         }
 
         public void RotateClockwise()
         {
-            _source.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            Source.RotateFlip(RotateFlipType.Rotate90FlipNone);
         }
 
         public void RotateAntiClockwise()
         {
-            _source.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            Source.RotateFlip(RotateFlipType.Rotate270FlipNone);
         }
 
         public void ChangeBrightness(float rate, Rectangle region)
         {
-            _source = ImageAdjuster.ChangeBrightness(_source, region, rate);
+            Source = ImageAdjuster.ChangeBrightness(_source, region, rate);
         }
 
         public void ChangeContrast(float rate, Rectangle region)
         {
-            _source = ImageAdjuster.ChangeContrast(_source, region, rate);
+            Source = ImageAdjuster.ChangeContrast(_source, region, rate);
         }
 
         public void ChangeSaturation(float rate, Rectangle region)
         {
-            _source = ImageAdjuster.ChangeSaturation(_source, region, rate);
+            Source = ImageAdjuster.ChangeSaturation(_source, region, rate);
         }
 
         public void ChangeColour(float redRate, float greenRate, float blueRate, Rectangle region)
         {
-            _source = ImageAdjuster.ChangeColour(_source, region, redRate, greenRate, blueRate);
+            Source = ImageAdjuster.ChangeColour(_source, region, redRate, greenRate, blueRate);
         }
 
 //        public void DrawLine
@@ -130,6 +138,7 @@ namespace ImageEditor.Model
         {
             Graphics g = Graphics.FromImage(_source);
             g.FillRectangle(new SolidBrush(color), region);
+            OnPropertyChanged("Source");
         }
 
 
@@ -144,11 +153,28 @@ namespace ImageEditor.Model
         {
             Graphics g = Graphics.FromImage(_source);
             g.DrawImage(newSource, region, 0, 0, newSource.Width, newSource.Height, GraphicsUnit.Pixel);
+            OnPropertyChanged("Source");
         }
 
         public void Crop(Rectangle region)
         {
-            _source = GetRegion(region);
+            Source = GetRegion(region);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public EditableImage Clone()
+        {
+            EditableImage result = (EditableImage)this.MemberwiseClone();
+            result.Source = _source.Clone(new Rectangle(0, 0, _source.Width, _source.Height), _source.PixelFormat);
+            return result;
         }
     }
 }
