@@ -20,8 +20,10 @@ namespace ImageEditor.Command
 
         public void Execute(object parameter)
         {
+            _viewModel.ComandList.AddNew(_viewModel.Image.Source);
             _viewModel.ApplyChanges();
             _viewModel.ResetFields();
+            _viewModel.OnCommandExecuted();
         }
 
         public void Undo(CommandContext context)

@@ -21,8 +21,10 @@ namespace ImageEditor.Command
 
         public void Execute(object param)
         {
+            _viewModel.ComandList.AddNew(_viewModel.Image.Source);
             _viewModel.Image.Source = HistogramEqualazer.Equalize(_viewModel.Image.Source, _viewModel.SelectedRegion);
-            _viewModel.Image = _viewModel.Image;
+            _viewModel.RefreshImage();
+            _viewModel.OnCommandExecuted();
         }
 
         public event EventHandler CanExecuteChanged;

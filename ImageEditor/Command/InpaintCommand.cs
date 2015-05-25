@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Input;
 using ImageEditor.ViewModel;
+using ImageProcessing;
 
 namespace ImageEditor.Command
 {
@@ -20,7 +22,19 @@ namespace ImageEditor.Command
 
         public void Execute(object param)
         {
-            throw new NotImplementedException();
+            _viewModel.ComandList.AddNew(_viewModel.Image.Source);
+            if (_viewModel.CreateMask)
+            {
+                ColourInpaint.Inpaint(_viewModel.Image.Source, ColourInpaint.ObtainMaskMatrix(_viewModel.Mask),
+                    _viewModel.LbpWindowSize, _viewModel.InpaintBlockSize);
+            }
+            else
+            {
+                ColourInpaint.Inpaint(_viewModel.Image.Source, _viewModel.SelectedColor,
+                    _viewModel.LbpWindowSize, _viewModel.InpaintBlockSize);    
+            }
+            _viewModel.RefreshImage();
+            _viewModel.OnCommandExecuted();
         }
 
         public event EventHandler CanExecuteChanged;

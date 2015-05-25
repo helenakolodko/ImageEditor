@@ -32,10 +32,5 @@ namespace ImageEditor.Model.Tool
         {
             return Cursors.Hand;
         }
-
-        public override void RaiseOnZoomChanged()
-        {
-        }
-        
     }
 }

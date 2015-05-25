@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Input;
 using ImageEditor.ViewModel;
 
@@ -20,6 +21,7 @@ namespace ImageEditor.Command
 
         public void Execute(object parameter)
         {
+            _viewModel.ComandList.AddNew(new Bitmap(_viewModel.Image.Source));
             string orientation = (string)parameter;
             if (orientation == "H")
             {
@@ -29,7 +31,8 @@ namespace ImageEditor.Command
             {
                 _viewModel.Image.FlipVertical();
             }
-            _viewModel.Image = _viewModel.Image;
+            _viewModel.RefreshImage();
+            _viewModel.OnCommandExecuted();
         }
 
         public event EventHandler CanExecuteChanged;

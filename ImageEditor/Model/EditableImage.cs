@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using ImageEditor.Annotations;
 using ImageProcessing;
@@ -70,16 +71,9 @@ namespace ImageEditor.Model
             return result;
         }
 
-        public BitmapImage GetImageToDisplay()
+        public Rectangle GetFullRectangle()
         {
-            MemoryStream ms = new MemoryStream();
-            _source.Save(ms, Format);
-            ms.Position = 0;
-            BitmapImage bi = new BitmapImage();
-            bi.BeginInit();
-            bi.StreamSource = ms;
-            bi.EndInit();
-            return bi;
+            return new Rectangle(0, 0, Width, Height);
         }
 
         public void Resize(int newWidth, int newHeight)
@@ -106,33 +100,6 @@ namespace ImageEditor.Model
         {
             Source.RotateFlip(RotateFlipType.Rotate270FlipNone);
         }
-
-        public void ChangeBrightness(float rate, Rectangle region)
-        {
-            Source = ImageAdjuster.ChangeBrightness(_source, region, rate);
-        }
-
-        public void ChangeContrast(float rate, Rectangle region)
-        {
-            Source = ImageAdjuster.ChangeContrast(_source, region, rate);
-        }
-
-        public void ChangeSaturation(float rate, Rectangle region)
-        {
-            Source = ImageAdjuster.ChangeSaturation(_source, region, rate);
-        }
-
-        public void ChangeColour(float redRate, float greenRate, float blueRate, Rectangle region)
-        {
-            Source = ImageAdjuster.ChangeColour(_source, region, redRate, greenRate, blueRate);
-        }
-
-//        public void DrawLine
-
-//        public void DrawPath
-
-//        public void DrawBrush
-        
 
         public void FillRegion(Rectangle region, Color color)
         {
@@ -173,7 +140,7 @@ namespace ImageEditor.Model
         public EditableImage Clone()
         {
             EditableImage result = (EditableImage)this.MemberwiseClone();
-            result.Source = _source.Clone(new Rectangle(0, 0, _source.Width, _source.Height), _source.PixelFormat);
+            result.Source = new Bitmap(Source); ;
             return result;
         }
     }

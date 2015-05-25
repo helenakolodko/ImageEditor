@@ -11,8 +11,16 @@ namespace ImageProcessing
         {
             int startX = region.Left;
             int startY = region.Top;
-            int stopX = startX + region.Width;
-            int stopY = startY + region.Height;
+            int stopX = image.Width;
+            int stopY = image.Height;
+            if (startX + region.Width < image.Width)
+            {
+                stopX = startX + region.Width;
+            }
+            if (startY + region.Height < image.Height)
+            {
+                stopY = startX + region.Height;
+            }
             int pixelSize = 4;
             int c;
             int radius = size >> 1;
@@ -24,7 +32,8 @@ namespace ImageProcessing
 
             Bitmap sBitmap = image;
             var bitmap = new Bitmap(image);
-            BitmapData sBitmapData = sBitmap.LockBits(region, ImageLockMode.ReadOnly, image.PixelFormat);
+            BitmapData sBitmapData = sBitmap.LockBits(new Rectangle(0, 0, sBitmap.Width, sBitmap.Height),
+                ImageLockMode.ReadOnly, image.PixelFormat);
             IntPtr ptr = sBitmapData.Scan0;
             int stride = sBitmapData.Stride;
             int offset = stride - region.Width * pixelSize;
@@ -32,7 +41,8 @@ namespace ImageProcessing
             byte[] source = new byte[bytes];
             System.Runtime.InteropServices.Marshal.Copy(ptr, source, 0, bytes);
 
-            BitmapData bmpData = bitmap.LockBits(region, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+            BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.ReadWrite, bitmap.PixelFormat);
             ptr = bmpData.Scan0;
             byte[] destination = new byte[bytes];
             System.Runtime.InteropServices.Marshal.Copy(ptr, destination, 0, bytes);
@@ -98,7 +108,7 @@ namespace ImageProcessing
             };
 
             Bitmap bitmap = new Bitmap(image);
-            filter.ApplyInPlace(bitmap);
+            filter.ApplyInPlace(bitmap, region);
             return bitmap;
         }
     }

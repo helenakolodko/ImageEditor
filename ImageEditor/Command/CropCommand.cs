@@ -16,13 +16,17 @@ namespace ImageEditor.Command
 
         public bool CanExecute(object parameter)
         {
-            return _viewModel.Image != null && _viewModel.SelectedTool is Selection;
+            return _viewModel.Image != null && _viewModel.Selection.Active;
         }
 
         public void Execute(object parameter)
         {
+            _viewModel.ComandList.AddNew(_viewModel.Image.Source);
             _viewModel.ResetFields();
-            throw new NotImplementedException();
+            _viewModel.Image.Crop(_viewModel.SelectedRegion);
+            _viewModel.RefreshImage();
+            _viewModel.ResetTools();
+            _viewModel.OnCommandExecuted();
         }
 
         public event EventHandler CanExecuteChanged;

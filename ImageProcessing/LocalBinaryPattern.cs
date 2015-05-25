@@ -67,7 +67,7 @@ namespace ImageProcessing
             lbp = NormalizeLbpMatrix(matrix, lbp, max);
             return lbp;
         }
-
+//
         private static double Bin2Dec(List<int> bin)
         {
             double d = 0;

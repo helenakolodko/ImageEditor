@@ -14,13 +14,12 @@ namespace ImageProcessing
             int startY = region.Top;
             int width = region.Width;
             int height = region.Height;
-
             int noisyPixels = (int)((width * height * amount) / 100f);
             byte[] values = new byte[2] { 0, 255 };
 
             Random rand = new Random();
             Bitmap b = new Bitmap(image);
-            BitmapData bmpData = b.LockBits(region, ImageLockMode.ReadWrite, b.PixelFormat);
+            BitmapData bmpData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, b.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
             int stride = bmpData.Stride;
 
@@ -50,13 +49,19 @@ namespace ImageProcessing
         {
             int startX = region.Left;
             int startY = region.Top;
-            int width = region.Width;
-            int height = region.Height;
-            int stopX = startX + width;
-            int stopY = startY + height;
+            int stopX = image.Width - 1;
+            int stopY = image.Height - 1;
+            if (startX + region.Width < image.Width)
+            {
+                stopX = startX + region.Width;
+            }
+            if (startY + region.Height < image.Height)
+            {
+                stopY = startX + region.Height;
+            }
 
             Bitmap b = new Bitmap(image);
-            BitmapData bmpData = b.LockBits(region, ImageLockMode.ReadWrite, b.PixelFormat);
+            BitmapData bmpData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, b.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
             int stride = bmpData.Stride;
 

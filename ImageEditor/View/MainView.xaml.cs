@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ImageEditor.ViewModel;
 
@@ -43,7 +44,5 @@ namespace ImageEditor.View
             e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.All : DragDropEffects.None;
             e.Handled = false;
         }
-
-
     }
 }

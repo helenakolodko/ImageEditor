@@ -1,28 +1,46 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace ImageEditor.Command
 {
     public class CommandList
     {
-        private Queue<CommandContext> _toUndo;
-        private Queue<CommandContext> _toRedo;
-        private int _maxDepth;
+        private Stack<Bitmap> _toUndo;
+        private Stack<Bitmap> _toRedo;
+
+        public bool HasToRedo { get { return _toRedo.Count > 0; } }
+        public bool HasToUndo { get { return _toUndo.Count > 0; } }
 
         public CommandList(int maxDepth)
         {
-            _maxDepth = maxDepth;
-            _toRedo = new Queue<CommandContext>();
-            _toUndo = new Queue<CommandContext>();
+            _toRedo = new Stack<Bitmap>(maxDepth);
+            _toUndo = new Stack<Bitmap>(maxDepth);
         }
 
-        public bool Undo()
+        public Bitmap Undo(Bitmap current)
         {
-            return false;
+            if (_toUndo.Count > 0)
+            {
+                _toRedo.Push(current);
+                return _toUndo.Pop();
+            }
+            return current;
         }
 
-        public bool Redo()
+        public Bitmap Redo(Bitmap current)
         {
-            return false;
+            if (_toRedo.Count > 0)
+            {
+                _toUndo.Push(current);
+                return _toRedo.Pop();
+            }
+            return current;
+        }
+
+        public void AddNew(Bitmap current)
+        {
+            _toUndo.Push(current);
+            _toRedo.Clear();
         }
     }
 }

@@ -277,7 +277,7 @@
         		<Setter.Value>
         			<ControlTemplate TargetType="{x:Type RepeatButton}">
         				<Border SnapsToDevicePixels="True" Background="{StaticResource PanelsBackgroundBrush}"  
-        					Height="3"/>
+        					Height="4"/>
         			</ControlTemplate>
         		</Setter.Value>
         	</Setter>

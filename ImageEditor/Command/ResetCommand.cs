@@ -20,7 +20,7 @@ namespace ImageEditor.Command
 
         public void Execute(object parameter)
         {
-            _viewModel.Image = _viewModel.Image;
+            _viewModel.RefreshImage();
             _viewModel.ResetFields();
         }
 

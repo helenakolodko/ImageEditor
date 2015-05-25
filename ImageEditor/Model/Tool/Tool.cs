@@ -7,7 +7,6 @@ namespace ImageEditor.Model.Tool
     public abstract class Tool
     {
         protected ImageEditorViewModel ViewModel;
-        public abstract void RaiseOnZoomChanged();
 
         protected Tool(ImageEditorViewModel viewModel)
         {

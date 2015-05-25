@@ -12,8 +12,16 @@ namespace ImageProcessing
         {
             int startX = region.Left;
             int startY = region.Top;
-            int stopX = startX + region.Width;
-            int stopY = startY + region.Height;
+            int stopX = image.Width - 1;
+            int stopY = image.Height - 1;
+            if (startX + region.Width < image.Width)
+            {
+                stopX = startX + region.Width;
+            }
+            if (startY + region.Height < image.Height)
+            {
+                stopY = startX + region.Height;
+            }
 
             int numberOfPixels = (stopX - startX) * (stopY - startY);
 
@@ -27,7 +35,7 @@ namespace ImageProcessing
             byte[] equalizedHistogramB = EqualizeHistogram(rgbStatistics.Blue.Values, numberOfPixels);
 
             var b = new Bitmap(image);
-            BitmapData bmpData = b.LockBits(region, ImageLockMode.ReadWrite, b.PixelFormat);
+            BitmapData bmpData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, b.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
             int stride = bmpData.Stride;
 
@@ -74,8 +82,16 @@ namespace ImageProcessing
         {
             int startX = region.Left;
             int startY = region.Top;
-            int stopX = startX + region.Width;
-            int stopY = startY + region.Height;
+            int stopX = image.Width - 1;
+            int stopY = image.Height - 1;
+            if (startX + region.Width < image.Width)
+            {
+                stopX = startX + region.Width;
+            }
+            if (startY + region.Height < image.Height)
+            {
+                stopY = startX + region.Height;
+            }
 
             Bitmap bitmap = new Bitmap(region.Width, region.Height);
             Graphics g = Graphics.FromImage(bitmap);
@@ -87,7 +103,7 @@ namespace ImageProcessing
             byte[] stretchedHistogramB = StretchHistogram(rgbStatistics.Red.Max, rgbStatistics.Red.Min);
 
             var b = new Bitmap(image);
-            BitmapData bmpData = b.LockBits(region, ImageLockMode.ReadWrite, b.PixelFormat);
+            BitmapData bmpData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, b.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
             int stride = bmpData.Stride;
 
@@ -130,15 +146,23 @@ namespace ImageProcessing
         {
             int startX = region.Left;
             int startY = region.Top;
-            int stopX = startX + region.Width;
-            int stopY = startY + region.Height;
+            int stopX = image.Width - 1;
+            int stopY = image.Height - 1;
+            if (startX + region.Width < image.Width)
+            {
+                stopX = startX + region.Width;
+            }
+            if (startY + region.Height < image.Height)
+            {
+                stopY = startX + region.Height;
+            }
 
             byte[] squeezedHistogramR = SqueezeHistogram(max, min);
             byte[] squeezedHistogramG = SqueezeHistogram(max, min);
             byte[] squeezedHistogramB = SqueezeHistogram(max, min);
 
             var b = new Bitmap(image);
-            BitmapData bmpData = b.LockBits(region, ImageLockMode.ReadWrite, b.PixelFormat);
+            BitmapData bmpData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, b.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
             int stride = bmpData.Stride;
 

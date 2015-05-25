@@ -27,17 +27,18 @@ namespace ImageEditor.Command
             {
                 _viewModel.GetTool(result);
             }
-           _viewModel.ResetTools();
+            if (result != ToolType.Bucket)
+            {
+                _viewModel.ResetTools();
+            }
         }
 
         public void Undo(CommandContext context)
         {
-            throw new NotImplementedException();
         }
 
         public void Redo(CommandContext context)
         {
-            throw new NotImplementedException();
         }
 
         public void RaiseCanExecuteChanged()

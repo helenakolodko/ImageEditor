@@ -17,9 +17,12 @@ namespace ImageEditor.Model.Tool
             {
                 Rectangle selection = ViewModel.Selection.GetRegion();
                 if (position.X > selection.Left && position.X < selection.Right &&
-                        position.Y > selection.Bottom && position.Y < selection.Top)
+                        position.Y < selection.Bottom && position.Y > selection.Top)
                 {
+                    ViewModel.ComandList.AddNew(new Bitmap(ViewModel.Image.Source));
                     ViewModel.Image.FillRegion(selection, ViewModel.SelectedColor);
+                    ViewModel.RefreshImage();
+                    ViewModel.OnCommandExecuted();
                 }   
             }
         }

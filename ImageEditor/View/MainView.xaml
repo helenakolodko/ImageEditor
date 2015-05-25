@@ -46,10 +46,10 @@
                     <Image Source="Resources/save_as-32.png"/>
                 </Button>
                 <Separator Width="10" Visibility="Hidden" />
-                <Button IsEnabled="False" ToolTip="Undo" Command="{Binding UndoCommand}">
+                <Button ToolTip="Undo" Command="{Binding UndoCommand}">
                     <Image Source="Resources/left2_filled-25.png"/>
                 </Button>
-                <Button IsEnabled="False" ToolTip="Redo" Command="{Binding RedoCommand}">
+                <Button ToolTip="Redo" Command="{Binding RedoCommand}">
                     <Image Source="Resources/right2_filled-25.png"/>
                 </Button>
                 <Separator Width="10" Visibility="Hidden" />
@@ -89,7 +89,7 @@
                 <Button ToolTip="Select" Command="{Binding SelectToolCommand}" CommandParameter="Selection">
                     <Image Source="Resources\Cursor-Select-icon.png" />
                 </Button>
-                <Button IsEnabled="False" ToolTip="Crop" Command="{Binding CropCommand}">
+                <Button ToolTip="Crop" Command="{Binding CropCommand}">
                     <Image Source="Resources/crop-26.png"/>
                 </Button>
                 <Button ToolTip="Drag" Command="{Binding SelectToolCommand}" CommandParameter="Drag">
@@ -129,8 +129,13 @@
         <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding Active, Converter={StaticResource BoolToVis}}"
               Background="{StaticResource ButtonBrush}">
             <TabControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <ei:CallMethodAction TargetObject="{Binding}" 
+                                                         MethodName="ResetFields"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
 
-                
                 <!-- FILTERS -->
 
                 <TabItem>
@@ -204,7 +209,7 @@
 
                 <!-- IMAGE EDIT -->
 
-                <TabItem>
+                <TabItem >
 					<TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Cursor-Move-icon.png" Height="15"/>
@@ -224,7 +229,7 @@
                                                 Value="{Binding ImageHeight}"/>
 						</DockPanel>
 						<Separator Height="25" Visibility="Hidden"/>
-						<Button Width="85" Height="25" Command="{Binding ResetCommand}">
+						<Button Width="85" Height="25" Command="{Binding ResizeCommand}">
 							<DockPanel>
 								<Image Source="Resources/resize-26.png" />
 								<TextBlock Text=" Resize"/>
@@ -267,7 +272,7 @@
                 <!-- HISTOGRAM -->
 
                 <TabItem>
-					<TabItem.Header>
+                    <TabItem.Header>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="Resources/Line-Chart-icon.png" Height="15"/>
 							<TextBlock Text=" Histogram"/>
@@ -313,9 +318,23 @@
 						<Label Content="Add Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 						<DockPanel HorizontalAlignment="Center">
 							<RadioButton Content="Salt-n-Papper" GroupName="NoiseType" Margin="6,0" 
-                                         IsChecked="{Binding SaltAndPapper}"/>
-							<RadioButton Content="Additive" GroupName="NoiseType" Margin="6,0" IsChecked="True"/>
-						</DockPanel>
+                                         IsChecked="{Binding SaltAndPapper}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <ei:CallMethodAction TargetObject="{Binding}" 
+                                                         MethodName="ResetFields"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
+                            <RadioButton Content="Additive" GroupName="NoiseType" Margin="6,0" IsChecked="True">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <ei:CallMethodAction TargetObject="{Binding}" 
+                                                         MethodName="ResetFields"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
+                        </DockPanel>
 						<Label Content="Coverage"/>
                         <Slider Maximum="100"  Margin="6,0"
 							 TickFrequency="10" Minimum="0" Value="{Binding NoiseCoverage, Mode=TwoWay}">
@@ -330,9 +349,23 @@
 						<Label Content="Reduce Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 						<DockPanel HorizontalAlignment="Center">
 							<RadioButton x:Name="MedianCheck"  Content="Median" GroupName="ReductionType" Margin="6,0" 
-                                         IsChecked="{Binding Median}"/>
+                                         IsChecked="{Binding Median}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <ei:CallMethodAction TargetObject="{Binding}" 
+                                                         MethodName="ResetFields"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
                             <RadioButton x:Name="Bilateral" Content="Bilateral" GroupName="ReductionType" 
-                                         Margin="6,0" IsChecked="True"/>
+                                         Margin="6,0" IsChecked="True">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <ei:CallMethodAction TargetObject="{Binding}" 
+                                                         MethodName="ResetFields"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
 						</DockPanel>
                         <Label Content="Radius" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"/>
                         <Slider Maximum="25" TickFrequency="2" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"
@@ -396,12 +429,16 @@
 								</Border.Background>
 							</Border>													
 						</DockPanel>
+						<Separator Height="10" Visibility="Hidden"/>
+						<CheckBox Content="Create Mask" HorizontalAlignment="Center"
+							IsChecked="{Binding CreateMask}"/>
+						<Separator Height="10" Visibility="Hidden"/>
 						<Label Content="Window Size"/>
 						<Slider x:Name="WindowSize" Maximum="25"  Margin="6,0"
-							 TickFrequency="5" Minimum="0"  Value="{Binding LbpWindowSize, Mode=TwoWay}"/>	
+							 TickFrequency="5" Minimum="1"  Value="{Binding LbpWindowSize, Mode=TwoWay}"/>	
 						<Label Content="Inpaint Block Size"/>
 						<Slider x:Name="BlockSize" Maximum="50"  Margin="6,0"
-							 TickFrequency="10" Minimum="0" Value="{Binding InpaintBlockSize, Mode=TwoWay}"/>	
+							 TickFrequency="10" Minimum="1" Value="{Binding InpaintBlockSize, Mode=TwoWay}"/>	
 						<Button x:Name="Inpaint" HorizontalAlignment="Center" Margin="0,10" 
                                 Command="{Binding InpaintCommand}">
 							<DockPanel HorizontalAlignment="Center">
@@ -431,7 +468,10 @@
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
 				<Grid x:Name="DrawingGrid">
-					<Rectangle x:Name="Selection" StrokeDashArray="3 3" Height="1" Width="1" Panel.ZIndex="1"/>
+					<Rectangle x:Name="Selection" StrokeDashArray="4 5" Height="{Binding SelectionHeight}"
+                               Width="{Binding SelectionWidth}" Margin="{Binding SelectionMargin}" Panel.ZIndex="1"
+                               StrokeThickness="1" Stroke="Aqua" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                               Visibility="{Binding Selection.Active, Converter={StaticResource BoolToVis}}"/>
 					<Image x:Name="ImageEdit"  HorizontalAlignment="Left" VerticalAlignment="Top"
                         Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
                         Source="{Binding ImageToDisplay.Source, Converter={StaticResource BitmapToImageSourceConverter},

@@ -32,10 +32,6 @@ namespace ImageEditor.Model.Tool
             }
         }
 
-        public override void RaiseOnZoomChanged()
-        {
-        }
-
         protected abstract void ProcessPoint(Point position);
     }
 }

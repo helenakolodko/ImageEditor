@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Windows.Input;
+using ImageEditor.ViewModel;
 
 namespace ImageEditor.Command
 {
     public class RedoCommand : IReversableCommand, ICommand
     {
-        private CommandList _commandList;
+        private readonly ImageEditorViewModel _viewModel;
 
-        public RedoCommand(CommandList commandList)
+        public RedoCommand(ImageEditorViewModel viewModel)
         {
-            _commandList = commandList;
+            _viewModel = viewModel;
         }
 
         public event EventHandler CanExecuteChanged;
         public bool CanExecute(object parameter)
         {
-            return false;
+            return _viewModel.ComandList.HasToRedo;
         }
 
         public void Execute(object parameter)
         {
+            _viewModel.Image.Source = _viewModel.ComandList.Redo(_viewModel.Image.Source);
+            _viewModel.RefreshImage();
+            _viewModel.OnCommandExecuted();
         }
 
         public void Undo(CommandContext context)
@@ -32,7 +36,8 @@ namespace ImageEditor.Command
 
         public void RaiseCanExecuteChanged()
         {
-            throw new NotImplementedException();
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }
