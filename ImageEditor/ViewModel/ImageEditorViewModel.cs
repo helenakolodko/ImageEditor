@@ -27,14 +27,12 @@ namespace ImageEditor.ViewModel
         private int strokeThickness = 1;
         private Color selectedColor = Color.Black;
         private int imageWidth;
-        private int imageHeight;        
+        private int imageHeight;
         private int histogramLeft;
         private int histogramRight = 255;
-        private int lbpWindowSize;
-        private int inpaintBlockSize;
-        private bool createMask;
         private Filters filters = new Filters(255);
         private Noise noise = new Noise();
+        private Inpainting inpainting = new Inpainting();
         private readonly ToolBox toolBox;
         private readonly int maxCommandListDepth = 10;
 
@@ -71,20 +69,10 @@ namespace ImageEditor.ViewModel
             }
         }
 
-        public void RefreshImage()
-        {
-            ImageToDisplay.Source = new Bitmap(Image.Source);
-            OnPropertyChanged("ImageToDisplay");
-            ImageWidth = Image.Width;
-            ImageHeight = Image.Height;
-            OnPropertyChanged("CanvasHeight");
-            OnPropertyChanged("CanvasWidth");
-        }
-
         public EditableImage ImageToDisplay
         {
             get { return tempImage; }
-            set { tempImage = value; OnPropertyChanged();}
+            set { tempImage = value; OnPropertyChanged(); }
         }
 
         public double Zoom
@@ -120,7 +108,7 @@ namespace ImageEditor.ViewModel
 
         public bool Active
         {
-            get { return active; } 
+            get { return active; }
             set { active = value; OnPropertyChanged(); }
         }
 
@@ -128,13 +116,13 @@ namespace ImageEditor.ViewModel
 
         public Thickness SelectionMargin
         {
-            get { return selectionMargin; } 
+            get { return selectionMargin; }
             set { selectionMargin = value; OnPropertyChanged(); }
         }
 
         public double SelectionWidth
         {
-            get { return selectionWidth; } 
+            get { return selectionWidth; }
             set { selectionWidth = value; OnPropertyChanged(); }
         }
 
@@ -146,41 +134,44 @@ namespace ImageEditor.ViewModel
 
         public Rectangle SelectedRegion
         {
-            get {
+            get
+            {
                 if (Selection != null)
                 {
-                    return Selection.Active ? Selection.GetRegion() : new Rectangle(0, 0, image.Width, image.Height);    
+                    return Selection.Active ? Selection.GetRegion() : new Rectangle(0, 0, image.Width, image.Height);
                 }
-                return new Rectangle(0, 0, image.Width, image.Height);  
+                return new Rectangle(0, 0, image.Width, image.Height);
             }
         }
 
-        public Tool SelectedTool { 
-            get { return selectedTool; } 
-            set { selectedTool = value; OnPropertyChanged(); } }
+        public Tool SelectedTool
+        {
+            get { return selectedTool; }
+            set { selectedTool = value; OnPropertyChanged(); }
+        }
 
         public int StrokeThickness
         {
-            get{return strokeThickness;} 
+            get { return strokeThickness; }
             set { strokeThickness = value; OnPropertyChanged(); }
         }
 
         public Color SelectedColor
         {
-            get { return selectedColor; } 
+            get { return selectedColor; }
             set { selectedColor = value; OnPropertyChanged(); }
         }
 
         public double CanvasWidth
         {
-            get 
+            get
             {
                 if (tempImage != null)
                 {
-                    return tempImage.Width* Zoom;
+                    return tempImage.Width * Zoom;
                 }
                 return 0;
-            } 
+            }
         }
 
         public double CanvasHeight
@@ -192,16 +183,18 @@ namespace ImageEditor.ViewModel
                     return tempImage.Height * Zoom;
                 }
                 return 0;
-            } 
+            }
         }
 
         public Filters Filters { get { return filters; } set { filters = value; OnPropertyChanged(); } }
-
         public Noise Noise { get { return noise; } set { noise = value; OnPropertyChanged(); } }
+        public Inpainting Inpainting { get { return inpainting; } set { inpainting = value; OnPropertyChanged(); } }
+
+        public Bitmap Mask;
 
         public int ImageWidth
         {
-            get { return imageWidth; } 
+            get { return imageWidth; }
             set { imageWidth = value; OnPropertyChanged(); }
         }
 
@@ -238,26 +231,6 @@ namespace ImageEditor.ViewModel
         }
 
 
-        public bool CreateMask
-        {
-            get { return createMask; }
-            set { createMask = value; OnPropertyChanged(); }
-        }
-
-        public Bitmap Mask;
-
-        public int LbpWindowSize
-        {
-            get { return lbpWindowSize; }
-            set { lbpWindowSize = value; OnPropertyChanged(); }
-        }
-
-        public int InpaintBlockSize
-        {
-            get { return inpaintBlockSize; }
-            set { inpaintBlockSize = value; OnPropertyChanged(); }
-        }
-
         #region Commands Properties
         public IReversableCommand ApplyCommand { get; private set; }
         public IReversableCommand OpenCommand { get; private set; }
@@ -280,17 +253,26 @@ namespace ImageEditor.ViewModel
 
         public CommandList ComandList { get; set; }
 
+
+        public void RefreshImage()
+        {
+            ImageToDisplay.Source = new Bitmap(Image.Source);
+            OnPropertyChanged("ImageToDisplay");
+            ImageWidth = Image.Width;
+            ImageHeight = Image.Height;
+            OnPropertyChanged("CanvasHeight");
+            OnPropertyChanged("CanvasWidth");
+        }
+
+
         public void ResetFields()
         {
             Filters = new Filters(255);
             Noise = new Noise();
+            Inpainting = new Inpainting();
 
             HistogramLeft = 0;
             HistogramRight = 255;
-
-            CreateMask = false;
-            LbpWindowSize = 0;
-            InpaintBlockSize = 0;
 
             // show initial image
         }
@@ -312,7 +294,7 @@ namespace ImageEditor.ViewModel
             ResetFields();
             ResetTools();
             Active = true;
-            if (ImageReady != null) 
+            if (ImageReady != null)
                 ImageReady();
             // clear command list
         }

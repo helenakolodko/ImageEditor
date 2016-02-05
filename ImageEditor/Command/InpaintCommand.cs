@@ -8,33 +8,33 @@ namespace ImageEditor.Command
 {
     public class InpaintCommand : IReversableCommand, ICommand
     {
-        private readonly ImageEditorViewModel _viewModel;
+        private readonly ImageEditorViewModel viewModel;
 
         public InpaintCommand(ImageEditorViewModel viewModel)
         {
-            _viewModel = viewModel;
+            this.viewModel = viewModel;
         }
 
         public bool CanExecute(object parameter)
         {
-            return _viewModel.Image != null;
+            return viewModel.Image != null;
         }
 
         public void Execute(object param)
         {
-            _viewModel.ComandList.AddNew(_viewModel.Image.Source);
-            if (_viewModel.CreateMask)
+            viewModel.ComandList.AddNew(viewModel.Image.Source);
+            if (viewModel.Inpainting.CreateMask)
             {
-                ColourInpaint.Inpaint(_viewModel.Image.Source, ColourInpaint.ObtainMaskMatrix(_viewModel.Mask),
-                    _viewModel.LbpWindowSize, _viewModel.InpaintBlockSize);
+                ColourInpaint.Inpaint(viewModel.Image.Source, ColourInpaint.ObtainMaskMatrix(viewModel.Mask),
+                    viewModel.Inpainting.LbpWindowSize, viewModel.Inpainting.InpaintBlockSize);
             }
             else
             {
-                ColourInpaint.Inpaint(_viewModel.Image.Source, _viewModel.SelectedColor,
-                    _viewModel.LbpWindowSize, _viewModel.InpaintBlockSize);    
+                ColourInpaint.Inpaint(viewModel.Image.Source, viewModel.SelectedColor,
+                    viewModel.Inpainting.LbpWindowSize, viewModel.Inpainting.InpaintBlockSize);    
             }
-            _viewModel.RefreshImage();
-            _viewModel.OnCommandExecuted();
+            viewModel.RefreshImage();
+            viewModel.OnCommandExecuted();
         }
 
         public event EventHandler CanExecuteChanged;

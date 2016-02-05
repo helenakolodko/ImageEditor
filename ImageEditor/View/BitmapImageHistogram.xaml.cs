@@ -12,12 +12,15 @@ using Point = System.Windows.Point;
 
 namespace ImageEditor.View
 {
-	/// <summary>
-	/// Interaction logic for BitmapImageHistogram.xaml
-	/// </summary>
 	public partial class BitmapImageHistogram : INotifyPropertyChanged
 	{
-        private Bitmap _image;
+        private Bitmap image;
+        private PointCollection redCurve;
+        private PointCollection greenCurve;
+        private PointCollection blueCurve;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public Bitmap Image
 	    {
             get { return (Bitmap)GetValue(ImageProperty); }
@@ -28,56 +31,50 @@ namespace ImageEditor.View
             DependencyProperty.Register("Image", typeof(Bitmap), typeof(BitmapImageHistogram),
             new PropertyMetadata(default(Bitmap), OnImagePropertyChanged));
 
-        private static void OnImagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var h = d  as BitmapImageHistogram;
-            if (h != null)
-            {
-                h.GetHistogram();
-                h._image = (Bitmap) e.NewValue;
-            }
-        }
-
-	    private PointCollection _rCurve;
-
 	    public PointCollection RedCurve
 	    {
-	        get { return _rCurve; }
+	        get { return redCurve; }
 	        set
 	        {
-	            _rCurve = value;
+	            redCurve = value;
 	            OnPropertyChanged();
 	        }
 	    }
 
-        private PointCollection _gCurve;
 
         public PointCollection GreenCurve
         {
-            get { return _gCurve; }
+            get { return greenCurve; }
             set
             {
-                _gCurve = value;
+                greenCurve = value;
                 OnPropertyChanged();
             }
-        }private PointCollection _bCurve;
+        }
 
         public PointCollection BlueCurve
         {
-            get { return _bCurve; }
+            get { return blueCurve; }
             set
             {
-                _bCurve = value;
+                blueCurve = value;
                 OnPropertyChanged();
             }
         }
 
 		public BitmapImageHistogram()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 		}
 
-	    private void GetHistogram()
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void GetHistogram()
 	    {
             ImageStatistics rgbStatistics = new ImageStatistics(Image);
             Point[] red = null;
@@ -105,13 +102,14 @@ namespace ImageEditor.View
 	        return points;
 	    }
 
-	    public event PropertyChangedEventHandler PropertyChanged;
-
-	    [NotifyPropertyChangedInvocator]
-	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-	    {
-	        var handler = PropertyChanged;
-	        if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-	    }
+        private static void OnImagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var h = d as BitmapImageHistogram;
+            if (h != null)
+            {
+                h.GetHistogram();
+                h.image = (Bitmap)e.NewValue;
+            }
+        }
 	}
 }

@@ -7,27 +7,27 @@ namespace ImageEditor.View
 {
     public partial class MainView  
     {
-        private ImageEditorViewModel _viewModel;
+        private ImageEditorViewModel viewModel;
         public MainView()
         {
             InitializeComponent();
-            _viewModel = new ImageEditorViewModel();
-            this.DataContext = _viewModel;
+            viewModel = new ImageEditorViewModel();
+            this.DataContext = viewModel;
         }
 
         private void ImageEdit_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            _viewModel.MouseDown(e.GetPosition(CanvasBorder));
+            viewModel.MouseDown(e.GetPosition(CanvasBorder));
         }
 
         private void ImageEdit_MouseMove(object sender, MouseEventArgs e)
         {
-            _viewModel.MouseMove(e.GetPosition(CanvasBorder));
+            viewModel.MouseMove(e.GetPosition(CanvasBorder));
         }
 
         private void ImageEdit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _viewModel.MouseUp(e.GetPosition(CanvasBorder));
+            viewModel.MouseUp(e.GetPosition(CanvasBorder));
         }
 
         private void DropImage(object sender, DragEventArgs e)
@@ -35,7 +35,7 @@ namespace ImageEditor.View
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                _viewModel.OpenImage(files[0]);
+                viewModel.OpenImage(files[0]);
             }
         }
 

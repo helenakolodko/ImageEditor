@@ -1,0 +1,27 @@
+﻿<Window x:Class="ImageEditor.View.DropboxMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageEditor.View"
+        mc:Ignorable="d"
+        Title="DropboxMainWindow" Height="170" Width="350" WindowStyle="None">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" Source="Resources/Dropbox-icon-colour-big.png" Stretch="None"/>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <DockPanel HorizontalAlignment="Center">
+                <Label Content="Username"/>
+                <Button Content="Log Off"/>
+            </DockPanel>
+            <Separator Height="20" Visibility="Hidden"/>
+            <Button Content="Load Image"/>
+            <Button Content="Save Image"/>
+            <Separator Height="5" Visibility="Hidden"/>
+            <Button Content="Cancel" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>
