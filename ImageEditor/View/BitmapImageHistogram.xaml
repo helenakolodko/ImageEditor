@@ -26,14 +26,14 @@
                              Points="{Binding RedCurve, ElementName=BiHistogram}" Stretch="Fill"/>
 					</Border>
                     <Border Height="150" Width="200">
-                    <Polygon Fill="#4C00FF00" Stroke="Green" 
-                             Visibility="{Binding IsChecked,ElementName=GreenVisible, Converter={StaticResource b2v}}"
-                             Points="{Binding GreenCurve, ElementName=BiHistogram}" Stretch="Fill"/>
+                        <Polygon Fill="#4C00FF00" Stroke="Green" 
+                                 Visibility="{Binding IsChecked,ElementName=GreenVisible, Converter={StaticResource b2v}}"
+                                 Points="{Binding GreenCurve, ElementName=BiHistogram}" Stretch="Fill"/>
                     </Border>
                     <Border Height="150" Width="200">
-                    <Polygon Fill="#4C0000FF" Stroke="Blue" 
-                             Visibility="{Binding IsChecked,ElementName=BlueVisible, Converter={StaticResource b2v}}"
-                             Points="{Binding BlueCurve, ElementName=BiHistogram}" Stretch="Fill"/>
+                        <Polygon Fill="#4C0000FF" Stroke="Blue" 
+                                 Visibility="{Binding IsChecked,ElementName=BlueVisible, Converter={StaticResource b2v}}"
+                                 Points="{Binding BlueCurve, ElementName=BiHistogram}" Stretch="Fill"/>
                     </Border>
                 </Canvas>	
             

@@ -147,7 +147,7 @@
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
                         <Label Content="Brightness"/>
-                        <Slider Margin="6,0" Value="{Binding Brightness}">
+                        <Slider Margin="6,0" Value="{Binding Filters.Brightness}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
@@ -156,7 +156,7 @@
                             </i:Interaction.Triggers>
                         </Slider>
                         <Label Content="Contrast" HorizontalAlignment="Left" />
-                        <Slider Margin="6,0" Value="{Binding Contrast}">
+                        <Slider Margin="6,0" Value="{Binding Filters.Contrast}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
@@ -165,7 +165,7 @@
                             </i:Interaction.Triggers>
                         </Slider>
                         <Label Content="Saturation" HorizontalAlignment="Left"/>
-                        <Slider Margin="6,0"  Value="{Binding Saturation}">
+                        <Slider Margin="6,0"  Value="{Binding Filters.Saturation}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
@@ -175,7 +175,7 @@
                         </Slider>
                         <Separator Height="15" Visibility="Hidden"/>
                         <Label Content="Red"/>
-                        <Slider Margin="6,0" Value="{Binding Red}">
+                        <Slider Margin="6,0" Value="{Binding Filters.Red}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
@@ -184,7 +184,7 @@
                             </i:Interaction.Triggers>
                         </Slider>
                         <Label Content="Green" HorizontalAlignment="Left" />
-                        <Slider Margin="6,0" Value="{Binding Green}">
+                        <Slider Margin="6,0" Value="{Binding Filters.Green}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
@@ -193,7 +193,7 @@
                             </i:Interaction.Triggers>
                         </Slider>
                         <Label Content="Blue" HorizontalAlignment="Left"/>
-                        <Slider Margin="6,0" Value="{Binding Blue}">
+                        <Slider Margin="6,0" Value="{Binding Filters.Blue}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}"
@@ -318,7 +318,7 @@
 						<Label Content="Add Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 						<DockPanel HorizontalAlignment="Center">
 							<RadioButton Content="Salt-n-Papper" GroupName="NoiseType" Margin="6,0" 
-                                         IsChecked="{Binding SaltAndPapper}">
+                                         IsChecked="{Binding Noise.SaltAndPapper}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <ei:CallMethodAction TargetObject="{Binding}" 
@@ -337,7 +337,7 @@
                         </DockPanel>
 						<Label Content="Coverage"/>
                         <Slider Maximum="100"  Margin="6,0"
-							 TickFrequency="10" Minimum="0" Value="{Binding NoiseCoverage, Mode=TwoWay}">
+							 TickFrequency="10" Minimum="0" Value="{Binding Noise.Coverage, Mode=TwoWay}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnNoiseCoverageChanged"/>
@@ -349,7 +349,7 @@
 						<Label Content="Reduce Noise" HorizontalAlignment="Center" FontWeight="Bold"/>
 						<DockPanel HorizontalAlignment="Center">
 							<RadioButton x:Name="MedianCheck"  Content="Median" GroupName="ReductionType" Margin="6,0" 
-                                         IsChecked="{Binding Median}">
+                                         IsChecked="{Binding Noise.Median}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <ei:CallMethodAction TargetObject="{Binding}" 
@@ -369,7 +369,7 @@
 						</DockPanel>
                         <Label Content="Radius" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"/>
                         <Slider Maximum="25" TickFrequency="2" IsEnabled="{Binding IsChecked, ElementName=MedianCheck}"
-                                Minimum="1"  Value="{Binding MedianRadius, Mode=TwoWay}" Margin="6,0" 
+                                Minimum="1"  Value="{Binding Noise.MedianRadius, Mode=TwoWay}" Margin="6,0" 
                                 SmallChange="2" LargeChange="2" IsSnapToTickEnabled="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
@@ -379,7 +379,7 @@
                         </Slider>
                         <Label Content="Kernel Size" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
                         <Slider Maximum="25" TickFrequency="2" Margin="6,0" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"
-                                Minimum="3" Value="{Binding KernelSize, Mode=TwoWay}"
+                                Minimum="3" Value="{Binding Noise.KernelSize, Mode=TwoWay}"
                                 LargeChange="2" SmallChange="2" IsSnapToTickEnabled="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
@@ -389,7 +389,7 @@
                         </Slider>
                         <Label Content="SpatialFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
                         <Slider Maximum="100" Margin="6,0" TickFrequency="10" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"
-                                    Minimum="0" Value="{Binding SpatialFactor, Mode=TwoWay}">
+                                    Minimum="0" Value="{Binding Noise.SpatialFactor, Mode=TwoWay}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnNoiseReduceParamsChanged"/>
@@ -398,7 +398,7 @@
                         </Slider>	
 						<Label Content="ColourFactor" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"/>
                         <Slider Maximum="100" TickFrequency="10" IsEnabled="{Binding IsChecked, ElementName=Bilateral}"
-                                Minimum="0" Margin="6,0" Value="{Binding ColourFactor, Mode=TwoWay}">
+                                Minimum="0" Margin="6,0" Value="{Binding Noise.ColourFactor, Mode=TwoWay}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnNoiseReduceParamsChanged"/>

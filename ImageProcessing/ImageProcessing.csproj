@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColourInpaint.cs" />
+    <Compile Include="ColourSpaceConverter.cs" />
     <Compile Include="HistogramEqualazer.cs" />
+    <Compile Include="CustomImage.cs" />
     <Compile Include="ImageHistogram.cs" />
     <Compile Include="ImageAdjuster.cs" />
     <Compile Include="LocalBinaryPattern.cs" />
