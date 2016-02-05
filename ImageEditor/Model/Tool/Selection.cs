@@ -12,27 +12,32 @@ namespace ImageEditor.Model.Tool
 {
     public class Selection : DrawingTool, INotifyPropertyChanged
     {
-        private double _zoom = 1.0;
+        private double zoom = 1.0;
+        private bool active;
+        private Rectangle region;
+        private Thickness selectionMargin;
+        private double selectionWidth;
+        private double selectionHeight;
+
         public double Zoom
         {
             set
             {
-                _zoom = value;
-                StartPoint.X = (int) (_region.X * value);
-                StartPoint.Y = (int) (_region.Y * value);
+                zoom = value;
+                StartPoint.X = (int) (region.X * value);
+                StartPoint.Y = (int) (region.Y * value);
                 TopLeft = StartPoint;
-                Width = (int) (_region.Width * value);
-                Height = (int) (_region.Height * value);
+                Width = (int) (region.Width * value);
+                Height = (int) (region.Height * value);
             }
 
         }
 
-        private bool _active;
         public bool Active {
-            get { return _active; }
+            get { return active; }
             set
             {
-                _active = value;
+                active = value;
                 if (value == false)
                 {
                     ViewModel.RefreshImage();
@@ -42,11 +47,28 @@ namespace ImageEditor.Model.Tool
             } 
         }
 
-        private Rectangle _region;
+
+        public Thickness SelectionMargin
+        {
+            get { return selectionMargin; }
+            set { selectionMargin = value; OnPropertyChanged(); }
+        }
+
+        public double SelectionWidth
+        {
+            get { return selectionWidth; }
+            set { selectionWidth = value; OnPropertyChanged(); }
+        }
+
+        public double SelectionHeight
+        {
+            get { return selectionHeight; }
+            set { selectionHeight = value; OnPropertyChanged(); }
+        }
 
         public Rectangle GetRegion()
         {
-            return _region;
+            return region;
         }
 
         public Selection(ImageEditorViewModel viewModel) : base(viewModel)
@@ -56,7 +78,7 @@ namespace ImageEditor.Model.Tool
         protected override void SetStartPoint(Point value)
         {
             StartPoint = new DrawingPoint((int)(value.X ), (int)(value.Y));
-            _region = new Rectangle((int)(value.X ), (int)(value.Y), 0, 0);
+            region = new Rectangle((int)(value.X ), (int)(value.Y), 0, 0);
         }
 
         protected override void SetEndPoint(Point value)
@@ -103,16 +125,16 @@ namespace ImageEditor.Model.Tool
         {
             get
             {
-                return new DrawingPoint((int) ViewModel.SelectionMargin.Left, (int) ViewModel.SelectionMargin.Top);
+                return new DrawingPoint((int) SelectionMargin.Left, (int) SelectionMargin.Top);
             }
             set
             {
-                Thickness SelectionMargin = ViewModel.SelectionMargin;
-                SelectionMargin.Top = value.Y;
-                SelectionMargin.Left = value.X;
-                ViewModel.SelectionMargin = SelectionMargin;
-                _region.Y = (int)(value.Y / _zoom);
-                _region.X = (int)(value.X / _zoom);
+                Thickness selectionMargin = SelectionMargin;
+                selectionMargin.Top = value.Y;
+                selectionMargin.Left = value.X;
+                SelectionMargin = selectionMargin;
+                region.Y = (int)(value.Y / zoom);
+                region.X = (int)(value.X / zoom);
             }
         }
 
@@ -120,16 +142,16 @@ namespace ImageEditor.Model.Tool
         {
             set
             {
-                ViewModel.SelectionWidth = value;
-                _region.Width = (int)(value / _zoom);
+                SelectionWidth = value;
+                region.Width = (int)(value / zoom);
             }
         }
         private double Height
         {
             set
             {
-                ViewModel.SelectionHeight = value;
-                _region.Height = (int)(value / _zoom);
+                SelectionHeight = value;
+                region.Height = (int)(value / zoom);
             }
         }
 

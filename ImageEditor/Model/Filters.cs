@@ -36,7 +36,7 @@ namespace ImageEditor.Model
         {
             get
             {
-                return Brightness / maxValue;
+                return (float)Brightness / maxValue;
             }
         }
 

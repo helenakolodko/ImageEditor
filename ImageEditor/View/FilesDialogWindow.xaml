@@ -21,8 +21,8 @@
         </DockPanel>        
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" CanVerticallyScroll="True">
-            <local:FileItem FileName="Folder 1"/>
-            <local:FileItem FileName="Folder 2"/>
+            <local:FileItem FileName="Folder 1\"/>
+            <local:FileItem FileName="Folder 2\"/>
             <local:FileItem FileName="SomeMusic.mp3" FileSize="1024"/>
             <local:FileItem FileName="Pic1.jpg" FileSize="2048"/>
             <local:FileItem FileName="Pic2.jpg" FileSize="2048"/>

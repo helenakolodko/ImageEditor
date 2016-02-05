@@ -10,7 +10,7 @@ namespace ImageEditor.View
         public FileItem()
         {
             InitializeComponent();
-            this.DataContext = this;
+
         }
 
         public static readonly DependencyProperty FileNameProperty = DependencyProperty.Register("FileName", typeof(string), typeof(FileItem));

@@ -118,6 +118,10 @@
                 <Button ToolTip="Zoom Out" Command="{Binding ZoomCommand}" CommandParameter="Out">
                     <Image Source="Resources/zoom_out-25.png"/>
                 </Button>
+                <Separator Visibility="Hidden" Width="50" />
+                <Button ToolTip="DropBox">
+                    <Image Source="Resources/Dropbox-icon.png"/>
+                </Button>
             </DockPanel>
         </DockPanel>
 
@@ -468,8 +472,8 @@
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
 				<Grid x:Name="DrawingGrid">
-					<Rectangle x:Name="Selection" StrokeDashArray="4 5" Height="{Binding SelectionHeight}"
-                               Width="{Binding SelectionWidth}" Margin="{Binding SelectionMargin}" Panel.ZIndex="1"
+                    <Rectangle x:Name="Selection" StrokeDashArray="4 5" Height="{Binding Selection.SelectionHeight}"
+                               Width="{Binding Selection.SelectionWidth}" Margin="{Binding Selection.SelectionMargin}" Panel.ZIndex="1"
                                StrokeThickness="1" Stroke="Aqua" HorizontalAlignment="Left" VerticalAlignment="Top" 
                                Visibility="{Binding Selection.Active, Converter={StaticResource BoolToVis}}"/>
 					<Image x:Name="ImageEdit"  HorizontalAlignment="Left" VerticalAlignment="Top"

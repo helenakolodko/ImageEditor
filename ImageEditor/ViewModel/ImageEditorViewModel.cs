@@ -20,9 +20,6 @@ namespace ImageEditor.ViewModel
         private double horizontalOffset;
         private double verticalOffset;
         private bool active;
-        private Thickness selectionMargin;
-        private double selectionWidth;
-        private double selectionHeight;
         private Tool selectedTool;
         private int strokeThickness = 1;
         private Color selectedColor = Color.Black;
@@ -114,24 +111,6 @@ namespace ImageEditor.ViewModel
 
         public Selection Selection { get; set; }
 
-        public Thickness SelectionMargin
-        {
-            get { return selectionMargin; }
-            set { selectionMargin = value; OnPropertyChanged(); }
-        }
-
-        public double SelectionWidth
-        {
-            get { return selectionWidth; }
-            set { selectionWidth = value; OnPropertyChanged(); }
-        }
-
-        public double SelectionHeight
-        {
-            get { return selectionHeight; }
-            set { selectionHeight = value; OnPropertyChanged(); }
-        }
-
         public Rectangle SelectedRegion
         {
             get
@@ -173,7 +152,6 @@ namespace ImageEditor.ViewModel
                 return 0;
             }
         }
-
         public double CanvasHeight
         {
             get
@@ -186,9 +164,21 @@ namespace ImageEditor.ViewModel
             }
         }
 
-        public Filters Filters { get { return filters; } set { filters = value; OnPropertyChanged(); } }
-        public Noise Noise { get { return noise; } set { noise = value; OnPropertyChanged(); } }
-        public Inpainting Inpainting { get { return inpainting; } set { inpainting = value; OnPropertyChanged(); } }
+        public Filters Filters
+        {
+            get { return filters; }
+            set { filters = value; OnPropertyChanged(); }
+        }
+        public Noise Noise
+        {
+            get { return noise; }
+            set { noise = value; OnPropertyChanged(); }
+        }
+        public Inpainting Inpainting
+        {
+            get { return inpainting; }
+            set { inpainting = value; OnPropertyChanged(); }
+        }
 
         public Bitmap Mask;
 
@@ -268,7 +258,7 @@ namespace ImageEditor.ViewModel
         public void ResetFields()
         {
             Filters = new Filters(255);
-            Noise = new Noise();
+            Noise.Reset();
             Inpainting = new Inpainting();
 
             HistogramLeft = 0;
