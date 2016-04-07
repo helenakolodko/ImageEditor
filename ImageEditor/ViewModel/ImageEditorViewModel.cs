@@ -68,8 +68,10 @@ namespace ImageEditor.ViewModel
 
         public EditableImage ImageToDisplay
         {
-            get { return tempImage; }
-            set { tempImage = value; OnPropertyChanged(); }
+            get {
+                return tempImage; }
+            set { tempImage = value;
+                OnPropertyChanged(); }
         }
 
         public double Zoom
@@ -166,8 +168,10 @@ namespace ImageEditor.ViewModel
 
         public Filters Filters
         {
-            get { return filters; }
-            set { filters = value; OnPropertyChanged(); }
+            get {
+                return filters; }
+            set {
+                filters = value; OnPropertyChanged(); }
         }
         public Noise Noise
         {
@@ -289,12 +293,30 @@ namespace ImageEditor.ViewModel
             // clear command list
         }
 
-        public void OnFilterChanged()
+        public void OnBrightnessChanged()
         {
             var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeBrightness(Image.Source, region, Filters.BrightnessRate);
+            OnPropertyChanged("ImageToDisplay");
+        }
+
+        public void OnContrastChanged()
+        {
+            var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeContrast(ImageToDisplay.Source, region, Filters.ContrastRate);
+            OnPropertyChanged("ImageToDisplay");
+        }
+
+        public void OnSaturationChanged()
+        {
+            var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeSaturation(ImageToDisplay.Source, region, Filters.SaturationRate);
+            OnPropertyChanged("ImageToDisplay");
+        }
+
+        public void OnColourChanged()
+        {
+            var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeColour(ImageToDisplay.Source, region, Filters.RedRate, Filters.GreenRate, Filters.BlueRate);
             OnPropertyChanged("ImageToDisplay");
         }

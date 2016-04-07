@@ -18,15 +18,16 @@
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Adjustments}" Grid.Row="0" Grid.ColumnSpan="2">
             <Label Content="\ParentFolder\CurrentFolder\" VerticalAlignment="Center" Margin="6,0" />
-        </DockPanel>        
+        </DockPanel>
 
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" CanVerticallyScroll="True">
+
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <local:FileItem FileName="Folder 1\"/>
             <local:FileItem FileName="Folder 2\"/>
             <local:FileItem FileName="SomeMusic.mp3" FileSize="1024"/>
             <local:FileItem FileName="Pic1.jpg" FileSize="2048"/>
             <local:FileItem FileName="Pic2.jpg" FileSize="2048"/>
-        </StackPanel>
+        </ListBox>
         
         <TextBox Grid.Row="2" Text="Pic1.jpeg" MaxLines="1" Grid.Column="0" Margin="6"/>
         <Button Grid.Row="2" Content="Load" Grid.Column="1" Margin="6"/>

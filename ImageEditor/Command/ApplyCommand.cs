@@ -6,24 +6,24 @@ namespace ImageEditor.Command
 {
     class ApplyCommand : IReversableCommand, ICommand
     {
-        private readonly ImageEditorViewModel _viewModel;
+        private readonly ImageEditorViewModel viewModel;
 
         public ApplyCommand(ImageEditorViewModel viewModel)
         {
-            _viewModel = viewModel;
+            this.viewModel = viewModel;
         }
 
         public bool CanExecute(object parameter)
         {
-            return _viewModel.Image != null;
+            return viewModel.Image != null;
         }
 
         public void Execute(object parameter)
         {
-            _viewModel.ComandList.AddNew(_viewModel.Image.Source);
-            _viewModel.ApplyChanges();
-            _viewModel.ResetFields();
-            _viewModel.OnCommandExecuted();
+            viewModel.ComandList.AddNew(viewModel.Image.Source);
+            viewModel.ApplyChanges();
+            viewModel.ResetFields();
+            viewModel.OnCommandExecuted();
         }
 
         public void Undo(CommandContext context)

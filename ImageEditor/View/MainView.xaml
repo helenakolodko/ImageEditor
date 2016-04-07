@@ -155,7 +155,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnFilterChanged"/>
+                                                         MethodName="OnBrightnessChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Slider>
@@ -164,7 +164,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnFilterChanged"/>
+                                                         MethodName="OnContrastChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Slider>
@@ -173,7 +173,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnFilterChanged"/>
+                                                         MethodName="OnSaturationChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Slider>
@@ -183,7 +183,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnFilterChanged"/>
+                                                         MethodName="OnColourChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Slider>
@@ -192,7 +192,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnFilterChanged"/>
+                                                         MethodName="OnColourChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Slider>
@@ -201,7 +201,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged">
                                     <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}"
-                                                         MethodName="OnFilterChanged"/>
+                                                         MethodName="OnColourChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Slider>
