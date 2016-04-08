@@ -303,21 +303,21 @@ namespace ImageEditor.ViewModel
         public void OnContrastChanged()
         {
             var region = SelectedRegion;
-            ImageToDisplay.Source = ImageAdjuster.ChangeContrast(ImageToDisplay.Source, region, Filters.ContrastRate);
+            ImageToDisplay.Source = ImageAdjuster.ChangeContrast(Image.Source, region, Filters.ContrastRate);
             OnPropertyChanged("ImageToDisplay");
         }
 
         public void OnSaturationChanged()
         {
             var region = SelectedRegion;
-            ImageToDisplay.Source = ImageAdjuster.ChangeSaturation(ImageToDisplay.Source, region, Filters.SaturationRate);
+            ImageToDisplay.Source = ImageAdjuster.ChangeSaturation(Image.Source, region, Filters.SaturationRate);
             OnPropertyChanged("ImageToDisplay");
         }
 
         public void OnColourChanged()
         {
             var region = SelectedRegion;
-            ImageToDisplay.Source = ImageAdjuster.ChangeColour(ImageToDisplay.Source, region, Filters.RedRate, Filters.GreenRate, Filters.BlueRate);
+            ImageToDisplay.Source = ImageAdjuster.ChangeColour(Image.Source, region, Filters.RedRate, Filters.GreenRate, Filters.BlueRate);
             OnPropertyChanged("ImageToDisplay");
         }
 
