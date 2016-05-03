@@ -50,6 +50,10 @@
       <HintPath>..\packages\Dropbox.Api.2.3.4\lib\portable-net45+sl50+win+wpa81+wp80\Dropbox.Api.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Expression.Effects" />
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="microsoft.expression.utility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86" />
@@ -67,10 +71,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
@@ -140,6 +140,7 @@
     <Compile Include="Command\CommandContext.cs" />
     <Compile Include="Command\CommandList.cs" />
     <Compile Include="Command\CropCommand.cs" />
+    <Compile Include="Command\DropboxCommand.cs" />
     <Compile Include="Command\FlipCommand.cs" />
     <Compile Include="Command\HistogramEqualizeCommand.cs" />
     <Compile Include="Command\HistogramStretchCommand.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Model\Tool\ToolBox.cs" />
     <Compile Include="Model\Tool\ToolFactory.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModel\DropboxDialogViewModel.cs" />
     <Compile Include="ViewModel\ImageEditorViewModel.cs" />
     <Compile Include="View\BitmapImageHistogram.xaml.cs">
       <DependentUpon>BitmapImageHistogram.xaml</DependentUpon>
@@ -238,12 +240,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

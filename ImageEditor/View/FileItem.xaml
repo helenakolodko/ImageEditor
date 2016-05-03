@@ -7,13 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="40">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="70"/>
-        </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" HorizontalAlignment="Center" Margin="6,0"/>
-        <Label Content="{Binding FileName}" Grid.Column="1" Margin="6,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <Label Content="{Binding FileSize}" Grid.Column="2" Margin="6,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+        <DockPanel LastChildFill="True">
+			<Image DockPanel.Dock="Left" Width="40"  Margin="6,0"/>
+			<Label DockPanel.Dock="Right" Width="50"  Content="{Binding FileSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileItem}}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+			<Label DockPanel.Dock="Left" Content="{Binding FileName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileItem}}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+		</DockPanel>
+	</Grid>
 </UserControl>

@@ -171,7 +171,8 @@ namespace ImageEditor.ViewModel
             get {
                 return filters; }
             set {
-                filters = value; OnPropertyChanged(); }
+                filters = value; OnPropertyChanged(); 
+            }
         }
         public Noise Noise
         {
@@ -243,6 +244,7 @@ namespace ImageEditor.ViewModel
         public IReversableCommand SelectToolCommand { get; private set; }
         public IReversableCommand UndoCommand { get; private set; }
         public IReversableCommand RedoCommand { get; private set; }
+        public IReversableCommand DropboxCommand { get; private set; }
         #endregion
 
         public CommandList ComandList { get; set; }
@@ -293,6 +295,7 @@ namespace ImageEditor.ViewModel
             // clear command list
         }
 
+        #region OnChange methods
         public void OnBrightnessChanged()
         {
             var region = SelectedRegion;
@@ -354,6 +357,7 @@ namespace ImageEditor.ViewModel
             ImageToDisplay.Source = HistogramEqualazer.Squeeze(image.Source,
                 SelectedRegion, HistogramLeft, HistogramRight);
         }
+        #endregion
 
         public void OnCommandExecuted()
         {
@@ -396,6 +400,7 @@ namespace ImageEditor.ViewModel
             SelectToolCommand = new SelectToolCommand(this);
             UndoCommand = new UndoCommand(this);
             RedoCommand = new RedoCommand(this);
+            DropboxCommand = new DropboxCommand(this);
         }
 
         public void GetTool(ToolType type)

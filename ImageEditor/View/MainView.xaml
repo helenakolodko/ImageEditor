@@ -62,7 +62,7 @@
                 <Button ToolTip="Line" Command="{Binding SelectToolCommand}" CommandParameter="Line">
                     <Image Source="Resources/Editing-Line-icon.png"/>
                 </Button>
-				<ComboBox IsEditable="True" ToolTip="Stroke Thickness" Text="{Binding StrokeThickness}" >
+				<ComboBox IsEditable="True" ToolTip="Stroke Thickness" Text="{Binding StrokeThickness}" Height="24" Margin="1,1,1,0" VerticalAlignment="Top" >
                     <ComboBoxItem Content="1"/>
                     <ComboBoxItem Content="2"/>
                     <ComboBoxItem Content="3"/>
@@ -119,8 +119,14 @@
                     <Image Source="Resources/zoom_out-25.png"/>
                 </Button>
                 <Separator Visibility="Hidden" Width="50" />
-                <Button ToolTip="DropBox">
+                <Button ToolTip="DropBox"  Command="{Binding DropboxCommand}">
                     <Image Source="Resources/Dropbox-icon.png"/>
+                </Button>
+				<Button x:Name="OpenDropBox" ToolTip="Open" Command="{Binding DropboxOpenCommand}">
+                    <Image Source="Resources/opened_folder-32.png"/>
+                </Button>
+                <Button ToolTip="SaveDropBox" Command="{Binding DropboxSaveCommand}">
+                    <Image Source="Resources/save_as-25.png"/>
                 </Button>
             </DockPanel>
         </DockPanel>

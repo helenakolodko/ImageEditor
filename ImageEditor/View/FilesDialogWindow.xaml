@@ -21,7 +21,7 @@
         </DockPanel>
 
 
-        <ListBox Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch">
             <local:FileItem FileName="Folder 1\"/>
             <local:FileItem FileName="Folder 2\"/>
             <local:FileItem FileName="SomeMusic.mp3" FileSize="1024"/>
