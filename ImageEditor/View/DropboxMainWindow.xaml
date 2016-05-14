@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageEditor.View"
         mc:Ignorable="d"
-        Title="DropboxMainWindow" Height="170" Width="350" WindowStyle="None">
+        Title="DropboxMainWindow" Height="170" Width="350" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -18,10 +18,7 @@
                 <Button Content="Log Off"/>
             </DockPanel>
             <Separator Height="20" Visibility="Hidden"/>
-            <Button Content="Load Image"/>
-            <Button Content="Save Image"/>
             <Separator Height="5" Visibility="Hidden"/>
-            <Button Content="Cancel" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </Window>
