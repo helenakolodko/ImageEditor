@@ -151,60 +151,18 @@
 					</TabItem.Header>
 					<StackPanel Style="{StaticResource Adjustments}">
                         <Label Content="Brightness"/>
-                        <Slider Margin="6,0" Value="{Binding Filters.Brightness}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ValueChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnBrightnessChanged"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Slider>
+                        <Slider Margin="6,0" Value="{Binding Filters.Brightness}"/>
                         <Label Content="Contrast" HorizontalAlignment="Left" />
-                        <Slider Margin="6,0" Value="{Binding Filters.Contrast}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ValueChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnContrastChanged"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Slider>
+                        <Slider Margin="6,0" Value="{Binding Filters.Contrast}"/>
                         <Label Content="Saturation" HorizontalAlignment="Left"/>
-                        <Slider Margin="6,0"  Value="{Binding Filters.Saturation}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ValueChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnSaturationChanged"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Slider>
+                        <Slider Margin="6,0"  Value="{Binding Filters.Saturation}"/>
                         <Separator Height="15" Visibility="Hidden"/>
                         <Label Content="Red"/>
-                        <Slider Margin="6,0" Value="{Binding Filters.Red}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ValueChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnColourChanged"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Slider>
+                        <Slider Margin="6,0" Value="{Binding Filters.Red}"/>
                         <Label Content="Green" HorizontalAlignment="Left" />
-                        <Slider Margin="6,0" Value="{Binding Filters.Green}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ValueChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" 
-                                                         MethodName="OnColourChanged"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Slider>
+                        <Slider Margin="6,0" Value="{Binding Filters.Green}"/>
                         <Label Content="Blue" HorizontalAlignment="Left"/>
-                        <Slider Margin="6,0" Value="{Binding Filters.Blue}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="ValueChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}"
-                                                         MethodName="OnColourChanged"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Slider>
+                        <Slider Margin="6,0" Value="{Binding Filters.Blue}"/>
                         <Separator Height="10" Visibility="Hidden"/>
                         <Button Content="Apply Filters"  HorizontalAlignment="Center" Command="{Binding ApplyCommand}"/>
                     </StackPanel>

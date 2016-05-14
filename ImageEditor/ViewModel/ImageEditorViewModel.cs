@@ -49,6 +49,7 @@ namespace ImageEditor.ViewModel
             CommandExecuted += UndoCommand.RaiseCanExecuteChanged;
             Selection = (Selection)toolBox.GetTool(ToolType.Selection);
             SelectedTool = toolBox.GetTool(ToolType.Drag);
+            filters.ValueChanged += OnFilterChanged;
         }
 
         public EditableImage Image
@@ -262,6 +263,7 @@ namespace ImageEditor.ViewModel
         public void ResetFields()
         {
             Filters = new Filters(255);
+            filters.ValueChanged += OnFilterChanged;
             Noise.Reset();
             Inpainting = new Inpainting();
 
@@ -293,30 +295,12 @@ namespace ImageEditor.ViewModel
             // clear command list
         }
 
-        public void OnBrightnessChanged()
+        public void OnFilterChanged()
         {
             var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeBrightness(Image.Source, region, Filters.BrightnessRate);
-            OnPropertyChanged("ImageToDisplay");
-        }
-
-        public void OnContrastChanged()
-        {
-            var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeContrast(ImageToDisplay.Source, region, Filters.ContrastRate);
-            OnPropertyChanged("ImageToDisplay");
-        }
-
-        public void OnSaturationChanged()
-        {
-            var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeSaturation(ImageToDisplay.Source, region, Filters.SaturationRate);
-            OnPropertyChanged("ImageToDisplay");
-        }
-
-        public void OnColourChanged()
-        {
-            var region = SelectedRegion;
             ImageToDisplay.Source = ImageAdjuster.ChangeColour(ImageToDisplay.Source, region, Filters.RedRate, Filters.GreenRate, Filters.BlueRate);
             OnPropertyChanged("ImageToDisplay");
         }

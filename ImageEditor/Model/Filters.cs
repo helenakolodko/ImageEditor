@@ -5,21 +5,53 @@ using System.Runtime.CompilerServices;
 
 namespace ImageEditor.Model
 {
+    public delegate void ValueChanged();
     public class Filters
     {
         private int maxValue;
+        private int brightness;
+        private int contrast;
+        private int saturation;
+        private int red;
+        private int green;
+        private int blue;
 
+        public event ValueChanged ValueChanged;
         public Filters(int maxValue)
         {
             this.maxValue = maxValue;
         }
 
-        public int Brightness { get; set; }
-        public int Contrast { get; set; }
-        public int Saturation { get; set; }
-        public int Red { get; set; }
-        public int Green { get; set; }
-        public int Blue { get; set; }
+        public int Brightness { 
+            get { return brightness; }
+            set { brightness = value; OnValueChanged(); }
+        }
+
+        public int Contrast
+        {
+            get { return contrast; }
+            set { contrast = value; OnValueChanged(); }
+        }
+        public int Saturation
+        {
+            get { return saturation; }
+            set { saturation = value; OnValueChanged(); }
+        }
+        public int Red
+        {
+            get { return red; }
+            set { red = value; OnValueChanged(); }
+        }
+        public int Green
+        {
+            get { return green; }
+            set { green = value; OnValueChanged(); }
+        }
+        public int Blue
+        {
+            get { return blue; }
+            set { blue = value; OnValueChanged(); }
+        }
 
         public float SaturationRate
         {
@@ -70,6 +102,12 @@ namespace ImageEditor.Model
             {
                 return GetExponentialRate(Blue);
             }
+        }
+
+        private void OnValueChanged()
+        {
+            if (ValueChanged != null)
+                ValueChanged();
         }
 
         private float GetExponentialRate(int value)
