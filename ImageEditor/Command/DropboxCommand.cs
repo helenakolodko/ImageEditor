@@ -26,8 +26,9 @@ namespace ImageEditor.Command
 
         public void Execute(object parameter)
         {
-            DropboxMainWindow window = new DropboxMainWindow();
-            var status = window.ShowDialog();
+            if (!viewModel.Dropbox.IsAuthorized)
+                viewModel.Dropbox.LogIn();            
+            viewModel.Dropbox.ShowDialog();
         }
 
 

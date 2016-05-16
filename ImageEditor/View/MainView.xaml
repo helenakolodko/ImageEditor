@@ -54,7 +54,7 @@
                 </Button>
                 <Separator Width="10" Visibility="Hidden" />
                 <Button ToolTip="Pencil" Command="{Binding SelectToolCommand}" CommandParameter="Pencil">
-                    <Image Source="Resources\Pencil-icon.png"/>
+                    <Image Source="Resources/Pencil-icon.png"/>
                 </Button>
                 <Button ToolTip="Brush" Command="{Binding SelectToolCommand}" CommandParameter="Brush">
                     <Image Source="Resources/brush-26.png"/>
@@ -122,10 +122,10 @@
                 <Button ToolTip="DropBox"  Command="{Binding DropboxCommand}">
                     <Image Source="Resources/Dropbox-icon.png"/>
                 </Button>
-				<Button x:Name="OpenDropBox" ToolTip="Open" Command="{Binding DropboxOpenCommand}">
+				<Button x:Name="OpenDropBox" ToolTip="Open" Command="{Binding DownloadCommand}">
                     <Image Source="Resources/opened_folder-32.png"/>
                 </Button>
-                <Button ToolTip="SaveDropBox" Command="{Binding DropboxSaveCommand}">
+                <Button ToolTip="SaveDropBox" Command="{Binding UploadCommand}">
                     <Image Source="Resources/save_as-25.png"/>
                 </Button>
             </DockPanel>

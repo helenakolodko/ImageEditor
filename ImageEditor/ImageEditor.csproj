@@ -69,6 +69,14 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nemiro.OAuth, Version=1.10.45.895, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nemiro.OAuth.1.10\lib\net45\Nemiro.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nemiro.OAuth.LoginForms, Version=1.4.45.1485, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nemiro.OAuth.LoginForms.1.4\lib\net45\Nemiro.OAuth.LoginForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -90,6 +98,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity" />
     <Reference Include="System.Xml" />
@@ -146,6 +155,7 @@
     <Compile Include="Command\HistogramStretchCommand.cs" />
     <Compile Include="Command\IReversableCommand.cs" />
     <Compile Include="Command\InpaintCommand.cs" />
+    <Compile Include="Command\DownloadCommand.cs" />
     <Compile Include="Command\OpenCommand.cs" />
     <Compile Include="Command\RedoCommand.cs" />
     <Compile Include="Command\ResetCommand.cs" />
@@ -155,6 +165,7 @@
     <Compile Include="Command\SaveCommand.cs" />
     <Compile Include="Command\SelectToolCommand.cs" />
     <Compile Include="Command\UndoCommand.cs" />
+    <Compile Include="Command\UploadCommand.cs" />
     <Compile Include="Command\ZoomCommand.cs" />
     <Compile Include="Converter\BitmapToImageSourceConverter.cs" />
     <Compile Include="Converter\ColorConverter.cs" />
@@ -164,6 +175,7 @@
     <Compile Include="Model\EditableImage.cs" />
     <Compile Include="Model\Filters.cs" />
     <Compile Include="Model\Inpainting.cs" />
+    <Compile Include="Model\Login.cs" />
     <Compile Include="Model\Noise.cs" />
     <Compile Include="Model\Tool\Brush.cs" />
     <Compile Include="Model\Tool\Bucket.cs" />
@@ -185,9 +197,10 @@
     <Compile Include="View\BitmapImageHistogram.xaml.cs">
       <DependentUpon>BitmapImageHistogram.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\FilesDialogWindow.xaml.cs">
-      <DependentUpon>FilesDialogWindow.xaml</DependentUpon>
+    <Compile Include="View\DownloadDialogWindow.xaml.cs">
+      <DependentUpon>DownloadDialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\FilesDialogWindow.cs" />
     <Compile Include="View\DropboxMainWindow.xaml.cs">
       <DependentUpon>DropboxMainWindow.xaml</DependentUpon>
     </Compile>
@@ -201,11 +214,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="View\UploadDialogWindow.xaml.cs">
+      <DependentUpon>UploadDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\BitmapImageHistogram.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\FilesDialogWindow.xaml">
+    <Page Include="View\DownloadDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -220,6 +236,10 @@
     <Page Include="View\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UploadDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +334,11 @@
     <Resource Include="View\Resources\Dropbox-icon-colour-big.png" />
     <Resource Include="View\Resources\Dropbox-icon-colour.png" />
     <Resource Include="View\Resources\Dropbox-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Resources\Folder-Download-icon.png" />
+    <Resource Include="View\Resources\Folder-Open-icon.png" />
+    <Resource Include="View\Resources\Folder-Upload-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

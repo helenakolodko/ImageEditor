@@ -14,8 +14,8 @@
         <Image Grid.Column="0" Source="Resources/Dropbox-icon-colour-big.png" Stretch="None"/>
         <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <DockPanel HorizontalAlignment="Center">
-                <Label Content="Username"/>
-                <Button Content="Log Off"/>
+                <Label Content="{Binding UserName}"/>
+                <Button Content="Log Off" IsEnabled="{Binding IsAuthorized}" Click="LogOff"/>
             </DockPanel>
             <Separator Height="20" Visibility="Hidden"/>
             <Separator Height="5" Visibility="Hidden"/>

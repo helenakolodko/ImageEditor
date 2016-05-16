@@ -4,12 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ImageEditor.View"
-             mc:Ignorable="d" 
+            
+            mc:Ignorable="d" 
              d:DesignHeight="40">
+   
     <Grid>
         <DockPanel LastChildFill="True">
-			<Image DockPanel.Dock="Left" Width="40"  Margin="6,0"/>
-			<Label DockPanel.Dock="Right" Width="50"  Content="{Binding FileSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileItem}}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+            <Image DockPanel.Dock="Left" Width="20" Source="{Binding ImageSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileItem}}, UpdateSourceTrigger=PropertyChanged}" Margin="6,0"/>
+			<Label DockPanel.Dock="Right" Width="60"  Content="{Binding FileSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileItem}}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
 			<Label DockPanel.Dock="Left" Content="{Binding FileName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:FileItem}}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
 		</DockPanel>
 	</Grid>

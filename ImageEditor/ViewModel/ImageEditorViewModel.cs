@@ -9,6 +9,7 @@ using ImageEditor.Model;
 using ImageEditor.Model.Tool;
 using ImageProcessing;
 using Point = System.Windows.Point;
+using ImageEditor.View;
 
 namespace ImageEditor.ViewModel
 {
@@ -50,7 +51,13 @@ namespace ImageEditor.ViewModel
             Selection = (Selection)toolBox.GetTool(ToolType.Selection);
             SelectedTool = toolBox.GetTool(ToolType.Drag);
             filters.ValueChanged += OnFilterChanged;
+            Dropbox = new DropboxMainWindow();
+            Dropbox.LogInChanged += DownloadCommand.RaiseCanExecuteChanged;
+            Dropbox.LogInChanged += UploadCommand.RaiseCanExecuteChanged;
         }
+
+
+        public DropboxMainWindow Dropbox { get; private set; }
 
         public EditableImage Image
         {
@@ -246,6 +253,8 @@ namespace ImageEditor.ViewModel
         public IReversableCommand UndoCommand { get; private set; }
         public IReversableCommand RedoCommand { get; private set; }
         public IReversableCommand DropboxCommand { get; private set; }
+        public IReversableCommand DownloadCommand { get; private set; }
+        public IReversableCommand UploadCommand { get; private set; }
         #endregion
 
         public CommandList ComandList { get; set; }
@@ -340,7 +349,6 @@ namespace ImageEditor.ViewModel
             ImageToDisplay.Source = HistogramEqualazer.Squeeze(image.Source,
                 SelectedRegion, HistogramLeft, HistogramRight);
         }
-        #endregion
 
         public void OnCommandExecuted()
         {
@@ -362,6 +370,7 @@ namespace ImageEditor.ViewModel
             ImageReady += ZoomCommand.RaiseCanExecuteChanged;
             ImageReady += ResetCommand.RaiseCanExecuteChanged;
             ImageReady += SelectToolCommand.RaiseCanExecuteChanged;
+            ImageReady += UploadCommand.RaiseCanExecuteChanged;
         }
 
         private void InitCommands()
@@ -384,6 +393,8 @@ namespace ImageEditor.ViewModel
             UndoCommand = new UndoCommand(this);
             RedoCommand = new RedoCommand(this);
             DropboxCommand = new DropboxCommand(this);
+            DownloadCommand = new DownloadCommand(this);
+            UploadCommand = new UploadCommand(this);
         }
 
         public void GetTool(ToolType type)
