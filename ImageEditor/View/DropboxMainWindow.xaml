@@ -16,6 +16,7 @@
             <DockPanel HorizontalAlignment="Center">
                 <Label Content="{Binding UserName}"/>
                 <Button Content="Log Off" IsEnabled="{Binding IsAuthorized}" Click="LogOff"/>
+                <Button Content="Log In" Click="LogIn_Click"/>
             </DockPanel>
             <Separator Height="20" Visibility="Hidden"/>
             <Separator Height="5" Visibility="Hidden"/>

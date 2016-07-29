@@ -168,7 +168,7 @@ namespace ImageEditor.View
                 }
                 else
                 {
-                    MessageBox.Show(result.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Unknown Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

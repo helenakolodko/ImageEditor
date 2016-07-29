@@ -103,7 +103,7 @@ namespace ImageEditor.View
 
         private void GetAccessToken()
         {
-            var login = new DropboxLogin("*", "*");
+            var login = new DropboxLogin("nz379qg3he6d01k", "cxpgctot3djx9ph");
 
             login.ShowDialog();
 
@@ -154,10 +154,15 @@ namespace ImageEditor.View
                 }
                 else
                 {
-                    MessageBox.Show(result.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Unknown Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+        public void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            LogIn();
+        }
+
 
         public void LogOff(object sender, RoutedEventArgs e)
         {
