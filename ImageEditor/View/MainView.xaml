@@ -269,6 +269,18 @@
                             <Button x:Name="Stretch"  Content="Stretch" HorizontalAlignment="Center"
                                 Command="{Binding HistogramStretchCommand}"/>
                         </DockPanel>
+						<DockPanel HorizontalAlignment="Center" Margin="0,15,0,0">
+                            <xctk:IntegerUpDown Width="55" Value="{Binding G, Mode=TwoWay}" DefaultValue="0" Maximum="255" Minimum="0"/>
+							<xctk:IntegerUpDown Width="55" Value="{Binding F, Mode=TwoWay}" DefaultValue="255" Maximum="255" Minimum="0"/>
+							<Button x:Name="D"  Content="D" HorizontalAlignment="Center"
+									Command="{Binding DCommand}" Margin="6,1"/>
+							<Button x:Name="E"  Content="E" HorizontalAlignment="Center"
+									Command="{Binding ECommand}" Margin="6,1"/>
+						</DockPanel>
+						<DockPanel HorizontalAlignment="Center" Margin="0,15,0,0">
+							<Button x:Name="Prewitt"  Content="Prewitt" HorizontalAlignment="Center"
+									Command="{Binding PrewitthCommand}" Margin="6,1"/>
+						</DockPanel>
 					</StackPanel>
 				</TabItem>
 

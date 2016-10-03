@@ -195,6 +195,9 @@ namespace ImageEditor.ViewModel
 
         public Bitmap Mask;
 
+        public int G { get; set; }
+        public int F { get; set; }
+
         public int ImageWidth
         {
             get { return imageWidth; }
@@ -255,6 +258,9 @@ namespace ImageEditor.ViewModel
         public IReversableCommand DropboxCommand { get; private set; }
         public IReversableCommand DownloadCommand { get; private set; }
         public IReversableCommand UploadCommand { get; private set; }
+        public IReversableCommand DCommand { get; private set; }
+        public IReversableCommand ECommand { get; private set; }
+        public IReversableCommand PrewittCommand { get; private set; }
         #endregion
 
         public CommandList ComandList { get; set; }
@@ -371,6 +377,9 @@ namespace ImageEditor.ViewModel
             ImageReady += ResetCommand.RaiseCanExecuteChanged;
             ImageReady += SelectToolCommand.RaiseCanExecuteChanged;
             ImageReady += UploadCommand.RaiseCanExecuteChanged;
+            ImageReady += ECommand.RaiseCanExecuteChanged;
+            ImageReady += DCommand.RaiseCanExecuteChanged;
+            ImageReady += PrewittCommand.RaiseCanExecuteChanged;
         }
 
         private void InitCommands()
@@ -395,6 +404,9 @@ namespace ImageEditor.ViewModel
             DropboxCommand = new DropboxCommand(this);
             DownloadCommand = new DownloadCommand(this);
             UploadCommand = new UploadCommand(this);
+            DCommand = new DCommand(this);
+            ECommand = new ECommand(this);
+            PrewittCommand = new PrewittCommand(this);
         }
 
         public void GetTool(ToolType type)

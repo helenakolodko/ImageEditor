@@ -149,7 +149,9 @@
     <Compile Include="Command\CommandContext.cs" />
     <Compile Include="Command\CommandList.cs" />
     <Compile Include="Command\CropCommand.cs" />
+    <Compile Include="Command\DCommand.cs" />
     <Compile Include="Command\DropboxCommand.cs" />
+    <Compile Include="Command\ECommand.cs" />
     <Compile Include="Command\FlipCommand.cs" />
     <Compile Include="Command\HistogramEqualizeCommand.cs" />
     <Compile Include="Command\HistogramStretchCommand.cs" />
@@ -157,6 +159,7 @@
     <Compile Include="Command\InpaintCommand.cs" />
     <Compile Include="Command\DownloadCommand.cs" />
     <Compile Include="Command\OpenCommand.cs" />
+    <Compile Include="Command\PrewittCommand.cs" />
     <Compile Include="Command\RedoCommand.cs" />
     <Compile Include="Command\ResetCommand.cs" />
     <Compile Include="Command\ResizeCommand.cs" />
